@@ -1,0 +1,953 @@
+{
+  "users": [
+    {
+      "id": "USR-001",
+      "name": "Valeria Sánchez",
+      "email": "valeria@ventas.com",
+      "password": "demo1234",
+      "role": "ops",
+      "scope": "ops",
+      "roleKey": "commercial",
+      "roleName": "Coordinación comercial",
+      "department": "Ventas",
+      "initials": "VS",
+      "clientId": null
+    },
+    {
+      "id": "USR-002",
+      "name": "Roberto García",
+      "email": "roberto@logistica.com",
+      "password": "demo1234",
+      "role": "ops",
+      "scope": "ops",
+      "roleKey": "logistics",
+      "roleName": "Jefatura logística",
+      "department": "Operaciones",
+      "initials": "RG",
+      "clientId": null
+    },
+    {
+      "id": "USR-003",
+      "name": "Lucía Quispe",
+      "email": "lucia@cevichero.pe",
+      "password": "demo1234",
+      "role": "portal",
+      "scope": "portal",
+      "roleKey": "buyer",
+      "roleName": "Comprador B2B",
+      "department": "Compras",
+      "initials": "LQ",
+      "clientId": "CLI-001"
+    }
+  ],
+  "products": [
+    {
+      "id": "PRD-001",
+      "name": "Filete de merluza congelado",
+      "sku": "SKU-ML-001-CF",
+      "category": "Pescados congelados",
+      "cat": "seafood",
+      "temp": "-18°C a -22°C",
+      "unit": "kg",
+      "price": 18.5,
+      "stock": 42,
+      "reserved": 12,
+      "minStock": 20,
+      "warehouse": "ALM-LN",
+      "zone": "CF-1",
+      "status": "ok"
+    },
+    {
+      "id": "PRD-002",
+      "name": "Pota entera congelada",
+      "sku": "SKU-PT-002-CF",
+      "category": "Pescados congelados",
+      "cat": "seafood",
+      "temp": "-18°C a -22°C",
+      "unit": "kg",
+      "price": 8.9,
+      "stock": 6,
+      "reserved": 0,
+      "minStock": 25,
+      "warehouse": "ALM-LN",
+      "zone": "CF-1",
+      "status": "low"
+    },
+    {
+      "id": "PRD-003",
+      "name": "Langostino pelado IQF",
+      "sku": "SKU-LG-003-CF",
+      "category": "Mariscos congelados",
+      "cat": "seafood",
+      "temp": "-18°C a -22°C",
+      "unit": "kg",
+      "price": 38,
+      "stock": 18,
+      "reserved": 8,
+      "minStock": 15,
+      "warehouse": "ALM-CL",
+      "zone": "CF-A",
+      "status": "ok"
+    },
+    {
+      "id": "PRD-004",
+      "name": "Pechuga de pollo sin hueso",
+      "sku": "SKU-PC-004-RF",
+      "category": "Aves refrigeradas",
+      "cat": "poultry",
+      "temp": "0°C a 4°C",
+      "unit": "kg",
+      "price": 14.2,
+      "stock": 0,
+      "reserved": 0,
+      "minStock": 30,
+      "warehouse": "ALM-LN",
+      "zone": "CF-2",
+      "status": "out"
+    },
+    {
+      "id": "PRD-005",
+      "name": "Queso edam bloque 5 kg",
+      "sku": "SKU-QE-005-RF",
+      "category": "Lácteos importados",
+      "cat": "dairy",
+      "temp": "2°C a 8°C",
+      "unit": "kg",
+      "price": 28,
+      "stock": 34,
+      "reserved": 6,
+      "minStock": 15,
+      "warehouse": "ALM-LN",
+      "zone": "CF-2",
+      "status": "ok"
+    },
+    {
+      "id": "PRD-006",
+      "name": "Jamón del país en losa",
+      "sku": "SKU-JM-006-RF",
+      "category": "Embutidos refrigerados",
+      "cat": "coldcuts",
+      "temp": "0°C a 4°C",
+      "unit": "kg",
+      "price": 22.5,
+      "stock": 11,
+      "reserved": 4,
+      "minStock": 20,
+      "warehouse": "ALM-LN",
+      "zone": "CF-2",
+      "status": "low"
+    },
+    {
+      "id": "PRD-007",
+      "name": "Mantequilla sin sal bloque 5 kg",
+      "sku": "SKU-MT-007-RF",
+      "category": "Lácteos importados",
+      "cat": "dairy",
+      "temp": "2°C a 6°C",
+      "unit": "bloque",
+      "price": 52,
+      "stock": 22,
+      "reserved": 0,
+      "minStock": 10,
+      "warehouse": "ALM-CL",
+      "zone": "CF-A",
+      "status": "ok"
+    },
+    {
+      "id": "PRD-008",
+      "name": "Brócoli congelado IQF",
+      "sku": "SKU-BR-008-CF",
+      "category": "Vegetales congelados",
+      "cat": "vegetables",
+      "temp": "-18°C",
+      "unit": "kg",
+      "price": 6.8,
+      "stock": 58,
+      "reserved": 10,
+      "minStock": 20,
+      "warehouse": "ALM-LN",
+      "zone": "CF-1",
+      "status": "ok"
+    },
+    {
+      "id": "PRD-009",
+      "name": "Pulpo cocido congelado",
+      "sku": "SKU-PL-009-CF",
+      "category": "Mariscos congelados",
+      "cat": "seafood",
+      "temp": "-18°C a -22°C",
+      "unit": "kg",
+      "price": 45,
+      "stock": 9,
+      "reserved": 0,
+      "minStock": 10,
+      "warehouse": "ALM-CL",
+      "zone": "CF-A",
+      "status": "low"
+    },
+    {
+      "id": "PRD-010",
+      "name": "Chorizo español refrigerado",
+      "sku": "SKU-CH-010-RF",
+      "category": "Embutidos refrigerados",
+      "cat": "coldcuts",
+      "temp": "0°C a 4°C",
+      "unit": "kg",
+      "price": 35,
+      "stock": 16,
+      "reserved": 2,
+      "minStock": 10,
+      "warehouse": "ALM-LN",
+      "zone": "CF-2",
+      "status": "ok"
+    },
+    {
+      "id": "PRD-011",
+      "name": "Camarón tigre entero IQF",
+      "sku": "SKU-CT-011-CF",
+      "category": "Mariscos congelados",
+      "cat": "seafood",
+      "temp": "-18°C a -22°C",
+      "unit": "kg",
+      "price": 52,
+      "stock": 14,
+      "reserved": 4,
+      "minStock": 10,
+      "warehouse": "ALM-CL",
+      "zone": "CF-A",
+      "status": "ok"
+    },
+    {
+      "id": "PRD-012",
+      "name": "Queso gouda laminado kg",
+      "sku": "SKU-QG-012-RF",
+      "category": "Lácteos importados",
+      "cat": "dairy",
+      "temp": "2°C a 8°C",
+      "unit": "kg",
+      "price": 32,
+      "stock": 28,
+      "reserved": 8,
+      "minStock": 12,
+      "warehouse": "ALM-LN",
+      "zone": "CF-2",
+      "status": "ok"
+    }
+  ],
+  "categories": [
+    {
+      "id": "CAT-001",
+      "name": "Pescados congelados",
+      "cat": "seafood"
+    },
+    {
+      "id": "CAT-002",
+      "name": "Mariscos congelados",
+      "cat": "seafood"
+    },
+    {
+      "id": "CAT-003",
+      "name": "Aves refrigeradas",
+      "cat": "poultry"
+    },
+    {
+      "id": "CAT-004",
+      "name": "Lácteos importados",
+      "cat": "dairy"
+    },
+    {
+      "id": "CAT-005",
+      "name": "Embutidos refrigerados",
+      "cat": "coldcuts"
+    },
+    {
+      "id": "CAT-006",
+      "name": "Vegetales congelados",
+      "cat": "vegetables"
+    }
+  ],
+  "warehouses": [
+    {
+      "id": "ALM-LN",
+      "name": "Almacén Lima Norte",
+      "address": "Av. Industrial 1240, Los Olivos, Lima",
+      "zones": [
+        {
+          "id": "CF-1",
+          "name": "Cámara 1 — Congelados",
+          "temp": "-18°C a -22°C",
+          "capacity": 120,
+          "used": 87,
+          "tempOk": true
+        },
+        {
+          "id": "CF-2",
+          "name": "Cámara 2 — Refrigerados",
+          "temp": "0°C a 4°C",
+          "capacity": 60,
+          "used": 41,
+          "tempOk": true
+        }
+      ]
+    },
+    {
+      "id": "ALM-CL",
+      "name": "Almacén Callao",
+      "address": "Jr. Atalaya 380, Callao, Lima",
+      "zones": [
+        {
+          "id": "CF-A",
+          "name": "Cámara A — Congelados",
+          "temp": "-18°C a -20°C",
+          "capacity": 80,
+          "used": 52,
+          "tempOk": true
+        }
+      ]
+    }
+  ],
+  "inventoryLots": [
+    {
+      "id": "LOT-2026-014",
+      "productId": "PRD-001",
+      "qty": 42,
+      "reserved": 12,
+      "expiry": "2027-03-20",
+      "entryDate": "2026-03-07",
+      "status": "ok",
+      "warehouse": "ALM-LN",
+      "zone": "CF-1"
+    },
+    {
+      "id": "LOT-2026-007",
+      "productId": "PRD-002",
+      "qty": 6,
+      "reserved": 0,
+      "expiry": "2026-05-13",
+      "entryDate": "2026-02-20",
+      "status": "expiring",
+      "warehouse": "ALM-LN",
+      "zone": "CF-1"
+    },
+    {
+      "id": "LOT-2026-011",
+      "productId": "PRD-003",
+      "qty": 18,
+      "reserved": 8,
+      "expiry": "2027-01-25",
+      "entryDate": "2026-03-05",
+      "status": "ok",
+      "warehouse": "ALM-CL",
+      "zone": "CF-A"
+    },
+    {
+      "id": "LOT-2026-003",
+      "productId": "PRD-006",
+      "qty": 11,
+      "reserved": 4,
+      "expiry": "2026-05-07",
+      "entryDate": "2026-01-25",
+      "status": "expiring",
+      "warehouse": "ALM-LN",
+      "zone": "CF-2"
+    },
+    {
+      "id": "LOT-2026-009",
+      "productId": "PRD-005",
+      "qty": 34,
+      "reserved": 6,
+      "expiry": "2026-09-15",
+      "entryDate": "2026-02-25",
+      "status": "ok",
+      "warehouse": "ALM-LN",
+      "zone": "CF-2"
+    },
+    {
+      "id": "LOT-2026-012",
+      "productId": "PRD-007",
+      "qty": 22,
+      "reserved": 0,
+      "expiry": "2026-12-05",
+      "entryDate": "2026-03-15",
+      "status": "ok",
+      "warehouse": "ALM-CL",
+      "zone": "CF-A"
+    },
+    {
+      "id": "LOT-2026-015",
+      "productId": "PRD-008",
+      "qty": 58,
+      "reserved": 10,
+      "expiry": "2027-06-06",
+      "entryDate": "2026-03-25",
+      "status": "ok",
+      "warehouse": "ALM-LN",
+      "zone": "CF-1"
+    },
+    {
+      "id": "LOT-2026-016",
+      "productId": "PRD-009",
+      "qty": 9,
+      "reserved": 0,
+      "expiry": "2026-08-20",
+      "entryDate": "2026-03-30",
+      "status": "ok",
+      "warehouse": "ALM-CL",
+      "zone": "CF-A"
+    },
+    {
+      "id": "LOT-2026-017",
+      "productId": "PRD-010",
+      "qty": 16,
+      "reserved": 2,
+      "expiry": "2026-07-05",
+      "entryDate": "2026-04-06",
+      "status": "ok",
+      "warehouse": "ALM-LN",
+      "zone": "CF-2"
+    },
+    {
+      "id": "LOT-2026-018",
+      "productId": "PRD-011",
+      "qty": 14,
+      "reserved": 4,
+      "expiry": "2027-02-15",
+      "entryDate": "2026-04-10",
+      "status": "ok",
+      "warehouse": "ALM-CL",
+      "zone": "CF-A"
+    },
+    {
+      "id": "LOT-2026-019",
+      "productId": "PRD-012",
+      "qty": 28,
+      "reserved": 8,
+      "expiry": "2026-10-25",
+      "entryDate": "2026-04-14",
+      "status": "ok",
+      "warehouse": "ALM-LN",
+      "zone": "CF-2"
+    }
+  ],
+  "stockMovements": [
+    {
+      "id": "MOV-0415",
+      "date": "2026-05-04 09:10",
+      "type": "reserva",
+      "productId": "PRD-001",
+      "lotId": "LOT-2026-014",
+      "qty": 12,
+      "orderId": "ORD-2026-0412",
+      "note": null,
+      "user": "Sistema"
+    },
+    {
+      "id": "MOV-0414",
+      "date": "2026-05-04 08:55",
+      "type": "ingreso",
+      "productId": "PRD-010",
+      "lotId": "LOT-2026-017",
+      "qty": 16,
+      "orderId": null,
+      "note": "Proveedor Embutidos del Sur S.A.C.",
+      "user": "Ana Torres"
+    },
+    {
+      "id": "MOV-0413",
+      "date": "2026-05-03 15:30",
+      "type": "salida",
+      "productId": "PRD-008",
+      "lotId": "LOT-2026-015",
+      "qty": 20,
+      "orderId": "ORD-2026-0410",
+      "note": null,
+      "user": "Ana Torres"
+    },
+    {
+      "id": "MOV-0412",
+      "date": "2026-05-03 14:00",
+      "type": "salida",
+      "productId": "PRD-001",
+      "lotId": "LOT-2026-014",
+      "qty": 15,
+      "orderId": "ORD-2026-0408",
+      "note": null,
+      "user": "Ana Torres"
+    },
+    {
+      "id": "MOV-0411",
+      "date": "2026-05-02 09:10",
+      "type": "ajuste",
+      "productId": "PRD-002",
+      "lotId": "LOT-2026-007",
+      "qty": -4,
+      "orderId": null,
+      "note": "Merma por temperatura — constatado en cámara",
+      "user": "Ana Torres"
+    },
+    {
+      "id": "MOV-0410",
+      "date": "2026-05-01 11:00",
+      "type": "ingreso",
+      "productId": "PRD-011",
+      "lotId": "LOT-2026-018",
+      "qty": 14,
+      "orderId": null,
+      "note": "Importación — Proveedor MarAzul del Pacífico",
+      "user": "Carlos Ríos"
+    }
+  ],
+  "clients": [
+    {
+      "id": "CLI-001",
+      "name": "Restaurant El Cevichero",
+      "ruc": "20601234567",
+      "contact": "Lucía Quispe",
+      "phone": "+51 987 654 321",
+      "condition": "30 días neto",
+      "status": "active",
+      "type": "HORECA",
+      "address": "Av. La Mar 1240, Miraflores, Lima",
+      "lastOrder": "2026-04-25",
+      "creditLimit": 15000,
+      "creditUsed": 8400
+    },
+    {
+      "id": "CLI-002",
+      "name": "Hotel Costa del Sol",
+      "ruc": "20502345678",
+      "contact": "Carlos Huamán",
+      "phone": "+51 976 543 210",
+      "condition": "45 días neto",
+      "status": "active",
+      "type": "Hotel",
+      "address": "Vía Expresa 1451, San Isidro, Lima",
+      "lastOrder": "2026-04-27",
+      "creditLimit": 30000,
+      "creditUsed": 12000
+    },
+    {
+      "id": "CLI-003",
+      "name": "Supermercados QuimiKost",
+      "ruc": "20103456789",
+      "contact": "Rosa Mendoza",
+      "phone": "+51 965 432 109",
+      "condition": "Contado",
+      "status": "active",
+      "type": "Supermercado",
+      "address": "Av. Universitaria 840, Comas, Lima",
+      "lastOrder": "2026-04-30",
+      "creditLimit": 0,
+      "creditUsed": 0
+    },
+    {
+      "id": "CLI-004",
+      "name": "Catering Andina S.A.C.",
+      "ruc": "20204567890",
+      "contact": "Jorge Paredes",
+      "phone": "+51 954 321 098",
+      "condition": "15 días neto",
+      "status": "active",
+      "type": "Catering",
+      "address": "Jr. Los Nogales 380, San Luis, Lima",
+      "lastOrder": "2026-04-23",
+      "creditLimit": 20000,
+      "creditUsed": 19200
+    },
+    {
+      "id": "CLI-005",
+      "name": "FreshMart Bodegas",
+      "ruc": "20305678901",
+      "contact": "Ana Rojas",
+      "phone": "+51 943 210 987",
+      "condition": "15 días neto",
+      "status": "observed",
+      "type": "Minorista",
+      "address": "Av. Túpac Amaru 2800, Independencia, Lima",
+      "lastOrder": "2026-04-04",
+      "creditLimit": 10000,
+      "creditUsed": 10000
+    },
+    {
+      "id": "CLI-006",
+      "name": "HORECA Norte S.R.L.",
+      "ruc": "20406789012",
+      "contact": "Miguel Torres",
+      "phone": "+51 932 109 876",
+      "condition": "30 días neto",
+      "status": "active",
+      "type": "Distribuidor",
+      "address": "Jr. San Martín 680, Trujillo, La Libertad",
+      "lastOrder": "2026-04-20",
+      "creditLimit": 25000,
+      "creditUsed": 8000
+    }
+  ],
+  "orders": [
+    {
+      "id": "ORD-2026-0412",
+      "clientId": "CLI-001",
+      "status": "validating",
+      "priority": "high",
+      "date": "2026-05-04",
+      "items": [
+        {
+          "productId": "PRD-001",
+          "qty": 30,
+          "price": 18.5,
+          "stockOk": true
+        },
+        {
+          "productId": "PRD-003",
+          "qty": 12,
+          "price": 38,
+          "stockOk": false
+        }
+      ],
+      "total": 1011,
+      "notes": "Entrega urgente — evento activo esta semana"
+    },
+    {
+      "id": "ORD-2026-0411",
+      "clientId": "CLI-002",
+      "status": "dispatched",
+      "priority": "medium",
+      "date": "2026-05-04",
+      "items": [
+        {
+          "productId": "PRD-005",
+          "qty": 8,
+          "price": 28,
+          "stockOk": true
+        },
+        {
+          "productId": "PRD-007",
+          "qty": 3,
+          "price": 52,
+          "stockOk": true
+        }
+      ],
+      "total": 380,
+      "notes": ""
+    },
+    {
+      "id": "ORD-2026-0410",
+      "clientId": "CLI-003",
+      "status": "dispatched",
+      "priority": "low",
+      "date": "2026-05-03",
+      "items": [
+        {
+          "productId": "PRD-008",
+          "qty": 20,
+          "price": 6.8,
+          "stockOk": true
+        }
+      ],
+      "total": 136,
+      "notes": ""
+    },
+    {
+      "id": "ORD-2026-0409",
+      "clientId": "CLI-004",
+      "status": "delivered",
+      "priority": "medium",
+      "date": "2026-05-02",
+      "items": [],
+      "total": 845,
+      "notes": ""
+    },
+    {
+      "id": "ORD-2026-0408",
+      "clientId": "CLI-006",
+      "status": "confirmed",
+      "priority": "low",
+      "date": "2026-05-04",
+      "items": [
+        {
+          "productId": "PRD-001",
+          "qty": 15,
+          "price": 18.5,
+          "stockOk": true
+        },
+        {
+          "productId": "PRD-006",
+          "qty": 8,
+          "price": 22.5,
+          "stockOk": true
+        }
+      ],
+      "total": 457.5,
+      "notes": ""
+    },
+    {
+      "id": "ORD-2026-0407",
+      "clientId": "CLI-005",
+      "status": "blocked",
+      "priority": "high",
+      "date": "2026-05-04",
+      "items": [
+        {
+          "productId": "PRD-010",
+          "qty": 8,
+          "price": 35,
+          "stockOk": true
+        }
+      ],
+      "total": 280,
+      "notes": "Bloqueado por límite de crédito agotado"
+    },
+    {
+      "id": "ORD-2026-0406",
+      "clientId": "CLI-001",
+      "status": "delivered",
+      "priority": "low",
+      "date": "2026-04-29",
+      "items": [],
+      "total": 620,
+      "notes": ""
+    },
+    {
+      "id": "ORD-2026-0413",
+      "clientId": "CLI-001",
+      "status": "validating",
+      "priority": "medium",
+      "date": "2026-05-13",
+      "items": [
+        {
+          "productId": "PRD-001",
+          "qty": 2,
+          "price": 18.5,
+          "stockOk": true
+        }
+      ],
+      "total": 37,
+      "notes": "",
+      "deliveryDate": "2026-05-14",
+      "source": "assisted_order",
+      "createdBy": "USR-001",
+      "createdByName": "Valeria Sánchez",
+      "createdByRole": "Coordinación comercial",
+      "createdByRoleKey": "commercial"
+    },
+    {
+      "id": "ORD-2026-0414",
+      "clientId": "CLI-001",
+      "status": "validating",
+      "priority": "medium",
+      "date": "2026-05-13",
+      "items": [
+        {
+          "productId": "PRD-001",
+          "qty": 1,
+          "price": 18.5,
+          "stockOk": true
+        }
+      ],
+      "total": 18.5,
+      "notes": "",
+      "deliveryDate": "2026-05-14",
+      "source": "assisted_order",
+      "createdBy": "USR-001",
+      "createdByName": "Valeria Sánchez",
+      "createdByRole": "Coordinación comercial",
+      "createdByRoleKey": "commercial"
+    },
+    {
+      "id": "ORD-2026-0415",
+      "clientId": "CLI-001",
+      "status": "validating",
+      "priority": "medium",
+      "date": "2026-05-14",
+      "items": [
+        {
+          "productId": "PRD-001",
+          "qty": 1,
+          "price": 18.5,
+          "stockOk": true
+        },
+        {
+          "productId": "PRD-002",
+          "qty": 1,
+          "price": 8.9,
+          "stockOk": true
+        }
+      ],
+      "total": 27.4,
+      "notes": "",
+      "deliveryDate": "2026-05-15",
+      "source": "assisted_order",
+      "createdBy": "USR-002",
+      "createdByName": "Roberto García",
+      "createdByRole": "Jefatura logística",
+      "createdByRoleKey": "logistics"
+    },
+    {
+      "id": "ORD-2026-0416",
+      "clientId": "CLI-001",
+      "status": "validating",
+      "priority": "medium",
+      "date": "2026-05-14",
+      "items": [
+        {
+          "productId": "PRD-001",
+          "qty": 1,
+          "price": 18.5,
+          "stockOk": true
+        },
+        {
+          "productId": "PRD-002",
+          "qty": 1,
+          "price": 8.9,
+          "stockOk": true
+        }
+      ],
+      "total": 27.4,
+      "notes": "",
+      "deliveryDate": "2026-05-15",
+      "source": "assisted_order",
+      "createdBy": "USR-001",
+      "createdByName": "Valeria Sánchez",
+      "createdByRole": "Coordinación comercial",
+      "createdByRoleKey": "commercial"
+    }
+  ],
+  "dispatches": [
+    {
+      "id": "DSP-2026-0089",
+      "orderId": "ORD-2026-0411",
+      "clientId": "CLI-002",
+      "status": "in_transit",
+      "driver": "Juan Ccoya Mamani",
+      "vehicle": "B8K-421 · Canter 3T Ref.",
+      "dest": "Vía Expresa 1451, San Isidro",
+      "tempExit": null,
+      "evidenceRequired": false,
+      "evidenceDone": false,
+      "checklist": [
+        "Carga verificada",
+        "Temperatura -18.2°C OK",
+        "Documentos listos"
+      ]
+    },
+    {
+      "id": "DSP-2026-0088",
+      "orderId": "ORD-2026-0410",
+      "clientId": "CLI-003",
+      "status": "in_transit",
+      "driver": "Pedro Quispe Condori",
+      "vehicle": "C2M-889 · Hyundai H1 Ref.",
+      "dest": "Av. Universitaria 840, Comas",
+      "tempExit": -19.2,
+      "evidenceRequired": true,
+      "evidenceDone": false,
+      "checklist": [
+        "Carga verificada",
+        "Temperatura -19.2°C OK",
+        "Documentos listos"
+      ]
+    },
+    {
+      "id": "DSP-2026-0087",
+      "orderId": "ORD-2026-0409",
+      "clientId": "CLI-004",
+      "status": "delivered",
+      "driver": "Luis Cáceres Vega",
+      "vehicle": "A3N-112 · Canter 3T Ref.",
+      "dest": "Jr. Los Nogales 380, San Luis",
+      "tempExit": -18.5,
+      "evidenceRequired": true,
+      "evidenceDone": true,
+      "checklist": [
+        "Carga verificada",
+        "Temperatura OK",
+        "Documentos listos"
+      ]
+    }
+  ],
+  "alerts": [
+    {
+      "id": "ALT-001",
+      "type": "danger",
+      "priority": 1,
+      "title": "Crédito agotado — FreshMart Bodegas",
+      "desc": "CLI-005 alcanzó límite (S/ 10,000). Pedido ORD-2026-0407 bloqueado automáticamente.",
+      "action": "Ver cliente",
+      "screen": "clients"
+    },
+    {
+      "id": "ALT-002",
+      "type": "danger",
+      "priority": 1,
+      "title": "Lote próximo a vencer — Jamón del país",
+      "desc": "LOT-2026-003 vence el 7 may. 7 kg disponibles en Cámara 2.",
+      "action": "Ver lote",
+      "screen": "inventory"
+    },
+    {
+      "id": "ALT-003",
+      "type": "warning",
+      "priority": 2,
+      "title": "Stock bajo — Pota entera congelada",
+      "desc": "Solo 6 kg disponibles. Mínimo recomendado: 25 kg. Sin reposición programada.",
+      "action": "Ver stock",
+      "screen": "inventory"
+    },
+    {
+      "id": "ALT-004",
+      "type": "warning",
+      "priority": 2,
+      "title": "Pedido en validación — El Cevichero",
+      "desc": "ORD-2026-0412 requiere revisión. Langostino IQF: 10 kg disponibles vs. 12 solicitados.",
+      "action": "Revisar pedido",
+      "screen": "orders"
+    },
+    {
+      "id": "ALT-005",
+      "type": "info",
+      "priority": 3,
+      "title": "Entrega sin evidencia — QuimiKost",
+      "desc": "DSP-2026-0088 en tránsito. Registra foto y firma al entregar.",
+      "action": "Ver despacho",
+      "screen": "dispatch"
+    }
+  ],
+  "activityLog": [
+    {
+      "id": "ACT-001",
+      "time": "09:14",
+      "text": "Pedido ORD-2026-0408 confirmado — HORECA Norte S.R.L.",
+      "type": "success"
+    },
+    {
+      "id": "ACT-002",
+      "time": "08:55",
+      "text": "Ingreso stock: Chorizo español 16 kg — Embutidos del Sur",
+      "type": "info"
+    },
+    {
+      "id": "ACT-003",
+      "time": "08:40",
+      "text": "DSP-2026-0088 salió a ruta — Pedro Quispe",
+      "type": "info"
+    },
+    {
+      "id": "ACT-004",
+      "time": "08:20",
+      "text": "Pedido ORD-2026-0412 recibido — El Cevichero (requiere validación)",
+      "type": "warning"
+    },
+    {
+      "id": "ACT-005",
+      "time": "07:55",
+      "text": "Alerta: LOT-2026-003 próximo a vencer",
+      "type": "danger"
+    },
+    {
+      "id": "ACT-006",
+      "time": "07:30",
+      "text": "Entrega DSP-2026-0087 completada — Catering Andina S.A.C.",
+      "type": "success"
+    }
+  ]
+}
