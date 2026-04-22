@@ -1,0 +1,22 @@
+{
+  "/api/v1/users": "/users",
+  "/api/v1/users/:id": "/users/:id",
+  "/api/v1/products": "/products",
+  "/api/v1/products/:id": "/products/:id",
+  "/api/v1/categories": "/categories",
+  "/api/v1/categories/:id": "/categories/:id",
+  "/api/v1/warehouses": "/warehouses",
+  "/api/v1/warehouses/:id": "/warehouses/:id",
+  "/api/v1/inventory-lots": "/inventoryLots",
+  "/api/v1/inventory-lots/:id": "/inventoryLots/:id",
+  "/api/v1/stock-movements": "/stockMovements",
+  "/api/v1/stock-movements/:id": "/stockMovements/:id",
+  "/api/v1/clients": "/clients",
+  "/api/v1/clients/:id": "/clients/:id",
+  "/api/v1/orders": "/orders",
+  "/api/v1/orders/:id": "/orders/:id",
+  "/api/v1/dispatches": "/dispatches",
+  "/api/v1/dispatches/:id": "/dispatches/:id",
+  "/api/v1/alerts": "/alerts",
+  "/api/v1/activity-log": "/activityLog"
+}
