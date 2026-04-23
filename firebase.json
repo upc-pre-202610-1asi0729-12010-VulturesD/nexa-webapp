@@ -1,0 +1,24 @@
+{
+  "hosting": {
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      { "source": "/api/v1/users",          "destination": "/api/v1/users.json" },
+      { "source": "/api/v1/products",       "destination": "/api/v1/products.json" },
+      { "source": "/api/v1/categories",     "destination": "/api/v1/categories.json" },
+      { "source": "/api/v1/warehouses",     "destination": "/api/v1/warehouses.json" },
+      { "source": "/api/v1/inventory-lots", "destination": "/api/v1/inventory-lots.json" },
+      { "source": "/api/v1/stock-movements","destination": "/api/v1/stock-movements.json" },
+      { "source": "/api/v1/clients",        "destination": "/api/v1/clients.json" },
+      { "source": "/api/v1/orders",         "destination": "/api/v1/orders.json" },
+      { "source": "/api/v1/dispatches",     "destination": "/api/v1/dispatches.json" },
+      { "source": "/api/v1/alerts",         "destination": "/api/v1/alerts.json" },
+      { "source": "/api/v1/activity-log",   "destination": "/api/v1/activity-log.json" },
+      { "source": "**",                     "destination": "/index.html" }
+    ]
+  }
+}
