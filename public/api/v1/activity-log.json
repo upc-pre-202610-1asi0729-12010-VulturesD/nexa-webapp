@@ -1,0 +1,38 @@
+[
+  {
+    "id": "ACT-001",
+    "time": "09:14",
+    "text": "Pedido ORD-2026-0408 confirmado — HORECA Norte S.R.L.",
+    "type": "success"
+  },
+  {
+    "id": "ACT-002",
+    "time": "08:55",
+    "text": "Ingreso stock: Chorizo español 16 kg — Embutidos del Sur",
+    "type": "info"
+  },
+  {
+    "id": "ACT-003",
+    "time": "08:40",
+    "text": "DSP-2026-0088 salió a ruta — Pedro Quispe",
+    "type": "info"
+  },
+  {
+    "id": "ACT-004",
+    "time": "08:20",
+    "text": "Pedido ORD-2026-0412 recibido — El Cevichero (requiere validación)",
+    "type": "warning"
+  },
+  {
+    "id": "ACT-005",
+    "time": "07:55",
+    "text": "Alerta: LOT-2026-003 próximo a vencer",
+    "type": "danger"
+  },
+  {
+    "id": "ACT-006",
+    "time": "07:30",
+    "text": "Entrega DSP-2026-0087 completada — Catering Andina S.A.C.",
+    "type": "success"
+  }
+]

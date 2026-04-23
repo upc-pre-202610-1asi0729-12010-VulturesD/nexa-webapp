@@ -1,0 +1,47 @@
+[
+  {
+    "id": "ALT-001",
+    "type": "danger",
+    "priority": 1,
+    "title": "Crédito agotado — FreshMart Bodegas",
+    "desc": "CLI-005 alcanzó límite (S/ 10,000). Pedido ORD-2026-0407 bloqueado automáticamente.",
+    "action": "Ver cliente",
+    "screen": "clients"
+  },
+  {
+    "id": "ALT-002",
+    "type": "danger",
+    "priority": 1,
+    "title": "Lote próximo a vencer — Jamón del país",
+    "desc": "LOT-2026-003 vence el 7 may. 7 kg disponibles en Cámara 2.",
+    "action": "Ver lote",
+    "screen": "inventory"
+  },
+  {
+    "id": "ALT-003",
+    "type": "warning",
+    "priority": 2,
+    "title": "Stock bajo — Pota entera congelada",
+    "desc": "Solo 6 kg disponibles. Mínimo recomendado: 25 kg. Sin reposición programada.",
+    "action": "Ver stock",
+    "screen": "inventory"
+  },
+  {
+    "id": "ALT-004",
+    "type": "warning",
+    "priority": 2,
+    "title": "Pedido en validación — El Cevichero",
+    "desc": "ORD-2026-0412 requiere revisión. Langostino IQF: 10 kg disponibles vs. 12 solicitados.",
+    "action": "Revisar pedido",
+    "screen": "orders"
+  },
+  {
+    "id": "ALT-005",
+    "type": "info",
+    "priority": 3,
+    "title": "Entrega sin evidencia — QuimiKost",
+    "desc": "DSP-2026-0088 en tránsito. Registra foto y firma al entregar.",
+    "action": "Ver despacho",
+    "screen": "dispatch"
+  }
+]
