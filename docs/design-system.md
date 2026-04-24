@@ -8,3 +8,7 @@ Document primary colors, neutral surfaces, spacing rhythm, and shadow usage for 
 
 Document sidebar, topbar, content width, and responsive shell behavior for operational users.
 
+## Card and table patterns
+
+Document repeated card, table, and badge patterns used by catalog, orders, dispatch, and reports.
+
