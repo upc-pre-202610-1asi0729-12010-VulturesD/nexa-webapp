@@ -16,3 +16,7 @@ Document repeated card, table, and badge patterns used by catalog, orders, dispa
 
 Document button hierarchy, input focus states, validation affordances, and disabled states.
 
+## Responsive breakpoints
+
+Document mobile and desktop layout expectations for dense operational views.
+
