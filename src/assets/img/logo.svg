@@ -1,0 +1,10 @@
+<svg width="120" height="32" viewBox="0 0 120 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  
+  <rect x="0" y="4" width="5" height="24" rx="2.5" fill="#2563EB"></rect>
+  <rect x="19" y="4" width="5" height="24" rx="2.5" fill="#2563EB"></rect>
+  <path d="M5 4 L24 28" stroke="#2563EB" stroke-width="5" stroke-linecap="round"></path>
+  
+  <circle cx="27" cy="6" r="3" fill="#F97316"></circle>
+  
+  <text x="36" y="23" font-family="&#39;Plus Jakarta Sans&#39;, sans-serif" font-weight="700" font-size="18" fill="#111827" letter-spacing="-0.3">nexa</text>
+</svg>
