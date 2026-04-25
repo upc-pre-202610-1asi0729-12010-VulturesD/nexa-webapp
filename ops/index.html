@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Nexa Ops</title>
+<link rel="stylesheet" href="https://unpkg.com/primeicons/primeicons.css">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="ops.css">
+<style>
+.dash-grid { display: grid; grid-template-columns: 1fr 272px; gap: 16px; }
+.kpi-row   { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 16px; }
+@media(max-width:1100px){ .kpi-row{grid-template-columns:repeat(2,1fr);} .dash-grid{grid-template-columns:1fr;} }
+.kpi-icon { width: 36px; height: 36px; border-radius: 9px; display:flex; align-items:center; justify-content:center; font-size:16px; float:right; margin:-4px -4px 0 0; }
+.quick-actions-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.quick-btn { display:flex; flex-direction:column; align-items:center; gap:6px; padding:14px 8px; border-radius:10px; border:1px solid #E5E7EB; background:#fff; cursor:pointer; transition:all 140ms; text-align:center; font-size:11px; font-weight:500; color:#374151; }
+.quick-btn:hover { border-color:#BFDBFE; background:#EFF6FF; color:#2563EB; }
+.quick-btn:hover .pi { color:#2563EB; }
+.quick-btn .pi { font-size:20px; color:#6B7280; }
+.next-action { background:#F0F7FF; border:1px solid #BFDBFE; border-radius:12px; padding:18px; margin-top:12px; }
+.next-action-label { font-size:10px; font-weight:700; color:#2563EB; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:8px; display:flex; align-items:center; gap:5px; }
+.next-action-title { font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:600; color:#1E3A8A; margin-bottom:6px; }
+.next-action-desc  { font-size:12px; color:#3B4E6B; line-height:1.5; margin-bottom:12px; }
+.product-card-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+@media(max-width:1100px){ .product-card-grid{grid-template-columns:repeat(3,1fr);} }
+@media(max-width:800px)  { .product-card-grid{grid-template-columns:repeat(2,1fr);} }
+.prod-card { background:#fff; border:1px solid #E5E7EB; border-radius:12px; overflow:hidden; display:flex; flex-direction:column; transition:box-shadow 140ms; cursor:pointer; }
+.prod-card:hover { box-shadow:0 4px 16px rgba(0,0,0,0.08); }
+.prod-body { padding:12px; flex:1; }
+.prod-name { font-size:13px; font-weight:500; color:#111827; line-height:1.3; margin-bottom:5px; }
+.prod-sku  { font-family:'JetBrains Mono',monospace; font-size:10px; color:#9CA3AF; margin-bottom:8px; }
+.prod-footer { padding:10px 12px; border-top:1px solid #F3F0EC; display:flex; align-items:center; justify-content:space-between; }
+.prod-price { font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:700; color:#111827; }
+.prod-stock { font-size:11px; color:#6B7280; }
+.out-stock-overlay { position:absolute; inset:0; background:rgba(249,247,244,0.7); display:flex; align-items:center; justify-content:center; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-logo"><img src="../assets/logo.svg" alt="Nexa"></div>
+    <div class="sidebar-nav">
+      <div class="nav-section">Principal</div>
+      <button class="nav-item" :class="{active:cs==='dashboard'}" @click="cs='dashboard'"><i class="pi pi-th-large"></i> Dashboard</button>
+      <button class="nav-item" :class="{active:cs==='catalog'}" @click="cs='catalog'"><i class="pi pi-box"></i> Catálogo</button>
+      <button class="nav-item" @click="nav('inventory.html')"><i class="pi pi-database"></i> Inventario <span class="nav-ext">↗</span></button>
+      <div class="nav-section">Comercial</div>
+      <button class="nav-item" :class="{active:cs==='orders'}" @click="cs='orders'"><i class="pi pi-file-edit"></i> Pedidos <span class="nav-count">{{D.orders.filter(o=>['validating','blocked'].includes(o.status)).length}}</span></button>
+      <button class="nav-item" @click="nav('create-order.html')"><i class="pi pi-plus-circle"></i> Crear pedido <span class="nav-ext">↗</span></button>
+      <button class="nav-item" :class="{active:cs==='clients'}" @click="cs='clients'"><i class="pi pi-users"></i> Clientes</button>
+      <div class="nav-section">Operaciones</div>
+      <button class="nav-item" @click="nav('dispatch.html')"><i class="pi pi-send"></i> Despacho <span class="nav-ext">↗</span></button>
+      <button class="nav-item" :class="{active:cs==='settings'}" @click="cs='settings'"><i class="pi pi-cog"></i> Configuración</button>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="avatar">MF</div>
+        <div><div class="user-name">{{D.user.name}}</div><div class="user-role">{{D.user.role}}</div></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-title">{{screenTitle}}</div>
+      <div style="font-size:12px;color:#9CA3AF;margin-left:8px">{{D.company.name}}</div>
+      <div class="topbar-right">
+        <button class="topbar-icon-btn" @click="toast('info','Sin actualizaciones nuevas')"><i class="pi pi-bell"></i><div class="notif-dot"></div></button>
+        <div class="avatar" title="María Fernández">MF</div>
+      </div>
+    </header>
+
+    <div class="page">
+
+      <!-- ─── DASHBOARD ─── -->
+      <template v-if="cs==='dashboard'">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Buenos días, María</div>
+            <div class="page-subtitle">Lunes 27 de abril · {{D.company.name}}</div>
+          </div>
+          <button class="btn btn-primary" @click="nav('create-order.html')"><i class="pi pi-plus"></i> Crear pedido</button>
+        </div>
+
+        <!-- Alert strip -->
+        <div class="alert-strip" style="margin-bottom:16px" v-if="D.alerts.length">
+          <div class="alert-strip-header" @click="alertsOpen=!alertsOpen">
+            <div class="alert-strip-title"><i class="pi pi-exclamation-triangle"></i> {{D.alerts.length}} situaciones requieren atención hoy</div>
+            <i :class="alertsOpen?'pi pi-chevron-up':'pi pi-chevron-down'" style="color:#B91C1C;font-size:12px"></i>
+          </div>
+          <div v-if="alertsOpen" class="alert-strip-items">
+            <div v-for="a in D.alerts" :key="a.id" class="alert-item" :class="'alert-item-'+a.type">
+              <div style="flex-shrink:0;margin-top:2px"><i :class="'pi '+(a.type==='danger'?'pi-times-circle':a.type==='warning'?'pi-exclamation-triangle':'pi-info-circle')" :style="{color:a.type==='danger'?'#B91C1C':a.type==='warning'?'#B45309':'#1D4ED8'}"></i></div>
+              <div class="alert-item-content">
+                <div class="alert-item-title" :style="{color:a.type==='danger'?'#B91C1C':a.type==='warning'?'#92400E':'#1D4ED8'}">{{a.title}}</div>
+                <div class="alert-item-desc" :style="{color:a.type==='danger'?'#DC2626':a.type==='warning'?'#B45309':'#2563EB'}">{{a.desc}}</div>
+              </div>
+              <button class="btn btn-ghost btn-sm" style="flex-shrink:0" @click="handleAlert(a)">{{a.action}}</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI row -->
+        <div class="kpi-row">
+          <div class="card kpi-card">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between">
+              <div class="kpi-label"><i class="pi pi-lock" style="color:#EF4444"></i> Pedidos bloqueados</div>
+              <div class="kpi-icon" style="background:#FEE2E2"><i class="pi pi-ban" style="color:#B91C1C"></i></div>
+            </div>
+            <div class="kpi-value" style="color:#EF4444">{{D.orders.filter(o=>o.status==='blocked').length}}</div>
+            <div class="kpi-sub">Crédito agotado o sin stock</div>
+          </div>
+          <div class="card kpi-card">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between">
+              <div class="kpi-label"><i class="pi pi-exclamation-circle" style="color:#F97316"></i> Stock crítico</div>
+              <div class="kpi-icon" style="background:#FFEDD5"><i class="pi pi-exclamation-circle" style="color:#C2410C"></i></div>
+            </div>
+            <div class="kpi-value" style="color:#F97316">{{D.products.filter(p=>p.status!=='ok').length}}</div>
+            <div class="kpi-sub">Bajo mínimo o sin stock</div>
+          </div>
+          <div class="card kpi-card">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between">
+              <div class="kpi-label"><i class="pi pi-send" style="color:#2563EB"></i> En despacho</div>
+              <div class="kpi-icon" style="background:#DBEAFE"><i class="pi pi-send" style="color:#1D4ED8"></i></div>
+            </div>
+            <div class="kpi-value" style="color:#2563EB">{{D.dispatches.filter(d=>d.status==='in_transit').length}}</div>
+            <div class="kpi-sub">Unidades en ruta ahora</div>
+          </div>
+          <div class="card kpi-card">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between">
+              <div class="kpi-label"><i class="pi pi-camera" style="color:#F59E0B"></i> Evidencia pendiente</div>
+              <div class="kpi-icon" style="background:#FEF3C7"><i class="pi pi-camera" style="color:#B45309"></i></div>
+            </div>
+            <div class="kpi-value" style="color:#F59E0B">{{D.dispatches.filter(d=>d.evidenceRequired&&!d.evidenceDone).length}}</div>
+            <div class="kpi-sub">Entregas sin foto/firma</div>
+          </div>
+        </div>
+
+        <!-- Main 2-col -->
+        <div class="dash-grid">
+          <div>
+            <div class="card" style="overflow:hidden;margin-bottom:12px">
+              <div class="card-header">
+                <span class="card-title">Requieren acción ahora</span>
+                <button class="btn btn-ghost btn-sm" @click="cs='orders'">Ver todos</button>
+              </div>
+              <table class="data-table">
+                <thead><tr><th>Pedido</th><th>Cliente</th><th>Estado</th><th>Prioridad</th><th>Nota</th><th></th></tr></thead>
+                <tbody>
+                  <tr v-for="o in D.orders.filter(x=>['validating','blocked','received'].includes(x.status))" :key="o.id" style="cursor:pointer" @click="nav('order-detail.html')">
+                    <td><span class="mono">{{o.id}}</span></td>
+                    <td style="font-weight:500;font-size:13px">{{D.clientName(o.clientId)}}</td>
+                    <td><span :class="'badge '+statusBadge(o.status)">{{statusLabel(o.status)}}</span></td>
+                    <td><span :class="'badge-priority-'+o.priority">{{o.priority==='high'?'Alta':o.priority==='medium'?'Media':'Baja'}}</span></td>
+                    <td style="font-size:12px;color:#6B7280;max-width:180px">{{o.notes||'—'}}</td>
+                    <td><button class="btn btn-ghost btn-sm" @click.stop="nav('order-detail.html')">Revisar</button></td>
+                  </tr>
+                  <tr v-if="!D.orders.filter(x=>['validating','blocked','received'].includes(x.status)).length">
+                    <td colspan="6">
+                      <div class="empty-state" style="padding:24px">
+                        <div class="empty-state-icon"><i class="pi pi-check-circle"></i></div>
+                        <div class="empty-state-title">Sin pendientes</div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- Next best action -->
+            <div class="next-action">
+              <div class="next-action-label"><i class="pi pi-lightbulb"></i> Acción recomendada</div>
+              <div class="next-action-title">Confirma ORD-2026-0412 antes de las 11:00</div>
+              <div class="next-action-desc">El Cevichero tiene un evento esta tarde y necesita confirmación. El langostino IQF tiene stock parcial (10 kg disponibles, 12 solicitados). Puedes sugerir camarón tigre IQF como alternativo.</div>
+              <button class="btn btn-secondary btn-sm" @click="nav('order-detail.html')"><i class="pi pi-arrow-right"></i> Revisar pedido</button>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="card card-pad">
+              <div class="card-title" style="margin-bottom:12px">Acciones rápidas</div>
+              <div class="quick-actions-grid">
+                <button class="quick-btn" @click="nav('create-order.html')"><i class="pi pi-plus-circle"></i>Crear pedido</button>
+                <button class="quick-btn" @click="nav('inventory.html')"><i class="pi pi-database"></i>Inventario</button>
+                <button class="quick-btn" @click="nav('dispatch.html')"><i class="pi pi-send"></i>Despacho</button>
+                <button class="quick-btn" @click="cs='orders'"><i class="pi pi-file-edit"></i>Pedidos</button>
+              </div>
+            </div>
+            <div class="card card-pad" style="flex:1">
+              <div class="card-title" style="margin-bottom:12px">Actividad reciente</div>
+              <div class="activity-item" v-for="a in D.activity" :key="a.time">
+                <div class="activity-dot" :style="{background:a.type==='success'?'#22C55E':a.type==='warning'?'#F59E0B':a.type==='danger'?'#EF4444':'#60A5FA'}"></div>
+                <span class="activity-text">{{a.text}}</span>
+                <span class="activity-time">{{a.time}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <!-- ─── CATALOG ─── -->
+      <template v-if="cs==='catalog'">
+        <div class="page-header">
+          <div><div class="page-title">Catálogo</div><div class="page-subtitle">{{D.products.length}} productos · Lima Norte y Callao</div></div>
+          <button class="btn btn-primary" @click="toast('info','Función en implementación con PrimeVue Dialog')"><i class="pi pi-plus"></i> Nuevo producto</button>
+        </div>
+        <div class="filter-bar">
+          <div class="search-input"><i class="pi pi-search"></i><input v-model="catSearch" placeholder="Buscar nombre o SKU..."></div>
+          <button v-for="f in catFilters" :key="f" class="filter-chip" :class="{active:catFilter===f}" @click="catFilter=f">{{f}}</button>
+        </div>
+        <div class="product-card-grid">
+          <div class="prod-card" v-for="p in filteredProds" :key="p.id" @click="nav('order-detail.html')">
+            <div class="product-placeholder" :class="'cat-'+p.cat" style="position:relative">
+              <div class="pp-icon"><i class="pi pi-box"></i></div>
+              <div class="pp-cat">{{p.category}}</div>
+              <div class="pp-hint">Imagen del producto</div>
+              <div v-if="p.status==='out'" class="out-stock-overlay"><span class="badge badge-red">Sin stock</span></div>
+            </div>
+            <div class="prod-body">
+              <div class="prod-name">{{p.name}}</div>
+              <div class="prod-sku">{{p.sku}}</div>
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                <span class="badge-temp">{{p.temp}}</span>
+                <span :class="'badge '+(p.status==='ok'?'badge-green':p.status==='low'?'badge-amber':'badge-red')">{{p.status==='ok'?'Disponible':p.status==='low'?'Stock bajo':'Sin stock'}}</span>
+              </div>
+            </div>
+            <div class="prod-footer">
+              <span class="prod-price">S/ {{p.price.toFixed(2)}}</span>
+              <span class="prod-stock">{{p.stock - p.reserved}} {{p.unit}} disp.</span>
+            </div>
+          </div>
+          <div v-if="!filteredProds.length" style="grid-column:1/-1">
+            <div class="empty-state"><div class="empty-state-icon"><i class="pi pi-search"></i></div><div class="empty-state-title">Sin resultados</div><div class="empty-state-desc">Intenta con otro término o categoría</div></div>
+          </div>
+        </div>
+      </template>
+
+      <!-- ─── ORDERS ─── -->
+      <template v-if="cs==='orders'">
+        <div class="page-header">
+          <div><div class="page-title">Pedidos</div><div class="page-subtitle">{{D.orders.length}} pedidos en el período</div></div>
+          <button class="btn btn-primary" @click="nav('create-order.html')"><i class="pi pi-plus"></i> Crear pedido</button>
+        </div>
+        <div class="filter-bar">
+          <div class="search-input"><i class="pi pi-search"></i><input placeholder="Buscar pedido o cliente..."></div>
+          <button v-for="f in ['Todos','En validación','Bloqueado','Confirmado','Preparando','Despachado','Entregado']" :key="f" class="filter-chip" :class="{active:ordFilter===f}" @click="ordFilter=f">{{f}}</button>
+        </div>
+        <div class="card" style="overflow:hidden">
+          <table class="data-table">
+            <thead><tr><th>Pedido</th><th>Cliente</th><th>Fecha</th><th>Total</th><th>Estado</th><th>Prioridad</th><th></th></tr></thead>
+            <tbody>
+              <tr v-for="o in filteredOrders" :key="o.id" style="cursor:pointer" @click="nav('order-detail.html')">
+                <td><span class="mono">{{o.id}}</span></td>
+                <td>
+                  <div style="font-weight:500;font-size:13px">{{D.clientName(o.clientId)}}</div>
+                  <div style="font-size:11px;color:#9CA3AF">{{D.clientByID(o.clientId)?.type}}</div>
+                </td>
+                <td style="font-size:12px;color:#6B7280">{{o.date}}</td>
+                <td style="font-weight:600;font-size:13px">S/ {{o.total.toFixed(2)}}</td>
+                <td><span :class="'badge '+statusBadge(o.status)">{{statusLabel(o.status)}}</span></td>
+                <td><span :class="'badge-priority-'+o.priority">{{o.priority==='high'?'Alta':o.priority==='medium'?'Media':'Baja'}}</span></td>
+                <td><button class="btn btn-ghost btn-sm" @click.stop="nav('order-detail.html')">Ver</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </template>
+
+      <!-- ─── CLIENTS ─── -->
+      <template v-if="cs==='clients'">
+        <div class="page-header">
+          <div><div class="page-title">Clientes</div><div class="page-subtitle">{{D.clients.length}} clientes registrados</div></div>
+          <button class="btn btn-primary" @click="toast('info','Nuevo cliente — usar PrimeVue Dialog')"><i class="pi pi-plus"></i> Nuevo cliente</button>
+        </div>
+        <div class="card" style="overflow:hidden">
+          <table class="data-table">
+            <thead><tr><th>Cliente</th><th>RUC</th><th>Tipo</th><th>Condición</th><th>Crédito utilizado</th><th>Estado</th><th>Último pedido</th><th></th></tr></thead>
+            <tbody>
+              <tr v-for="c in D.clients" :key="c.id">
+                <td>
+                  <div style="font-weight:500;font-size:13px">{{c.name}}</div>
+                  <div style="font-size:11px;color:#9CA3AF">{{c.contact}} · {{c.phone}}</div>
+                </td>
+                <td><span class="mono">{{c.ruc}}</span></td>
+                <td style="font-size:12px;color:#6B7280">{{c.type}}</td>
+                <td style="font-size:12px">{{c.condition}}</td>
+                <td style="min-width:140px">
+                  <template v-if="c.creditLimit">
+                    <div style="display:flex;justify-content:space-between;font-size:11px;color:#6B7280;margin-bottom:3px">
+                      <span>S/ {{c.creditUsed.toLocaleString()}}</span>
+                      <span>S/ {{c.creditLimit.toLocaleString()}}</span>
+                    </div>
+                    <div class="credit-bar-wrap"><div class="credit-bar" :style="{width:Math.min(100,Math.round(c.creditUsed/c.creditLimit*100))+'%',background:c.creditUsed>=c.creditLimit?'#EF4444':c.creditUsed/c.creditLimit>=0.8?'#F97316':'#22C55E'}"></div></div>
+                  </template>
+                  <span v-else style="font-size:12px;color:#9CA3AF">Contado</span>
+                </td>
+                <td><span :class="'badge '+(c.status==='active'?'badge-green':'badge-orange')">{{c.status==='active'?'Activo':'Observado'}}</span></td>
+                <td style="font-size:12px;color:#6B7280">{{c.lastOrder}}</td>
+                <td><button class="btn btn-ghost btn-sm" @click="toast('info','Ficha de '+c.name)">Ver ficha</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </template>
+
+      <!-- ─── SETTINGS ─── -->
+      <template v-if="cs==='settings'">
+        <div class="page-header"><div><div class="page-title">Configuración</div></div></div>
+        <div class="grid-2" style="align-items:start">
+          <div class="card card-pad">
+            <div class="card-title" style="margin-bottom:16px">Empresa</div>
+            <div v-for="f in [{l:'Razón social',v:D.company.name},{l:'RUC',v:D.company.ruc},{l:'Dirección',v:D.company.address},{l:'País',v:D.company.country}]" :key="f.l" style="margin-bottom:14px">
+              <div style="font-size:11px;font-weight:600;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">{{f.l}}</div>
+              <div style="font-size:13px;color:#374151">{{f.v}}</div>
+            </div>
+          </div>
+          <div class="card" style="overflow:hidden">
+            <div class="card-header"><span class="card-title">Usuarios y roles</span><button class="btn btn-primary btn-sm"><i class="pi pi-plus"></i> Invitar</button></div>
+            <table class="data-table">
+              <thead><tr><th>Usuario</th><th>Rol</th><th>Estado</th></tr></thead>
+              <tbody>
+                <tr v-for="u in users" :key="u.name">
+                  <td><div style="font-weight:500;font-size:13px">{{u.name}}</div><div style="font-size:11px;color:#9CA3AF">{{u.email}}</div></td>
+                  <td style="font-size:12px;color:#6B7280">{{u.role}}</td>
+                  <td><span :class="'badge '+(u.status==='Activo'?'badge-green':u.status==='Invitado'?'badge-amber':'badge-gray')">{{u.status}}</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </template>
+
+    </div><!-- /page -->
+  </div><!-- /main -->
+
+  <!-- Mobile nav -->
+  <nav class="mobile-nav"><div class="mobile-nav-inner">
+    <button class="mobile-nav-item" :class="{active:cs==='dashboard'}" @click="cs='dashboard'"><i class="pi pi-th-large"></i>Inicio</button>
+    <button class="mobile-nav-item" :class="{active:cs==='catalog'}" @click="cs='catalog'"><i class="pi pi-box"></i>Catálogo</button>
+    <button class="mobile-nav-item" :class="{active:cs==='orders'}" @click="cs='orders'"><i class="pi pi-file-edit"></i>Pedidos</button>
+    <button class="mobile-nav-item" @click="nav('dispatch.html')"><i class="pi pi-send"></i>Despacho</button>
+    <button class="mobile-nav-item" @click="nav('create-order.html')"><i class="pi pi-plus-circle"></i>Crear</button>
+  </div></nav>
+
+  <!-- Toasts -->
+  <div class="toast-wrap">
+    <div v-for="t in toasts" :key="t.id" :class="'toast toast-'+t.type"><i :class="'pi '+(t.type==='success'?'pi-check-circle':t.type==='danger'?'pi-times-circle':t.type==='warning'?'pi-exclamation-triangle':'pi-info-circle')"></i>{{t.msg}}</div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/vue@3.4.0/dist/vue.global.prod.js"></script>
+<script src="data.js"></script>
+<script>
+const { createApp, ref, computed } = Vue;
+createApp({
+  setup() {
+    const D = window.NexaData;
+    const cs = ref('dashboard');
+    const alertsOpen = ref(true);
+    const toasts = ref([]);
+    const catSearch = ref('');
+    const catFilter = ref('Todos');
+    const ordFilter = ref('Todos');
+
+    const catFilters = ['Todos', ...new Set(D.products.map(p => p.category))];
+
+    function nav(page) { window.location.href = page; }
+    function toast(type, msg) {
+      const id = Date.now(); toasts.value.push({ id, type, msg });
+      setTimeout(() => { toasts.value = toasts.value.filter(t => t.id !== id); }, 3500);
+    }
+    function handleAlert(a) {
+      if (['inventory'].includes(a.screen)) nav('inventory.html');
+      else if (a.screen === 'dispatch') nav('dispatch.html');
+      else { cs.value = a.screen === 'orders' ? 'orders' : 'clients'; }
+    }
+    function statusLabel(s) {
+      return { draft:'Borrador', received:'Recibido', validating:'En validación', confirmed:'Confirmado', preparing:'Preparando', dispatched:'Despachado', delivered:'Entregado', observed:'Observado', cancelled:'Cancelado', rejected:'Rechazado', blocked:'Bloqueado' }[s] || s;
+    }
+    function statusBadge(s) {
+      return 'badge-' + ({ draft:'gray', received:'blue', validating:'orange', confirmed:'blue', preparing:'amber', dispatched:'blue', delivered:'green', observed:'orange', cancelled:'gray', rejected:'red', blocked:'red' }[s] || 'gray');
+    }
+    const filteredProds = computed(() => {
+      let p = D.products;
+      if (catFilter.value !== 'Todos') p = p.filter(x => x.category === catFilter.value);
+      if (catSearch.value) p = p.filter(x => x.name.toLowerCase().includes(catSearch.value.toLowerCase()) || x.sku.toLowerCase().includes(catSearch.value.toLowerCase()));
+      return p;
+    });
+    const filteredOrders = computed(() => {
+      if (ordFilter.value === 'Todos') return D.orders;
+      return D.orders.filter(o => statusLabel(o.status) === ordFilter.value);
+    });
+    const screenTitle = computed(() => ({ dashboard:'Dashboard', catalog:'Catálogo', orders:'Pedidos', clients:'Clientes', settings:'Configuración' }[cs.value] || 'Nexa Ops'));
+
+    const users = [
+      { name:'María Fernández', email:'mfernandez@friopacifico.pe', role:'Jefa comercial', status:'Activo' },
+      { name:'Carlos Ríos', email:'crios@friopacifico.pe', role:'Administrador', status:'Activo' },
+      { name:'Ana Torres', email:'atorres@friopacifico.pe', role:'Encargada inventario', status:'Activo' },
+      { name:'Juan Ccoya', email:'jccoya@friopacifico.pe', role:'Repartidor', status:'Activo' },
+      { name:'Pedro Quispe', email:'pquispe@friopacifico.pe', role:'Repartidor', status:'Activo' },
+      { name:'Rosa Palomino', email:'rpalomino@friopacifico.pe', role:'Asistente ventas', status:'Invitado' },
+    ];
+
+    return { D, cs, alertsOpen, toasts, catSearch, catFilter, catFilters, ordFilter, filteredProds, filteredOrders, screenTitle, users, nav, toast, handleAlert, statusLabel, statusBadge };
+  }
+}).mount('#app');
+</script>
+</body>
+</html>
