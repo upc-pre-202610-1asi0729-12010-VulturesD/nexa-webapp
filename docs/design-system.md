@@ -20,3 +20,7 @@ Document button hierarchy, input focus states, validation affordances, and disab
 
 Document mobile and desktop layout expectations for dense operational views.
 
+## Status color semantics
+
+Document success, warning, critical, and neutral status semantics across contexts.
+
