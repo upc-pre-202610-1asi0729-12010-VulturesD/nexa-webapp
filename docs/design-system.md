@@ -12,3 +12,7 @@ Document sidebar, topbar, content width, and responsive shell behavior for opera
 
 Document repeated card, table, and badge patterns used by catalog, orders, dispatch, and reports.
 
+## Button and form states
+
+Document button hierarchy, input focus states, validation affordances, and disabled states.
+
