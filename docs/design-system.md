@@ -24,3 +24,7 @@ Document mobile and desktop layout expectations for dense operational views.
 
 Document success, warning, critical, and neutral status semantics across contexts.
 
+## Visual acceptance checklist
+
+Document the visual QA checklist used before TB1 release.
+
