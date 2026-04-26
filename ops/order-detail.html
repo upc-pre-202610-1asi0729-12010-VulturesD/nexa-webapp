@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Detalle de pedido — Nexa Ops</title>
+<link rel="stylesheet" href="https://unpkg.com/primeicons/primeicons.css">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="ops.css">
+<style>
+body { background: #F9F7F4; }
+.od-shell { max-width: 1100px; margin: 0 auto; padding: 24px; }
+.od-grid { display: grid; grid-template-columns: 1fr 320px; gap: 20px; align-items: start; }
+@media(max-width:900px) { .od-grid { grid-template-columns: 1fr; } }
+.status-stage { display: flex; flex-direction: column; align-items: center; flex: 1; }
+.status-bar   { display: flex; align-items: flex-start; gap: 0; padding: 0 4px; }
+.stage-circle { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+.stage-label  { font-size: 10px; font-weight: 500; text-align: center; margin-top: 6px; white-space: nowrap; }
+.stage-line   { height: 2px; flex: 1; margin-top: 16px; }
+.stage-done   .stage-circle { background: #22C55E; color: #fff; }
+.stage-done   .stage-label  { color: #15803D; }
+.stage-done   .stage-line   { background: #22C55E; }
+.stage-active .stage-circle { background: #2563EB; color: #fff; box-shadow: 0 0 0 4px #DBEAFE; }
+.stage-active .stage-label  { color: #1D4ED8; font-weight: 600; }
+.stage-active .stage-line   { background: #E5E7EB; }
+.stage-pending .stage-circle { background: #E5E7EB; color: #6B7280; }
+.stage-pending .stage-label  { color: #9CA3AF; }
+.stage-pending .stage-line   { background: #E5E7EB; }
+.stage-special .stage-circle { background: #EF4444; color: #fff; }
+.stage-special .stage-label  { color: #B91C1C; font-weight: 600; }
+.info-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid #F3F0EC; font-size: 13px; }
+.info-row:last-child { border-bottom: none; }
+.info-label { color: #6B7280; font-size: 12px; }
+.comment-row { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid #F3F0EC; }
+.comment-row:last-child { border-bottom: none; }
+.comment-avatar { width: 28px; height: 28px; border-radius: 50%; background: #DBEAFE; color: #1D4ED8; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+.comment-text  { font-size: 12px; color: #374151; line-height: 1.5; flex: 1; }
+.comment-time  { font-size: 10px; color: #9CA3AF; }
+.action-bar { background: #fff; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="od-shell">
+
+    <!-- Header -->
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+      <button class="btn btn-ghost btn-sm" @click="nav('index.html')"><i class="pi pi-arrow-left"></i> Pedidos</button>
+      <div style="flex:1">
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;color:#111827">Pedido ORD-2026-0412</div>
+        <div style="font-size:12px;color:#9CA3AF">Creado el 27 abr 2026 · Por María Fernández</div>
+      </div>
+      <span class="badge badge-orange" style="font-size:13px;padding:5px 12px">En validación</span>
+    </div>
+
+    <!-- Action bar -->
+    <div class="action-bar">
+      <div style="flex:1;font-size:13px;color:#374151"><i class="pi pi-info-circle" style="color:#2563EB;margin-right:6px"></i>Pedido recibido hace 48 min. Requiere confirmación manual por stock parcial en langostino IQF.</div>
+      <button class="btn btn-ghost" @click="showReject=true">Rechazar</button>
+      <button class="btn btn-secondary" @click="toast('info','Pedido guardado como observado')">Observar</button>
+      <button class="btn btn-primary" @click="showConfirm=true"><i class="pi pi-check"></i> Confirmar pedido</button>
+    </div>
+
+    <!-- Status timeline bar -->
+    <div class="card card-pad" style="margin-bottom:16px">
+      <div class="section-label" style="margin-bottom:14px">Estado del pedido</div>
+      <div class="status-bar">
+        <template v-for="(stage,i) in statusStages" :key="stage.key">
+          <div class="status-stage" :class="'stage-'+stageState(stage.key,i)">
+            <div class="stage-circle"><i :class="'pi '+stage.icon" style="font-size:13px"></i></div>
+            <div class="stage-label">{{stage.label}}</div>
+          </div>
+          <div v-if="i<statusStages.length-1" class="stage-line" :class="i<currentStageIdx?'stage-done stage-line':'stage-pending stage-line'"></div>
+        </template>
+      </div>
+    </div>
+
+    <div class="od-grid">
+      <!-- LEFT: Products + Timeline -->
+      <div style="display:flex;flex-direction:column;gap:16px">
+
+        <!-- Products table -->
+        <div class="card" style="overflow:hidden">
+          <div class="card-header"><span class="card-title">Productos del pedido</span></div>
+          <table class="data-table">
+            <thead><tr><th>Producto</th><th>SKU</th><th>Cantidad</th><th>Precio unit.</th><th>Subtotal</th><th>Lote asignado</th><th>Stock</th></tr></thead>
+            <tbody>
+              <tr v-for="item in orderItems" :key="item.productId">
+                <td>
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div class="product-placeholder" :class="'cat-'+item.cat" style="width:30px;height:30px;border-radius:6px;flex-shrink:0">
+                      <i class="pi pi-box" style="font-size:11px;color:rgba(0,0,0,0.2);position:relative;z-index:1"></i>
+                    </div>
+                    <span style="font-size:13px;font-weight:500">{{item.name}}</span>
+                  </div>
+                </td>
+                <td><span class="mono">{{item.sku}}</span></td>
+                <td style="font-weight:600">{{item.qty}} {{item.unit}}</td>
+                <td>S/ {{item.price.toFixed(2)}}</td>
+                <td style="font-weight:600">S/ {{(item.qty*item.price).toFixed(2)}}</td>
+                <td>
+                  <span class="mono" v-if="item.lotId">{{item.lotId}}</span>
+                  <span v-else style="color:#9CA3AF;font-size:12px">Sin asignar</span>
+                </td>
+                <td>
+                  <span v-if="item.stockOk" class="badge badge-green">Reservado</span>
+                  <span v-else class="badge badge-amber">Stock parcial</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="padding:14px 20px;display:flex;justify-content:flex-end;border-top:1px solid #E5E7EB;gap:24px;align-items:center">
+            <div style="font-size:12px;color:#6B7280">Condición: <strong>30 días neto</strong></div>
+            <div style="text-align:right"><div style="font-size:11px;color:#9CA3AF">Total del pedido</div><div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:700;color:#111827">S/ 1,011.00</div></div>
+          </div>
+        </div>
+
+        <!-- Internal activity -->
+        <div class="card card-pad">
+          <div class="card-title" style="margin-bottom:14px">Actividad interna</div>
+          <div class="timeline">
+            <div class="tl-item" v-for="ev in orderEvents" :key="ev.label">
+              <div class="tl-spine"></div>
+              <div class="tl-dot" :style="{background:ev.bg,color:ev.color}"><i :class="'pi '+ev.icon" style="font-size:11px"></i></div>
+              <div class="tl-content"><div class="tl-title">{{ev.label}}</div><div class="tl-meta">{{ev.user}} · {{ev.time}}</div><div v-if="ev.note" style="font-size:12px;color:#6B7280;margin-top:3px;background:#F9F7F4;border-radius:6px;padding:6px 8px">{{ev.note}}</div></div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <!-- Add comment -->
+          <div style="display:flex;gap:8px;align-items:flex-end">
+            <div class="avatar avatar-sm">MF</div>
+            <div class="field-input" style="flex:1;align-items:flex-start"><textarea rows="2" style="border:none;outline:none;font-size:13px;flex:1;background:transparent;resize:none;width:100%" placeholder="Añade un comentario interno..."></textarea></div>
+            <button class="btn btn-secondary btn-sm" @click="toast('success','Comentario guardado')"><i class="pi pi-send"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Client info + Dispatch info -->
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="card card-pad">
+          <div class="card-title" style="margin-bottom:14px">Cliente</div>
+          <div class="info-row"><span class="info-label">Empresa</span><span style="font-weight:500">Restaurant El Cevichero</span></div>
+          <div class="info-row"><span class="info-label">RUC</span><span class="mono">20601234567</span></div>
+          <div class="info-row"><span class="info-label">Contacto</span><span>Lucía Quispe</span></div>
+          <div class="info-row"><span class="info-label">Teléfono</span><span>+51 987 654 321</span></div>
+          <div class="info-row"><span class="info-label">Dirección entrega</span><span style="text-align:right;max-width:160px;font-size:12px">Av. La Mar 1240, Miraflores</span></div>
+          <div class="info-row"><span class="info-label">Condición</span><span>30 días neto</span></div>
+          <div class="info-row"><span class="info-label">Nota del pedido</span><span style="font-size:12px;color:#6B7280;text-align:right">Entrega urgente — evento viernes 28 abr</span></div>
+        </div>
+
+        <div class="card card-pad">
+          <div class="card-title" style="margin-bottom:14px">Despacho</div>
+          <div class="empty-state" style="padding:16px 0">
+            <div class="empty-state-icon"><i class="pi pi-send"></i></div>
+            <div class="empty-state-title" style="font-size:13px">Sin despacho asignado</div>
+            <div class="empty-state-desc" style="font-size:12px">El despacho se creará cuando el pedido esté en preparación</div>
+          </div>
+        </div>
+
+        <div class="card card-pad">
+          <div class="card-title" style="margin-bottom:14px">Evidencia de entrega</div>
+          <div class="perm-state" style="padding:16px 0">
+            <div class="perm-icon"><i class="pi pi-camera"></i></div>
+            <div class="perm-title" style="font-size:13px">Pendiente de despacho</div>
+            <div class="perm-desc" style="font-size:12px">La evidencia se registrará durante la entrega</div>
+          </div>
+        </div>
+
+        <div class="card card-pad" style="background:#F0F7FF;border-color:#BFDBFE">
+          <div style="font-size:10px;font-weight:700;color:#2563EB;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px">Crédito del cliente</div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:#374151;margin-bottom:4px">
+            <span>Utilizado: S/ 8,400</span><span>Límite: S/ 15,000</span>
+          </div>
+          <div class="credit-bar-wrap"><div class="credit-bar" style="width:56%;background:#22C55E"></div></div>
+          <div style="font-size:11px;color:#15803D;margin-top:4px">56% utilizado · S/ 6,600 disponibles</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm modal -->
+  <div class="modal-overlay" v-if="showConfirm" @click.self="showConfirm=false">
+    <div class="modal">
+      <div class="modal-title">Confirmar pedido</div>
+      <div class="banner banner-warning"><i class="pi pi-exclamation-triangle"></i><div>El langostino IQF tiene stock parcial (10 kg disponibles, 12 solicitados). Se confirmará con el stock disponible.</div></div>
+      <div style="font-size:13px;color:#374151;margin-bottom:8px">¿Confirmas el pedido <strong>ORD-2026-0412</strong> para <strong>El Cevichero</strong> por S/ 1,011.00?</div>
+      <div style="font-size:12px;color:#6B7280">El stock quedará reservado y el pedido pasará a preparación.</div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" @click="showConfirm=false">Cancelar</button>
+        <button class="btn btn-primary" @click="confirmOrder()"><i class="pi pi-check"></i> Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reject modal -->
+  <div class="modal-overlay" v-if="showReject" @click.self="showReject=false">
+    <div class="modal">
+      <div class="modal-title">Rechazar pedido</div>
+      <div class="field" style="margin-bottom:16px">
+        <div class="field-label">Motivo del rechazo</div>
+        <div class="field-input" style="align-items:flex-start"><textarea v-model="rejectReason" rows="3" style="border:none;outline:none;font-size:13px;flex:1;background:transparent;resize:none" placeholder="Indica el motivo para notificar al cliente..."></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" @click="showReject=false">Cancelar</button>
+        <button class="btn btn-danger" @click="rejectOrder()"><i class="pi pi-times"></i> Rechazar pedido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div class="toast-wrap">
+    <div v-for="t in toasts" :key="t.id" :class="'toast toast-'+t.type"><i :class="'pi '+(t.type==='success'?'pi-check-circle':'pi-info-circle')"></i>{{t.msg}}</div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/vue@3.4.0/dist/vue.global.prod.js"></script>
+<script src="data.js"></script>
+<script>
+const { createApp, ref } = Vue;
+createApp({
+  setup() {
+    const D = window.NexaData;
+    const toasts = ref([]);
+    const showConfirm = ref(false);
+    const showReject = ref(false);
+    const rejectReason = ref('');
+    const currentStageIdx = ref(2); // validating
+
+    function nav(p) { window.location.href = p; }
+    function toast(type, msg) {
+      const id = Date.now(); toasts.value.push({ id, type, msg });
+      setTimeout(() => { toasts.value = toasts.value.filter(t => t.id !== id); }, 3500);
+    }
+    function confirmOrder() { showConfirm.value = false; currentStageIdx.value = 3; toast('success', 'Pedido ORD-2026-0412 confirmado. Stock reservado.'); }
+    function rejectOrder()  { showReject.value = false; toast('danger', 'Pedido rechazado. Se notificará al cliente.'); }
+
+    const statusStages = [
+      { key:'received',  label:'Recibido',    icon:'pi-inbox' },
+      { key:'validating',label:'Validación',  icon:'pi-clock' },
+      { key:'confirmed', label:'Confirmado',  icon:'pi-check' },
+      { key:'preparing', label:'Preparando',  icon:'pi-box' },
+      { key:'dispatched',label:'Despachado',  icon:'pi-send' },
+      { key:'delivered', label:'Entregado',   icon:'pi-check-circle' },
+    ];
+
+    function stageState(key, i) {
+      if (i < currentStageIdx.value) return 'done';
+      if (i === currentStageIdx.value) return 'active';
+      return 'pending';
+    }
+
+    const orderItems = [
+      { productId:'PRD-001', name:'Filete de merluza congelado', sku:'SKU-ML-001-CF', cat:'seafood', qty:30, unit:'kg', price:18.50, lotId:'LOT-2026-014', stockOk:true },
+      { productId:'PRD-003', name:'Langostino pelado IQF', sku:'SKU-LG-003-CF', cat:'seafood', qty:12, unit:'kg', price:38.00, lotId:'LOT-2026-011', stockOk:false },
+    ];
+
+    const orderEvents = [
+      { label:'Pedido recibido del cliente', user:'Sistema', time:'27 abr 2026 · 08:20', icon:'pi-inbox', bg:'#DBEAFE', color:'#1D4ED8', note:null },
+      { label:'Validación de stock iniciada', user:'Sistema', time:'27 abr 2026 · 08:20', icon:'pi-search', bg:'#FEF3C7', color:'#B45309', note:null },
+      { label:'Stock parcial detectado: langostino IQF', user:'Sistema', time:'27 abr 2026 · 08:21', icon:'pi-exclamation-triangle', bg:'#FFEDD5', color:'#C2410C', note:'Solicitado: 12 kg · Disponible en LOT-2026-011: 10 kg' },
+    ];
+
+    return { D, toasts, showConfirm, showReject, rejectReason, currentStageIdx, statusStages, orderItems, orderEvents, stageState, nav, toast, confirmOrder, rejectOrder };
+  }
+}).mount('#app');
+</script>
+</body>
+</html>
