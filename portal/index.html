@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Nexa Portal — Cliente B2B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/primeicons/primeicons.css">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+body { font-family: 'Inter', sans-serif; background: #F9F7F4; min-height: 100vh; color: #111827; }
+button { cursor:pointer; font-family:inherit; }
+/* Topbar */
+.portal-topbar { background: #fff; border-bottom: 1px solid #E5E7EB; height: 60px; display: flex; align-items: center; padding: 0 24px; gap: 16px; position: sticky; top: 0; z-index: 30; }
+.portal-nav { display: flex; gap: 2px; }
+.portal-nav-item { padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; color: #6B7280; cursor: pointer; border: none; background: none; transition: all 140ms; }
+.portal-nav-item:hover { background: #F9F7F4; color: #111827; }
+.portal-nav-item.active { background: #EFF6FF; color: #2563EB; font-weight: 600; }
+.cart-btn { display: flex; align-items: center; gap: 7px; padding: 8px 14px; background: #2563EB; color: #fff; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; transition: background 140ms; }
+.cart-btn:hover { background: #1D4ED8; }
+.cart-count { background: #F97316; color: #fff; border-radius: 9999px; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+/* Page */
+.portal-page { max-width: 1060px; margin: 0 auto; padding: 28px 20px; }
+/* Cards */
+.card { background: #fff; border: 1px solid #E5E7EB; border-radius: 12px; }
+.card-pad { padding: 20px; }
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 500; }
+.badge::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; flex-shrink:0; }
+.badge-green  { background: #DCFCE7; color: #15803D; }
+.badge-amber  { background: #FEF3C7; color: #B45309; }
+.badge-orange { background: #FFEDD5; color: #C2410C; }
+.badge-blue   { background: #DBEAFE; color: #1D4ED8; }
+.badge-gray   { background: #F3F4F6; color: #6B7280; }
+/* Grids */
+.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+@media(max-width:900px){ .grid-4{grid-template-columns:repeat(2,1fr);} .grid-3{grid-template-columns:repeat(2,1fr);} }
+@media(max-width:560px){ .grid-4,.grid-3,.grid-2{grid-template-columns:1fr;} }
+/* Home hero */
+.portal-hero { background: linear-gradient(140deg, #1E3A8A 0%, #2563EB 100%); border-radius: 16px; padding: 36px 40px; color: #fff; margin-bottom: 24px; position: relative; overflow: hidden; }
+.portal-hero::after { content:''; position:absolute; right:-60px; top:-60px; width:280px; height:280px; border-radius:50%; background:rgba(255,255,255,0.05); }
+.portal-hero::before { content:''; position:absolute; left:-40px; bottom:-60px; width:200px; height:200px; border-radius:50%; background:rgba(37,99,235,0.4); }
+.hero-greeting { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 6px; position: relative; z-index: 1; }
+.hero-sub { font-size: 13px; opacity: 0.7; margin-bottom: 20px; position: relative; z-index: 1; }
+/* Product cards */
+.prod-card { background: #fff; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; transition: box-shadow 140ms; cursor: pointer; }
+.prod-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+.prod-placeholder { height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; position: relative; overflow: hidden; }
+.prod-placeholder::before { content:''; position:absolute; inset:0; background-image:radial-gradient(rgba(0,0,0,0.055) 1px,transparent 1px); background-size:14px 14px; }
+.pp-icon { font-size:26px; color:rgba(0,0,0,0.18); position:relative; z-index:1; }
+.pp-cat  { font-size:9px; font-weight:600; color:rgba(0,0,0,0.32); text-transform:uppercase; letter-spacing:0.07em; position:relative; z-index:1; }
+.pp-hint { font-size:8px; color:rgba(0,0,0,0.2); border:1px dashed rgba(0,0,0,0.18); padding:1px 6px; border-radius:3px; position:relative; z-index:1; }
+.cat-seafood    { background: linear-gradient(145deg, #EFF6FF, #DBEAFE); }
+.cat-poultry    { background: linear-gradient(145deg, #FFFBEB, #FEF3C7); }
+.cat-dairy      { background: linear-gradient(145deg, #F0FDF4, #DCFCE7); }
+.cat-coldcuts   { background: linear-gradient(145deg, #FFF1F2, #FFE4E6); }
+.cat-vegetables { background: linear-gradient(145deg, #F0FDF4, #DCFCE7); }
+.prod-body  { padding: 12px; flex: 1; }
+.prod-name  { font-size: 13px; font-weight: 600; color: #111827; line-height: 1.3; margin-bottom: 4px; }
+.prod-sku   { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #9CA3AF; margin-bottom: 6px; }
+.prod-temp  { font-size: 10px; color: #6B7280; display: flex; align-items: center; gap: 3px; margin-bottom: 6px; }
+.prod-footer { padding: 10px 12px; border-top: 1px solid #F3F0EC; display: flex; align-items: center; justify-content: space-between; }
+.prod-price { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700; color: #111827; }
+.add-btn    { width: 30px; height: 30px; border-radius: 8px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 140ms; }
+.add-btn-default { background: #EFF6FF; color: #2563EB; }
+.add-btn-default:hover { background: #2563EB; color: #fff; }
+.add-btn-added { background: #DCFCE7; color: #15803D; }
+/* Filter */
+.filter-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+.search-inp { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #E5E7EB; border-radius: 8px; padding: 8px 12px; min-width: 220px; }
+.search-inp input { border: none; outline: none; font-size: 13px; color: #111827; flex: 1; background: transparent; }
+.search-inp input::placeholder { color: #9CA3AF; }
+.search-inp .pi { color: #9CA3AF; font-size: 14px; }
+.filter-chip { padding: 6px 13px; border-radius: 6px; border: 1px solid #E5E7EB; background: #fff; font-size: 12px; font-weight: 500; color: #6B7280; cursor: pointer; transition: all 140ms; }
+.filter-chip:hover  { background: #F9F7F4; }
+.filter-chip.active { background: #EFF6FF; color: #2563EB; border-color: #BFDBFE; }
+/* Order status bar */
+.os-bar   { display: flex; align-items: flex-start; padding: 8px 0; }
+.os-step  { display: flex; flex-direction: column; align-items: center; flex: 1; gap: 6px; }
+.os-circle { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+.os-label  { font-size: 10px; font-weight: 500; text-align: center; white-space: nowrap; }
+.os-line   { height: 2px; flex: 1; margin-top: 15px; }
+.os-done   .os-circle { background: #22C55E; color: #fff; }
+.os-done   .os-label  { color: #15803D; }
+.os-done   .os-line   { background: #22C55E; }
+.os-active .os-circle { background: #2563EB; color: #fff; box-shadow: 0 0 0 4px #DBEAFE; }
+.os-active .os-label  { color: #1D4ED8; font-weight: 600; }
+.os-active .os-line   { background: #E5E7EB; }
+.os-pending .os-circle { background: #E5E7EB; color: #6B7280; }
+.os-pending .os-label  { color: #9CA3AF; }
+.os-pending .os-line   { background: #E5E7EB; }
+/* Cart drawer */
+.drawer-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.28); backdrop-filter:blur(2px); z-index:80; }
+.cart-drawer { position:fixed; top:0; right:0; bottom:0; width:380px; background:#fff; border-left:1px solid #E5E7EB; box-shadow:-4px 0 32px rgba(0,0,0,0.10); z-index:90; display:flex; flex-direction:column; transform:translateX(100%); transition:transform 0.28s cubic-bezier(0.16,1,0.3,1); }
+.cart-drawer.open { transform:translateX(0); }
+.cart-header { padding:18px 24px; border-bottom:1px solid #E5E7EB; display:flex; align-items:center; justify-content:space-between; }
+.cart-title  { font-family:'Plus Jakarta Sans',sans-serif; font-size:15px; font-weight:700; }
+.cart-close  { width:30px; height:30px; border-radius:8px; border:1px solid #E5E7EB; background:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#6B7280; font-size:13px; }
+.cart-items  { flex:1; overflow-y:auto; padding:16px 24px; }
+.cart-item   { display:flex; gap:10px; align-items:center; padding:11px 0; border-bottom:1px solid #F3F0EC; }
+.cart-item:last-child { border-bottom:none; }
+.qty-ctrl { display:flex; align-items:center; gap:5px; }
+.qty-btn  { width:24px; height:24px; border-radius:6px; border:1px solid #E5E7EB; background:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; color:#374151; }
+.qty-val  { font-size:13px; font-weight:600; min-width:20px; text-align:center; }
+.cart-footer { padding:18px 24px; border-top:1px solid #E5E7EB; }
+.cart-total-row { display:flex; justify-content:space-between; margin-bottom:14px; }
+.cart-confirm-btn { width:100%; padding:12px; background:#2563EB; color:#fff; border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; font-family:inherit; transition:background 140ms; }
+.cart-confirm-btn:hover { background:#1D4ED8; }
+/* Toast */
+.toast-wrap { position:fixed; top:16px; right:16px; z-index:9999; display:flex; flex-direction:column; gap:8px; pointer-events:none; }
+.toast { padding:11px 15px; border-radius:10px; font-size:13px; font-weight:500; box-shadow:0 4px 16px rgba(0,0,0,0.10); display:flex; align-items:center; gap:8px; animation:tin 0.25s cubic-bezier(0.16,1,0.3,1); max-width:300px; pointer-events:all; }
+@keyframes tin { from{opacity:0;transform:translateX(14px);} to{opacity:1;transform:translateX(0);} }
+.toast-success { background:#DCFCE7; color:#15803D; border:1px solid #BBF7D0; }
+.toast-info    { background:#DBEAFE; color:#1D4ED8; border:1px solid #BFDBFE; }
+/* Data table */
+.data-table { width:100%; border-collapse:collapse; }
+.data-table th { font-size:11px; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.05em; padding:10px 14px; text-align:left; border-bottom:1px solid #E5E7EB; background:#F9F7F4; }
+.data-table td { padding:12px 14px; font-size:13px; color:#374151; border-bottom:1px solid #F3F0EC; }
+.data-table tr:hover td { background:#F9F7F4; }
+.data-table tr:last-child td { border-bottom:none; }
+/* Btn */
+.btn { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:8px; font-size:13px; font-weight:500; cursor:pointer; border:none; transition:all 140ms; white-space:nowrap; }
+.btn-primary   { background:#2563EB; color:#fff; }
+.btn-primary:hover { background:#1D4ED8; }
+.btn-ghost     { background:transparent; color:#4B5563; border:1px solid #E5E7EB; }
+.btn-ghost:hover { background:#F9F7F4; }
+.btn-sm { padding:5px 10px; font-size:12px; border-radius:6px; }
+/* Avatar */
+.avatar { width:32px; height:32px; border-radius:50%; background:#DBEAFE; color:#1D4ED8; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; cursor:pointer; }
+@media(max-width:600px) { .portal-nav{display:none;} .portal-page{padding:16px;} .portal-hero{padding:24px 20px;} }
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- Topbar -->
+  <header class="portal-topbar">
+    <img src="../assets/logo.svg" alt="Nexa" style="height:26px">
+    <nav class="portal-nav">
+      <button class="portal-nav-item" :class="{active:screen==='home'}" @click="screen='home'">Inicio</button>
+      <button class="portal-nav-item" :class="{active:screen==='catalog'}" @click="screen='catalog'">Catálogo</button>
+      <button class="portal-nav-item" :class="{active:screen==='orders'}" @click="screen='orders'">Mis pedidos</button>
+    </nav>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
+      <button class="cart-btn" @click="cartOpen=true">
+        <i class="pi pi-shopping-cart"></i> Carrito
+        <span class="cart-count" v-if="cartItems.length">{{cartItems.length}}</span>
+      </button>
+      <div class="avatar" title="Lucía Quispe">LQ</div>
+    </div>
+  </header>
+
+  <!-- HOME -->
+  <div class="portal-page" v-if="screen==='home'">
+    <div class="portal-hero">
+      <div class="hero-greeting">Hola, Lucía</div>
+      <div class="hero-sub">Restaurant El Cevichero · 30 días neto · Crédito: S/ 8,400 / 15,000 utilizados</div>
+      <div style="display:flex;gap:8px;position:relative;z-index:1">
+        <button class="btn btn-primary" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.35)" @click="screen='catalog'"><i class="pi pi-box"></i> Ver catálogo</button>
+        <button class="btn btn-primary" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25)" @click="screen='orders'"><i class="pi pi-file-edit"></i> Mis pedidos</button>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-bottom:24px">
+      <div class="card card-pad" style="cursor:pointer" @click="screen='orders'">
+        <div style="font-size:11px;color:#9CA3AF;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600">Pedido activo</div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:700;margin-bottom:6px">ORD-2026-0412</div>
+        <span class="badge badge-orange">En validación</span>
+        <div style="font-size:11px;color:#9CA3AF;margin-top:8px">Enviado hace 48 min · S/ 1,011.00</div>
+      </div>
+      <div class="card card-pad">
+        <div style="font-size:11px;color:#9CA3AF;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600">Crédito disponible</div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:700;margin-bottom:6px;color:#22C55E">S/ 6,600</div>
+        <div style="height:5px;background:#E5E7EB;border-radius:9999px;overflow:hidden;margin-bottom:6px"><div style="width:56%;height:100%;background:#22C55E;border-radius:9999px"></div></div>
+        <div style="font-size:11px;color:#6B7280">56% utilizado · límite S/ 15,000</div>
+      </div>
+      <div class="card card-pad" style="cursor:pointer" @click="screen='orders'">
+        <div style="font-size:11px;color:#9CA3AF;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600">Última entrega</div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:700;margin-bottom:6px">ORD-2026-0406</div>
+        <span class="badge badge-green">Entregada</span>
+        <div style="font-size:11px;color:#9CA3AF;margin-top:8px">24 abr 2026 · S/ 620.00</div>
+      </div>
+    </div>
+
+    <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:600;margin-bottom:14px">Productos frecuentes</div>
+    <div class="grid-4">
+      <div class="prod-card" v-for="p in products.slice(0,4)" :key="p.id">
+        <div class="prod-placeholder" :class="'cat-'+p.cat">
+          <i class="pi pi-box pp-icon"></i><div class="pp-cat">{{p.category}}</div><div class="pp-hint">Imagen del producto</div>
+        </div>
+        <div class="prod-body">
+          <div class="prod-name">{{p.name}}</div>
+          <div class="prod-sku">{{p.sku}}</div>
+          <div class="prod-temp"><i class="pi pi-thermometer" style="font-size:10px"></i>{{p.temp}}</div>
+          <span :class="'badge '+(p.available?'badge-green':'badge-red')">{{p.available?'Disponible':'Sin stock'}}</span>
+        </div>
+        <div class="prod-footer">
+          <span class="prod-price">S/ {{p.price}}</span>
+          <button class="add-btn" :class="isInCart(p.id)?'add-btn-added':'add-btn-default'" @click="addToCart(p)" :disabled="!p.available">
+            <i :class="'pi '+(isInCart(p.id)?'pi-check':'pi-plus')"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATALOG -->
+  <div class="portal-page" v-if="screen==='catalog'">
+    <div style="margin-bottom:18px"><div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:700">Catálogo</div><div style="font-size:13px;color:#6B7280;margin-top:3px">Productos disponibles para tu empresa</div></div>
+    <div class="filter-bar">
+      <div class="search-inp"><i class="pi pi-search"></i><input v-model="catSearch" placeholder="Buscar producto..."></div>
+      <button v-for="f in catFilters" :key="f" class="filter-chip" :class="{active:catFilter===f}" @click="catFilter=f">{{f}}</button>
+    </div>
+    <div class="grid-4">
+      <div class="prod-card" v-for="p in filteredProds" :key="p.id">
+        <div class="prod-placeholder" :class="'cat-'+p.cat" :style="!p.available?'opacity:0.55':''">
+          <i class="pi pi-box pp-icon"></i><div class="pp-cat">{{p.category}}</div><div class="pp-hint">Imagen del producto</div>
+        </div>
+        <div class="prod-body">
+          <div class="prod-name">{{p.name}}</div>
+          <div class="prod-sku">{{p.sku}}</div>
+          <div class="prod-temp"><i class="pi pi-thermometer" style="font-size:10px"></i>{{p.temp}}</div>
+          <span :class="'badge '+(p.available?'badge-green':p.lowStock?'badge-amber':'badge-red')">{{p.available?'Disponible':p.lowStock?'Stock limitado':'Sin stock'}}</span>
+        </div>
+        <div class="prod-footer">
+          <span class="prod-price">S/ {{p.price}}</span>
+          <button class="add-btn" :class="isInCart(p.id)?'add-btn-added':'add-btn-default'" @click="addToCart(p)" :disabled="!p.available" :style="!p.available?'opacity:0.3;cursor:not-allowed':''">
+            <i :class="'pi '+(isInCart(p.id)?'pi-check':'pi-plus')"></i>
+          </button>
+        </div>
+      </div>
+      <div v-if="!filteredProds.length" style="grid-column:1/-1;padding:48px;text-align:center;color:#9CA3AF">Sin resultados para esta búsqueda</div>
+    </div>
+  </div>
+
+  <!-- MY ORDERS -->
+  <div class="portal-page" v-if="screen==='orders'">
+    <div style="margin-bottom:18px"><div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:700">Mis pedidos</div></div>
+    <!-- Active order -->
+    <div class="card card-pad" style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700">Pedido ORD-2026-0412</div>
+        <span class="badge badge-orange">En validación</span>
+      </div>
+      <div style="font-size:12px;color:#9CA3AF;margin-bottom:18px">Enviado 27 abr 2026 · 2 productos · S/ 1,011.00</div>
+      <div style="font-size:11px;font-weight:600;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px">Estado del pedido</div>
+      <div class="os-bar">
+        <template v-for="(s,i) in orderStages" :key="s.key">
+          <div class="os-step" :class="i<2?'os-done':i===2?'os-active':'os-pending'">
+            <div class="os-circle"><i :class="'pi '+s.icon" style="font-size:12px"></i></div>
+            <div class="os-label">{{s.label}}</div>
+          </div>
+          <div v-if="i<orderStages.length-1" class="os-line" :class="i<2?'os-done os-line':'os-pending os-line'"></div>
+        </template>
+      </div>
+      <div style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:8px;padding:10px 14px;margin-top:16px;font-size:12px;color:#92400E">
+        <i class="pi pi-exclamation-triangle" style="margin-right:6px"></i><strong>En validación</strong> — Tu proveedor está verificando disponibilidad de langostino IQF. Te confirmarán a la brevedad.
+      </div>
+    </div>
+    <!-- History -->
+    <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:600;margin-bottom:12px">Historial</div>
+    <div class="card" style="overflow:hidden">
+      <table class="data-table">
+        <thead><tr><th>Pedido</th><th>Fecha</th><th>Productos</th><th>Total</th><th>Estado</th><th></th></tr></thead>
+        <tbody>
+          <tr v-for="o in orderHistory" :key="o.id">
+            <td style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#6B7280">{{o.id}}</td>
+            <td style="font-size:12px;color:#6B7280">{{o.date}}</td>
+            <td style="font-size:12px;color:#6B7280">{{o.items}} productos</td>
+            <td style="font-weight:600">S/ {{o.amount}}</td>
+            <td><span :class="'badge badge-'+(o.status==='Entregado'?'green':'blue')">{{o.status}}</span></td>
+            <td><button class="btn btn-ghost btn-sm" @click="toast('info','Detalle de '+o.id)">Ver detalle</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Cart drawer -->
+  <div class="drawer-overlay" v-if="cartOpen" @click="cartOpen=false"></div>
+  <div class="cart-drawer" :class="{open:cartOpen}">
+    <div class="cart-header">
+      <div class="cart-title">Tu pedido</div>
+      <button class="cart-close" @click="cartOpen=false"><i class="pi pi-times"></i></button>
+    </div>
+    <div class="cart-items">
+      <div v-if="!cartItems.length" style="text-align:center;padding:40px 16px;color:#9CA3AF">
+        <i class="pi pi-shopping-cart" style="font-size:28px;display:block;margin-bottom:8px;opacity:0.35"></i>Tu carrito está vacío
+      </div>
+      <div class="cart-item" v-for="item in cartItems" :key="item.id">
+        <div class="prod-placeholder" :class="'cat-'+item.cat" style="width:40px;height:40px;border-radius:8px;flex-shrink:0">
+          <i class="pi pi-box" style="font-size:14px;color:rgba(0,0,0,0.2);position:relative;z-index:1"></i>
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{item.name}}</div>
+          <div style="font-size:11px;color:#9CA3AF">S/ {{item.price}} / {{item.unit}}</div>
+        </div>
+        <div class="qty-ctrl">
+          <button class="qty-btn" @click="changeQty(item,-1)">−</button>
+          <span class="qty-val">{{item.qty}}</span>
+          <button class="qty-btn" @click="changeQty(item,1)">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="cart-footer" v-if="cartItems.length">
+      <div style="margin-bottom:12px">
+        <div style="font-size:12px;color:#6B7280;margin-bottom:4px">Notas del pedido (opcional)</div>
+        <textarea v-model="cartNotes" rows="2" style="width:100%;border:1px solid #E5E7EB;border-radius:8px;padding:8px 10px;font-size:12px;color:#374151;font-family:inherit;resize:none;outline:none" placeholder="Instrucciones de entrega, horarios..."></textarea>
+      </div>
+      <div class="cart-total-row">
+        <span style="font-size:13px;color:#6B7280">Total estimado</span>
+        <span style="font-family:'Plus Jakarta Sans',sans-serif;font-size:19px;font-weight:700">S/ {{cartTotal}}</span>
+      </div>
+      <button class="cart-confirm-btn" @click="confirmOrder()"><i class="pi pi-send"></i> Enviar pedido</button>
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div class="toast-wrap">
+    <div v-for="t in toasts" :key="t.id" :class="'toast toast-'+t.type"><i class="pi pi-check-circle"></i>{{t.msg}}</div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/vue@3.4.0/dist/vue.global.prod.js"></script>
+<script>
+const { createApp, ref, computed } = Vue;
+createApp({
+  setup() {
+    const screen = ref('home');
+    const cartOpen = ref(false);
+    const cartItems = ref([]);
+    const cartNotes = ref('');
+    const toasts = ref([]);
+    const catSearch = ref('');
+    const catFilter = ref('Todos');
+
+    const products = [
+      { id:'P01', name:'Filete de merluza congelado', sku:'SKU-ML-001-CF', category:'Pescados congelados', cat:'seafood', temp:'-18°C a -22°C', price:'18.50', unit:'kg', available:true, lowStock:false },
+      { id:'P02', name:'Pota entera congelada', sku:'SKU-PT-002-CF', category:'Pescados congelados', cat:'seafood', temp:'-18°C a -22°C', price:'8.90', unit:'kg', available:true, lowStock:true },
+      { id:'P03', name:'Langostino pelado IQF', sku:'SKU-LG-003-CF', category:'Mariscos congelados', cat:'seafood', temp:'-18°C a -22°C', price:'38.00', unit:'kg', available:true, lowStock:false },
+      { id:'P04', name:'Pechuga de pollo sin hueso', sku:'SKU-PC-004-RF', category:'Aves refrigeradas', cat:'poultry', temp:'0°C a 4°C', price:'14.20', unit:'kg', available:false, lowStock:false },
+      { id:'P05', name:'Queso edam bloque 5 kg', sku:'SKU-QE-005-RF', category:'Lácteos importados', cat:'dairy', temp:'2°C a 8°C', price:'28.00', unit:'kg', available:true, lowStock:false },
+      { id:'P06', name:'Jamón del país en losa', sku:'SKU-JM-006-RF', category:'Embutidos refrigerados', cat:'coldcuts', temp:'0°C a 4°C', price:'22.50', unit:'kg', available:true, lowStock:true },
+      { id:'P07', name:'Mantequilla sin sal bloque 5 kg', sku:'SKU-MT-007-RF', category:'Lácteos importados', cat:'dairy', temp:'2°C a 6°C', price:'52.00', unit:'bloque', available:true, lowStock:false },
+      { id:'P08', name:'Brócoli congelado IQF', sku:'SKU-BR-008-CF', category:'Vegetales congelados', cat:'vegetables', temp:'-18°C', price:'6.80', unit:'kg', available:true, lowStock:false },
+      { id:'P09', name:'Pulpo cocido congelado', sku:'SKU-PL-009-CF', category:'Mariscos congelados', cat:'seafood', temp:'-18°C a -22°C', price:'45.00', unit:'kg', available:true, lowStock:true },
+      { id:'P10', name:'Chorizo español refrigerado', sku:'SKU-CH-010-RF', category:'Embutidos refrigerados', cat:'coldcuts', temp:'0°C a 4°C', price:'35.00', unit:'kg', available:true, lowStock:false },
+    ];
+
+    const catFilters = ['Todos',...new Set(products.map(p=>p.category))];
+    const filteredProds = computed(() => {
+      let p = products;
+      if (catFilter.value !== 'Todos') p = p.filter(x=>x.category===catFilter.value);
+      if (catSearch.value) p = p.filter(x=>x.name.toLowerCase().includes(catSearch.value.toLowerCase()));
+      return p;
+    });
+
+    function isInCart(id) { return cartItems.value.some(i=>i.id===id); }
+    function addToCart(p) {
+      if (!p.available) return;
+      const existing = cartItems.value.find(i=>i.id===p.id);
+      if (existing) { existing.qty++; } else { cartItems.value.push({...p, qty:1}); }
+      toast('success', p.name+' agregado al pedido');
+    }
+    function changeQty(item, delta) {
+      item.qty += delta;
+      if (item.qty <= 0) cartItems.value = cartItems.value.filter(i=>i.id!==item.id);
+    }
+    const cartTotal = computed(() => cartItems.value.reduce((s,i)=>s+parseFloat(i.price)*i.qty,0).toFixed(2));
+    function confirmOrder() {
+      cartItems.value = []; cartOpen.value = false; screen.value = 'orders';
+      toast('success','Pedido enviado correctamente. En validación.');
+    }
+    function toast(type, msg) {
+      const id = Date.now(); toasts.value.push({id,type,msg});
+      setTimeout(()=>{toasts.value=toasts.value.filter(t=>t.id!==id);},3500);
+    }
+
+    const orderStages = [
+      {key:'sent',label:'Enviado',icon:'pi-send'},
+      {key:'received',label:'Recibido',icon:'pi-inbox'},
+      {key:'validating',label:'En validación',icon:'pi-clock'},
+      {key:'confirmed',label:'Confirmado',icon:'pi-check'},
+      {key:'preparing',label:'Preparando',icon:'pi-box'},
+      {key:'delivered',label:'Entregado',icon:'pi-check-circle'},
+    ];
+    const orderHistory = [
+      {id:'ORD-2026-0406',date:'24 abr 2026',items:3,amount:'620.00',status:'Entregado'},
+      {id:'ORD-2026-0398',date:'17 abr 2026',items:2,amount:'389.00',status:'Entregado'},
+      {id:'ORD-2026-0381',date:'08 abr 2026',items:5,amount:'1,240.00',status:'Entregado'},
+      {id:'ORD-2026-0362',date:'01 abr 2026',items:4,amount:'876.00',status:'Entregado'},
+    ];
+
+    return { screen, cartOpen, cartItems, cartNotes, toasts, catSearch, catFilter, catFilters, products, filteredProds, cartTotal, orderStages, orderHistory, isInCart, addToCart, changeQty, confirmOrder, toast };
+  }
+}).mount('#app');
+</script>
+</body>
+</html>
