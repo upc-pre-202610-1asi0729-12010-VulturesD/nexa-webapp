@@ -1,0 +1,40 @@
+[
+  {
+    "id": "ALM-LN",
+    "name": "Almacén Lima Norte",
+    "address": "Av. Industrial 1240, Los Olivos, Lima",
+    "zones": [
+      {
+        "id": "CF-1",
+        "name": "Cámara 1 — Congelados",
+        "temp": "-18°C a -22°C",
+        "capacity": 120,
+        "used": 87,
+        "tempOk": true
+      },
+      {
+        "id": "CF-2",
+        "name": "Cámara 2 — Refrigerados",
+        "temp": "0°C a 4°C",
+        "capacity": 60,
+        "used": 41,
+        "tempOk": true
+      }
+    ]
+  },
+  {
+    "id": "ALM-CL",
+    "name": "Almacén Callao",
+    "address": "Jr. Atalaya 380, Callao, Lima",
+    "zones": [
+      {
+        "id": "CF-A",
+        "name": "Cámara A — Congelados",
+        "temp": "-18°C a -20°C",
+        "capacity": 80,
+        "used": 52,
+        "tempOk": true
+      }
+    ]
+  }
+]

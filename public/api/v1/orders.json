@@ -1,0 +1,125 @@
+[
+  {
+    "id": "ORD-2026-0412",
+    "clientId": "CLI-001",
+    "status": "validating",
+    "priority": "high",
+    "date": "2026-05-04",
+    "items": [
+      {
+        "productId": "PRD-001",
+        "qty": 30,
+        "price": 18.5,
+        "stockOk": true
+      },
+      {
+        "productId": "PRD-003",
+        "qty": 12,
+        "price": 38.0,
+        "stockOk": false
+      }
+    ],
+    "total": 1011.0,
+    "notes": "Entrega urgente — evento activo esta semana"
+  },
+  {
+    "id": "ORD-2026-0411",
+    "clientId": "CLI-002",
+    "status": "preparing",
+    "priority": "medium",
+    "date": "2026-05-04",
+    "items": [
+      {
+        "productId": "PRD-005",
+        "qty": 8,
+        "price": 28.0,
+        "stockOk": true
+      },
+      {
+        "productId": "PRD-007",
+        "qty": 3,
+        "price": 52.0,
+        "stockOk": true
+      }
+    ],
+    "total": 380.0,
+    "notes": ""
+  },
+  {
+    "id": "ORD-2026-0410",
+    "clientId": "CLI-003",
+    "status": "dispatched",
+    "priority": "low",
+    "date": "2026-05-03",
+    "items": [
+      {
+        "productId": "PRD-008",
+        "qty": 20,
+        "price": 6.8,
+        "stockOk": true
+      }
+    ],
+    "total": 136.0,
+    "notes": ""
+  },
+  {
+    "id": "ORD-2026-0409",
+    "clientId": "CLI-004",
+    "status": "delivered",
+    "priority": "medium",
+    "date": "2026-05-02",
+    "items": [],
+    "total": 845.0,
+    "notes": ""
+  },
+  {
+    "id": "ORD-2026-0408",
+    "clientId": "CLI-006",
+    "status": "confirmed",
+    "priority": "low",
+    "date": "2026-05-04",
+    "items": [
+      {
+        "productId": "PRD-001",
+        "qty": 15,
+        "price": 18.5,
+        "stockOk": true
+      },
+      {
+        "productId": "PRD-006",
+        "qty": 8,
+        "price": 22.5,
+        "stockOk": true
+      }
+    ],
+    "total": 457.5,
+    "notes": ""
+  },
+  {
+    "id": "ORD-2026-0407",
+    "clientId": "CLI-005",
+    "status": "blocked",
+    "priority": "high",
+    "date": "2026-05-04",
+    "items": [
+      {
+        "productId": "PRD-010",
+        "qty": 8,
+        "price": 35.0,
+        "stockOk": true
+      }
+    ],
+    "total": 280.0,
+    "notes": "Bloqueado por límite de crédito agotado"
+  },
+  {
+    "id": "ORD-2026-0406",
+    "clientId": "CLI-001",
+    "status": "delivered",
+    "priority": "low",
+    "date": "2026-04-29",
+    "items": [],
+    "total": 620.0,
+    "notes": ""
+  }
+]
