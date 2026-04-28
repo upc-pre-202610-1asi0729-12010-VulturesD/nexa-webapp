@@ -1,0 +1,5 @@
+import { Routes } from '@angular/router';
+
+export const CATALOG_ROUTES: Routes = [
+  { path: '', loadComponent: () => import('./views/products.page').then((m) => m.ProductsPage) },
+];
