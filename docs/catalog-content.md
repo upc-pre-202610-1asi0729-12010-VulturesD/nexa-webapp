@@ -8,3 +8,7 @@ Record expected behavior for text search, category chips, and visible stock stat
 
 Record content checks for product cards, SKU labels, units, and cold-chain temperature text.
 
+## Catalog content rules
+
+Record product naming, SKU format, temperature labels, and stock status copy.
+
