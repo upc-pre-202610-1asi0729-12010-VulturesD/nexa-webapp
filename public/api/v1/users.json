@@ -1,0 +1,41 @@
+[
+  {
+    "id": "USR-001",
+    "name": "Valeria Sánchez",
+    "email": "valeria@ventas.com",
+    "password": "demo1234",
+    "role": "ops",
+    "scope": "ops",
+    "roleKey": "commercial",
+    "roleName": "Coordinación comercial",
+    "department": "Ventas",
+    "initials": "VS",
+    "clientId": null
+  },
+  {
+    "id": "USR-002",
+    "name": "Roberto García",
+    "email": "roberto@logistica.com",
+    "password": "demo1234",
+    "role": "ops",
+    "scope": "ops",
+    "roleKey": "logistics",
+    "roleName": "Jefatura logística",
+    "department": "Operaciones",
+    "initials": "RG",
+    "clientId": null
+  },
+  {
+    "id": "USR-003",
+    "name": "Lucía Quispe",
+    "email": "lucia@cevichero.pe",
+    "password": "demo1234",
+    "role": "portal",
+    "scope": "portal",
+    "roleKey": "buyer",
+    "roleName": "Comprador B2B",
+    "department": "Compras",
+    "initials": "LQ",
+    "clientId": "CLI-001"
+  }
+]

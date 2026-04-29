@@ -1,0 +1,33 @@
+{
+  "name": "nexa-webapp",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "description": "Nexa B2B cold-chain distribution web application",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "server": "json-server --watch server/db.json --routes server/routes.json --port 3000",
+    "start": "json-server --watch db.json --routes routes.json --host 0.0.0.0 --port $PORT",
+    "mock:api": "npm run server",
+    "dev:all": "concurrently \"npm run mock:api\" \"npm run dev\""
+  },
+  "dependencies": {
+    "@primeuix/themes": "^1.0.0",
+    "axios": "^1.7.7",
+    "pinia": "^2.2.4",
+    "primeflex": "^3.3.1",
+    "primeicons": "^7.0.0",
+    "primevue": "^4.2.1",
+    "vue": "^3.5.12",
+    "vue-i18n": "^10.0.4",
+    "vue-router": "^4.4.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.1.4",
+    "concurrently": "^9.0.1",
+    "json-server": "^0.17.4",
+    "vite": "^5.4.10"
+  }
+}
