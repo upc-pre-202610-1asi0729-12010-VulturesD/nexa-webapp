@@ -24,3 +24,7 @@ Verify the create action posts an order payload to /api/v1/orders.
 
 Verify low stock warnings appear before confirmation for constrained products.
 
+## Failure message behavior
+
+Verify API failure state shows a clear non-blocking message.
+
