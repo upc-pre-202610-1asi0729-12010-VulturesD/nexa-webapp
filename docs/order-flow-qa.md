@@ -20,3 +20,7 @@ Verify line totals and order total update from selected quantities and prices.
 
 Verify the create action posts an order payload to /api/v1/orders.
 
+## Stock warning behavior
+
+Verify low stock warnings appear before confirmation for constrained products.
+
