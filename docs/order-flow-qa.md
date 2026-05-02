@@ -12,3 +12,7 @@ Verify that product selection shows price, cold-chain category, and current stoc
 
 Verify quantity inputs reject empty and invalid values before summary confirmation.
 
+## Summary calculation
+
+Verify line totals and order total update from selected quantities and prices.
+
