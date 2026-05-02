@@ -28,3 +28,7 @@ Verify low stock warnings appear before confirmation for constrained products.
 
 Verify API failure state shows a clear non-blocking message.
 
+## Browser order smoke path
+
+Verify login, products, orders, new order, confirmation, and list return path.
+
