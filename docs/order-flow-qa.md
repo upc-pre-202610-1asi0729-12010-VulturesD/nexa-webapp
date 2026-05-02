@@ -8,3 +8,7 @@ Verify that commercial users select a B2B client before adding products.
 
 Verify that product selection shows price, cold-chain category, and current stock state.
 
+## Quantity validation
+
+Verify quantity inputs reject empty and invalid values before summary confirmation.
+
