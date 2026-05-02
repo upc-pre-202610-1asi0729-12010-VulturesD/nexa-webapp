@@ -16,3 +16,7 @@ Verify quantity inputs reject empty and invalid values before summary confirmati
 
 Verify line totals and order total update from selected quantities and prices.
 
+## Order create request
+
+Verify the create action posts an order payload to /api/v1/orders.
+
