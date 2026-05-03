@@ -32,3 +32,7 @@ Verify API failure state shows a clear non-blocking message.
 
 Verify login, products, orders, new order, confirmation, and list return path.
 
+## Buyer visibility note
+
+Record buyer-facing visibility scoped by client account where portal data is available.
+
