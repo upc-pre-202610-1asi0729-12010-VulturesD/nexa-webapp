@@ -36,3 +36,7 @@ Verify login, products, orders, new order, confirmation, and list return path.
 
 Record buyer-facing visibility scoped by client account where portal data is available.
 
+## Integration fallback checks
+
+Record route aliases and static API fallback behavior used by order navigation checks.
+
