@@ -1,0 +1,123 @@
+[
+  {
+    "id": "LOT-2026-014",
+    "productId": "PRD-001",
+    "qty": 42,
+    "reserved": 12,
+    "expiry": "2027-03-20",
+    "entryDate": "2026-03-07",
+    "status": "ok",
+    "warehouse": "ALM-LN",
+    "zone": "CF-1"
+  },
+  {
+    "id": "LOT-2026-007",
+    "productId": "PRD-002",
+    "qty": 6,
+    "reserved": 0,
+    "expiry": "2026-05-13",
+    "entryDate": "2026-02-20",
+    "status": "expiring",
+    "warehouse": "ALM-LN",
+    "zone": "CF-1"
+  },
+  {
+    "id": "LOT-2026-011",
+    "productId": "PRD-003",
+    "qty": 18,
+    "reserved": 8,
+    "expiry": "2027-01-25",
+    "entryDate": "2026-03-05",
+    "status": "ok",
+    "warehouse": "ALM-CL",
+    "zone": "CF-A"
+  },
+  {
+    "id": "LOT-2026-003",
+    "productId": "PRD-006",
+    "qty": 11,
+    "reserved": 4,
+    "expiry": "2026-05-07",
+    "entryDate": "2026-01-25",
+    "status": "expiring",
+    "warehouse": "ALM-LN",
+    "zone": "CF-2"
+  },
+  {
+    "id": "LOT-2026-009",
+    "productId": "PRD-005",
+    "qty": 34,
+    "reserved": 6,
+    "expiry": "2026-09-15",
+    "entryDate": "2026-02-25",
+    "status": "ok",
+    "warehouse": "ALM-LN",
+    "zone": "CF-2"
+  },
+  {
+    "id": "LOT-2026-012",
+    "productId": "PRD-007",
+    "qty": 22,
+    "reserved": 0,
+    "expiry": "2026-12-05",
+    "entryDate": "2026-03-15",
+    "status": "ok",
+    "warehouse": "ALM-CL",
+    "zone": "CF-A"
+  },
+  {
+    "id": "LOT-2026-015",
+    "productId": "PRD-008",
+    "qty": 58,
+    "reserved": 10,
+    "expiry": "2027-06-06",
+    "entryDate": "2026-03-25",
+    "status": "ok",
+    "warehouse": "ALM-LN",
+    "zone": "CF-1"
+  },
+  {
+    "id": "LOT-2026-016",
+    "productId": "PRD-009",
+    "qty": 9,
+    "reserved": 0,
+    "expiry": "2026-08-20",
+    "entryDate": "2026-03-30",
+    "status": "ok",
+    "warehouse": "ALM-CL",
+    "zone": "CF-A"
+  },
+  {
+    "id": "LOT-2026-017",
+    "productId": "PRD-010",
+    "qty": 16,
+    "reserved": 2,
+    "expiry": "2026-07-05",
+    "entryDate": "2026-04-06",
+    "status": "ok",
+    "warehouse": "ALM-LN",
+    "zone": "CF-2"
+  },
+  {
+    "id": "LOT-2026-018",
+    "productId": "PRD-011",
+    "qty": 14,
+    "reserved": 4,
+    "expiry": "2027-02-15",
+    "entryDate": "2026-04-10",
+    "status": "ok",
+    "warehouse": "ALM-CL",
+    "zone": "CF-A"
+  },
+  {
+    "id": "LOT-2026-019",
+    "productId": "PRD-012",
+    "qty": 28,
+    "reserved": 8,
+    "expiry": "2026-10-25",
+    "entryDate": "2026-04-14",
+    "status": "ok",
+    "warehouse": "ALM-LN",
+    "zone": "CF-2"
+  }
+]
