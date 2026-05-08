@@ -4,3 +4,7 @@
 
 Record expected card states for pending, in route, delivered, and exception dispatches.
 
+## Checklist evidence
+
+Record the checklist and evidence sections used for delivery validation.
+
