@@ -1,0 +1,68 @@
+[
+  {
+    "id": "MOV-0415",
+    "date": "2026-05-04 09:10",
+    "type": "reserva",
+    "productId": "PRD-001",
+    "lotId": "LOT-2026-014",
+    "qty": 12,
+    "orderId": "ORD-2026-0412",
+    "note": null,
+    "user": "Sistema"
+  },
+  {
+    "id": "MOV-0414",
+    "date": "2026-05-04 08:55",
+    "type": "ingreso",
+    "productId": "PRD-010",
+    "lotId": "LOT-2026-017",
+    "qty": 16,
+    "orderId": null,
+    "note": "Proveedor Embutidos del Sur S.A.C.",
+    "user": "Ana Torres"
+  },
+  {
+    "id": "MOV-0413",
+    "date": "2026-05-03 15:30",
+    "type": "salida",
+    "productId": "PRD-008",
+    "lotId": "LOT-2026-015",
+    "qty": 20,
+    "orderId": "ORD-2026-0410",
+    "note": null,
+    "user": "Ana Torres"
+  },
+  {
+    "id": "MOV-0412",
+    "date": "2026-05-03 14:00",
+    "type": "salida",
+    "productId": "PRD-001",
+    "lotId": "LOT-2026-014",
+    "qty": 15,
+    "orderId": "ORD-2026-0408",
+    "note": null,
+    "user": "Ana Torres"
+  },
+  {
+    "id": "MOV-0411",
+    "date": "2026-05-02 09:10",
+    "type": "ajuste",
+    "productId": "PRD-002",
+    "lotId": "LOT-2026-007",
+    "qty": -4,
+    "orderId": null,
+    "note": "Merma por temperatura — constatado en cámara",
+    "user": "Ana Torres"
+  },
+  {
+    "id": "MOV-0410",
+    "date": "2026-05-01 11:00",
+    "type": "ingreso",
+    "productId": "PRD-011",
+    "lotId": "LOT-2026-018",
+    "qty": 14,
+    "orderId": null,
+    "note": "Importación — Proveedor MarAzul del Pacífico",
+    "user": "Carlos Ríos"
+  }
+]

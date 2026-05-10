@@ -1,0 +1,32 @@
+[
+  {
+    "id": "CAT-001",
+    "name": "Pescados congelados",
+    "cat": "seafood"
+  },
+  {
+    "id": "CAT-002",
+    "name": "Mariscos congelados",
+    "cat": "seafood"
+  },
+  {
+    "id": "CAT-003",
+    "name": "Aves refrigeradas",
+    "cat": "poultry"
+  },
+  {
+    "id": "CAT-004",
+    "name": "Lácteos importados",
+    "cat": "dairy"
+  },
+  {
+    "id": "CAT-005",
+    "name": "Embutidos refrigerados",
+    "cat": "coldcuts"
+  },
+  {
+    "id": "CAT-006",
+    "name": "Vegetales congelados",
+    "cat": "vegetables"
+  }
+]

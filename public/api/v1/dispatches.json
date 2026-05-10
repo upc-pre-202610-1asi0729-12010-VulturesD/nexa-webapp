@@ -1,0 +1,53 @@
+[
+  {
+    "id": "DSP-2026-0089",
+    "orderId": "ORD-2026-0411",
+    "clientId": "CLI-002",
+    "status": "ready",
+    "driver": "Juan Ccoya Mamani",
+    "vehicle": "B8K-421 · Canter 3T Ref.",
+    "dest": "Vía Expresa 1451, San Isidro",
+    "tempExit": null,
+    "evidenceRequired": false,
+    "evidenceDone": false,
+    "checklist": [
+      "Carga verificada",
+      "Temperatura -18.2°C OK",
+      "Documentos listos"
+    ]
+  },
+  {
+    "id": "DSP-2026-0088",
+    "orderId": "ORD-2026-0410",
+    "clientId": "CLI-003",
+    "status": "in_transit",
+    "driver": "Pedro Quispe Condori",
+    "vehicle": "C2M-889 · Hyundai H1 Ref.",
+    "dest": "Av. Universitaria 840, Comas",
+    "tempExit": -19.2,
+    "evidenceRequired": true,
+    "evidenceDone": false,
+    "checklist": [
+      "Carga verificada",
+      "Temperatura -19.2°C OK",
+      "Documentos listos"
+    ]
+  },
+  {
+    "id": "DSP-2026-0087",
+    "orderId": "ORD-2026-0409",
+    "clientId": "CLI-004",
+    "status": "delivered",
+    "driver": "Luis Cáceres Vega",
+    "vehicle": "A3N-112 · Canter 3T Ref.",
+    "dest": "Jr. Los Nogales 380, San Luis",
+    "tempExit": -18.5,
+    "evidenceRequired": true,
+    "evidenceDone": true,
+    "checklist": [
+      "Carga verificada",
+      "Temperatura OK",
+      "Documentos listos"
+    ]
+  }
+]
