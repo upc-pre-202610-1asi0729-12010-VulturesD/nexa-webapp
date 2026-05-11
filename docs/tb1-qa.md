@@ -30,3 +30,9 @@ Record responsive shell checks for collapsed width, menu labels, and active stat
 
 Responsive shell checks protect repeated desktop and mobile navigation.
 
+## Topbar alignment
+
+Record topbar checks for logo, role badge, language control, and profile actions.
+
+Topbar alignment keeps navigation clear for commercial, logistics, and buyer users.
+
