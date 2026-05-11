@@ -24,3 +24,9 @@ Record checks for collection routes and id routes across products, clients, orde
 
 Route checks prevent broken detail screens in TB1 browser flows.
 
+## Sidebar responsiveness
+
+Record responsive shell checks for collapsed width, menu labels, and active states.
+
+Responsive shell checks protect repeated desktop and mobile navigation.
+
