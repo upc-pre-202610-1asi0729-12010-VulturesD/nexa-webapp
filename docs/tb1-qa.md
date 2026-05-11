@@ -12,3 +12,9 @@ Record checks for unauthenticated access, login success, role redirects, and log
 
 Guard validation protects internal and buyer screens during TB1 review.
 
+## API base URL
+
+Record checks for environment API roots, interceptor mapping, and JSON Server compatibility.
+
+API checks keep /api/v1 calls stable across local and hosted review paths.
+
