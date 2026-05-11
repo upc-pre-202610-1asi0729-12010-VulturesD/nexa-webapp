@@ -18,3 +18,9 @@ Record checks for environment API roots, interceptor mapping, and JSON Server co
 
 API checks keep /api/v1 calls stable across local and hosted review paths.
 
+## JSON Server routes
+
+Record checks for collection routes and id routes across products, clients, orders, inventory, and dispatches.
+
+Route checks prevent broken detail screens in TB1 browser flows.
+
