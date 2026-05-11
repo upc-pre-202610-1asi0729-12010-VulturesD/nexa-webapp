@@ -6,3 +6,9 @@ Record checks for /catalog, /dispatch, /create-order, and ops aliases so old boo
 
 Routing aliases keep TB1 demos stable while preserving the final Angular route names.
 
+## Auth guards
+
+Record checks for unauthenticated access, login success, role redirects, and logout behavior.
+
+Guard validation protects internal and buyer screens during TB1 review.
+
