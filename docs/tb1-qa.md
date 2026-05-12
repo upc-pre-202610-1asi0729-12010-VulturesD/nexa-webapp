@@ -54,3 +54,9 @@ Record card checks for product name, SKU, category, temperature, price, and stoc
 
 Catalog visual checks keep product browsing consistent and scannable.
 
+## Client labels
+
+Record client checks for segment labels, credit state, contact information, and status copy.
+
+Client copy checks support commercial account review before order creation.
+
