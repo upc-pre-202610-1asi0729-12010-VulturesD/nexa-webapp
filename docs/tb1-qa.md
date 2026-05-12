@@ -60,3 +60,9 @@ Record client checks for segment labels, credit state, contact information, and 
 
 Client copy checks support commercial account review before order creation.
 
+## Stock mapping
+
+Record inventory checks for low stock, reserved stock, lot age, and movement labels.
+
+Inventory checks support S2 logistics review of cold-chain stock.
+
