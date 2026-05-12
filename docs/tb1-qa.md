@@ -36,3 +36,9 @@ Record topbar checks for logo, role badge, language control, and profile actions
 
 Topbar alignment keeps navigation clear for commercial, logistics, and buyer users.
 
+## Create order route
+
+Record checks that /orders/new loads the create order workflow and keeps confirmation reachable.
+
+Order route checks protect the main S1 commercial scenario.
+
