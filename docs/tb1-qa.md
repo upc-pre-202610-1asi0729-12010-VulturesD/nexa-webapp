@@ -42,3 +42,9 @@ Record checks that /orders/new loads the create order workflow and keeps confirm
 
 Order route checks protect the main S1 commercial scenario.
 
+## Order failure messaging
+
+Record checks for graceful messaging when the mock API rejects or cannot persist an order.
+
+Failure-state checks keep the flow understandable during local API interruptions.
+
