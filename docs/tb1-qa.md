@@ -66,3 +66,9 @@ Record inventory checks for low stock, reserved stock, lot age, and movement lab
 
 Inventory checks support S2 logistics review of cold-chain stock.
 
+## Dispatch cards
+
+Record dispatch card checks for KPI alignment, checklist sections, and responsive wrapping.
+
+Dispatch layout checks keep logistics operations usable on varied screen widths.
+
