@@ -48,3 +48,9 @@ Record checks for graceful messaging when the mock API rejects or cannot persist
 
 Failure-state checks keep the flow understandable during local API interruptions.
 
+## Catalog cards
+
+Record card checks for product name, SKU, category, temperature, price, and stock state.
+
+Catalog visual checks keep product browsing consistent and scannable.
+
