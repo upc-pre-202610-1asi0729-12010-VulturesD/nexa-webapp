@@ -78,3 +78,9 @@ Record checks for dispatch list to detail navigation and fallback state handling
 
 Dispatch navigation checks protect the S2 evidence review flow.
 
+## Report data boundaries
+
+Record checks that reports use available mock API data and avoid unsupported calculations.
+
+Report checks keep analytics grounded in the TB1 data contract.
+
