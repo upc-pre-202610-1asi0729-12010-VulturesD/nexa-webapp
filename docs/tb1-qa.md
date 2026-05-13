@@ -96,3 +96,9 @@ Record checks that buyer users see portal data tied to their account scope only.
 
 Portal scope checks protect role separation between buyer and internal users.
 
+## Bilingual labels
+
+Record checks for Spanish and English labels in shell, portal, profile, and status controls.
+
+Language checks keep TB1 UX text consistent across user roles.
+
