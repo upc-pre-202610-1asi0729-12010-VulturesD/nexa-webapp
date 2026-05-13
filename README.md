@@ -37,7 +37,7 @@
 
 ## Overview
 
-TB1 frontend SPA for the Nexa cold-chain distribution platform. Uses mock authentication and a cloud-hosted Fake API (json-server on Render) to demonstrate the first web application increment. No real backend is included in this iteration.
+TB1 frontend SPA for the Nexa cold-chain distribution platform. Uses mock authentication and a cloud-hosted Fake API (json-server on Render) to demonstrate the first web application increment. No real backend is included in this iteration. Route guards protect the demo operations and portal scopes.
 
 Two surfaces share a single design system:
 
