@@ -72,3 +72,9 @@ Record dispatch card checks for KPI alignment, checklist sections, and responsiv
 
 Dispatch layout checks keep logistics operations usable on varied screen widths.
 
+## Dispatch detail
+
+Record checks for dispatch list to detail navigation and fallback state handling.
+
+Dispatch navigation checks protect the S2 evidence review flow.
+
