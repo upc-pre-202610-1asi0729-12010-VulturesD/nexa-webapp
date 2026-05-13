@@ -102,3 +102,9 @@ Record checks for Spanish and English labels in shell, portal, profile, and stat
 
 Language checks keep TB1 UX text consistent across user roles.
 
+## Production build
+
+Record the production build command and expected bundle output path.
+
+Build checks prove the final Angular source compiles before release.
+
