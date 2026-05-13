@@ -90,3 +90,9 @@ Record checks for KPI cards, status grouping, and empty state spacing in reports
 
 Report visual checks make management summaries readable during review.
 
+## Buyer scope
+
+Record checks that buyer users see portal data tied to their account scope only.
+
+Portal scope checks protect role separation between buyer and internal users.
+
