@@ -84,3 +84,9 @@ Record checks that reports use available mock API data and avoid unsupported cal
 
 Report checks keep analytics grounded in the TB1 data contract.
 
+## Report hierarchy
+
+Record checks for KPI cards, status grouping, and empty state spacing in reports.
+
+Report visual checks make management summaries readable during review.
+
