@@ -127,7 +127,7 @@ export class LoginPage {
 
   pickProfile(u: User): void {
     this.email = u.email;
-    this.password = u.password || 'demo1234';
+    this.password = u.password ?? '';
     this.error.set(null);
   }
 
