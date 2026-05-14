@@ -114,3 +114,9 @@ Record checks that node_modules, dist, .angular, logs, and private env files rem
 
 Repository hygiene checks prevent local machine artifacts from entering the public repo.
 
+## Mobile overflow
+
+Record mobile checks for card grids, tables, side navigation, and action wrapping.
+
+Mobile overflow checks avoid visual breaks during responsive review.
+
