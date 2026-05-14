@@ -120,3 +120,9 @@ Record mobile checks for card grids, tables, side navigation, and action wrappin
 
 Mobile overflow checks avoid visual breaks during responsive review.
 
+## Dependency boundaries
+
+Record checks for Angular dependency usage and absence of inactive frontend libraries in package metadata.
+
+Dependency checks keep the final WebApp aligned with the Angular implementation.
+
