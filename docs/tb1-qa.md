@@ -108,3 +108,9 @@ Record the production build command and expected bundle output path.
 
 Build checks prove the final Angular source compiles before release.
 
+## Ignored artifacts
+
+Record checks that node_modules, dist, .angular, logs, and private env files remain untracked.
+
+Repository hygiene checks prevent local machine artifacts from entering the public repo.
+
