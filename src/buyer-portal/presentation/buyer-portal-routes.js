@@ -1,0 +1,18 @@
+export const buyerPortalRoutes = [
+  { path: 'home', name: 'portal.home', component: () => import('@/buyer-portal/presentation/views/buyer-home-view.vue') },
+  { path: 'request-builder', name: 'portal.requestBuilder', component: () => import('@/buyer-portal/presentation/views/buyer-request-builder-view.vue') },
+  { path: 'purchase-requests', name: 'buyer-purchase-requests', component: () => import('@/buyer-portal/presentation/views/buyer-requests-view.vue') },
+  { path: 'purchase-requests/:id', name: 'buyer-purchase-request-detail', component: () => import('@/buyer-portal/presentation/views/buyer-request-detail-view.vue') },
+  { path: 'purchase-orders', name: 'buyer-purchase-orders', component: () => import('@/buyer-portal/presentation/views/buyer-orders-view.vue') },
+  { path: 'purchase-orders/success', name: 'buyer-purchase-orders-success', component: () => import('@/buyer-portal/presentation/views/buyer-order-success-view.vue') },
+  { path: 'purchase-orders/:id', name: 'buyer-purchase-order-detail', component: () => import('@/buyer-portal/presentation/views/buyer-order-detail-view.vue') },
+  { path: 'business-documents', name: 'buyer-business-documents', component: () => import('@/buyer-portal/presentation/views/buyer-business-documents-view.vue') },
+  { path: 'premium', name: 'portal.premium', component: () => import('@/buyer-portal/presentation/views/buyer-premium-preview-view.vue') },
+  { path: 'profile', name: 'buyer-profile', component: () => import('@/buyer-portal/presentation/views/buyer-profile-view.vue') },
+  { path: 'requests', redirect: '/portal/purchase-requests' },
+  { path: 'requests/:id', redirect: to => `/portal/purchase-requests/${to.params.id}` },
+  { path: 'orders', redirect: '/portal/purchase-orders' },
+  { path: 'orders/success', redirect: '/portal/purchase-orders/success' },
+  { path: 'orders/:id', redirect: to => `/portal/purchase-orders/${to.params.id}` },
+  { path: 'documents', redirect: '/portal/business-documents' },
+];
