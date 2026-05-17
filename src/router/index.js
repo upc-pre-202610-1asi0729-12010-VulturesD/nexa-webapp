@@ -32,7 +32,9 @@ router.beforeEach((to) => {
   if (rolesRecord && auth.isAuthenticated) {
     const userRole = auth.user?.roleKey || 'commercial';
     if (!rolesRecord.meta.roles.includes(userRole)) {
-      return { name: 'ops.dashboard' };
+      return userRole === 'logistics'
+        ? { path: '/ops/operations/dashboard' }
+        : { path: '/ops/commercial/dashboard' };
     }
   }
 });
