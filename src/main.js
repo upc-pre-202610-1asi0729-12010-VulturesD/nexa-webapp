@@ -6,7 +6,7 @@ import ConfirmationService from 'primevue/confirmationservice';
 import { definePreset } from '@primeuix/themes';
 import Aura from '@primeuix/themes/aura';
 
-import App from './app/App.vue';
+import App from './app/app.vue';
 import router from './router';
 import i18n from './i18n';
 

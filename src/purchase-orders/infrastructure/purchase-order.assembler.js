@@ -1,4 +1,4 @@
-import { Order } from '@/purchase-orders/domain/model/entities/Order.entity';
+import { Order } from '@/purchase-orders/domain/model/entities/purchase-order.entity';
 import { OrderResource } from './purchase-order.resource';
 
 export const OrderAssembler = {

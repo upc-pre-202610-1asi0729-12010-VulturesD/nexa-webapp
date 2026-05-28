@@ -1,4 +1,4 @@
-import { Dispatch } from '@/dispatch-orders/domain/model/entities/Dispatch.entity';
+import { Dispatch } from '@/dispatch-orders/domain/model/entities/dispatch.entity';
 import { DispatchResource } from './dispatch-order.resource';
 
 export const DispatchAssembler = {

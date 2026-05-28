@@ -1,5 +1,17 @@
 export const purchaseOrdersRoutes = [
-  { path: 'orders', name: 'ops.orders', component: () => import('@/purchase-orders/presentation/views/OrdersView.vue') },
-  { path: 'orders/new', name: 'ops.orders.new', component: () => import('@/purchase-orders/presentation/views/CreateOrderView.vue') },
-  { path: 'orders/:id', name: 'ops.orders.detail', component: () => import('@/purchase-orders/presentation/views/OrderDetailView.vue') },
+  {
+    path: 'commercial/purchase-orders',
+    name: 'commercial-purchase-orders',
+    component: () => import('@/purchase-orders/presentation/views/orders-view.vue'),
+    meta: { roles: ['commercial'] },
+  },
+  {
+    path: 'commercial/purchase-orders/:id',
+    name: 'commercial-purchase-order-detail',
+    component: () => import('@/purchase-orders/presentation/views/order-detail-view.vue'),
+    meta: { roles: ['commercial'] },
+  },
+  { path: 'orders', redirect: '/ops/commercial/purchase-orders' },
+  { path: 'orders/new', redirect: '/ops/commercial/manual-order-entry' },
+  { path: 'orders/:id', redirect: to => `/ops/commercial/purchase-orders/${to.params.id}` },
 ];
