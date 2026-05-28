@@ -22,6 +22,14 @@ const selectedOrder = computed(() =>
 );
 
 const selectedDocs = computed(() => selectedOrder.value?.docs || []);
+const selectedPaymentState = computed(() => {
+  const order = selectedOrder.value;
+  if (!order) return { label: 'No order selected', badge: 'badge-gray', message: 'Select a purchase order to review billing state.' };
+  if (order.paymentStatus === 'failed') return { label: 'Payment failed', badge: 'badge-red', message: 'Review payment evidence before documents are visible to buyer.' };
+  if (order.paymentStatus === 'confirmed' || order.status === 'delivered') return { label: 'Payment confirmed', badge: 'badge-green', message: 'Billing information is ready for customer follow-up.' };
+  if (order.paymentCondition === 'cash') return { label: 'Cash pending', badge: 'badge-amber', message: 'Cash orders require payment confirmation before closing.' };
+  return { label: 'Credit terms', badge: 'badge-blue', message: `Payment condition: ${order.paymentCondition || 'standard'}.` };
+});
 const pendingCount = computed(() => D.businessDocuments.filter(doc => doc.required && ['pending', 'observed', 'rejected'].includes(doc.status)).length);
 const acceptedCount = computed(() => D.businessDocuments.filter(doc => ['accepted', 'uploaded', 'generated'].includes(doc.status)).length);
 const invoiceDocs = computed(() => D.businessDocuments.filter(doc => doc.type?.startsWith('invoice')));
@@ -109,6 +117,12 @@ function advance(doc) {
         <span :class="'badge ' + orderStatusBadge(selectedOrder.status)">{{ orderStatusLabel(selectedOrder.status) }}</span>
       </div>
       <div class="flow-panel-pad">
+        <div class="banner banner-info">
+          <i class="pi pi-credit-card"></i>
+          <div>
+            <strong>{{ selectedPaymentState.label }}.</strong> {{ selectedPaymentState.message }}
+          </div>
+        </div>
         <div v-if="selectedOrder.task" class="banner banner-warning">
           <i class="pi pi-upload"></i>
           <div>
