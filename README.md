@@ -91,6 +91,18 @@ The Vite app runs on `http://localhost:5173/`. The local Fake API runs on `http:
 
 Supporting contexts include `iam`, `analytics`, `communications`, `customer-portals`, `buyer-portal`, `subscriptions`, `shared`, and the application shell under `src/app`.
 
+## Context Ownership
+
+| Bounded context | Owner | Support |
+|---|---|---|
+| Sales | DiegoS284 | Cmarin2802, R0obxdnt-bit |
+| Logistics | Cmarin2802 | DiegoS284, GerardRojasMancilla |
+| Warehouse | JoaquinVerde115 | R0obxdnt-bit, DiegoS284 |
+| Invoicing | GerardRojasMancilla | Cmarin2802, DiegoS284 |
+| Catalog Management | R0obxdnt-bit | JoaquinVerde115, DiegoS284 |
+
+Warehouse scope is focused on availability, lots, stock movement, warehouse records, and cold-chain monitoring. Catalog Management owns the product and promotion data that buyers and operators use before orders are created.
+
 ## GitFlow Strategy
 
 The repository uses `main` for released states and `develop` for integrated work before release. Feature work is reconstructed through `feature/*` branches, release stabilization through `release/*` branches, and small production corrections through `hotfix/*` branches. Remote branches are kept clean: only `main` and `develop` are expected to remain active after publication.
@@ -127,5 +139,6 @@ v1.2.0
 ## Scope Notes
 
 - Fake API data is for frontend validation and academic demonstration.
+- Warehouse monitoring data is simulated in the Fake API and should be treated as UI validation data only.
 - Production backend integration is not included in this WebApp repository.
 - Firebase deployment is not claimed as completed in this version.
