@@ -37,6 +37,8 @@ Current version: `v1.2.0`.
 
 Current status: active WebApp iteration for the academic project. This repository does not represent a final v2 or v3 product release.
 
+The current `v1.2.0` line includes second-pass refinements for Sales, Logistics, Warehouse, Invoicing, Catalog Management, Fake API relations, and shared UI polish.
+
 Firebase deployment will be configured and validated in a later milestone. The current repository keeps local and Fake API configuration ready for development and academic review.
 
 ## Tech Stack

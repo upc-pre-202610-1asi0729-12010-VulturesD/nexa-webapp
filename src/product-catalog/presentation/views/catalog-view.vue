@@ -11,17 +11,27 @@ const D = ds.D;
 
 const search = ref('');
 const filter = ref('all');
+const stockFilter = ref('all');
 const categories = computed(() => [...new Set(D.products.map(p => p.category))]);
+const categorySummary = computed(() =>
+  categories.value.map(category => ({
+    category,
+    total: D.products.filter(product => product.category === category).length,
+    low: D.products.filter(product => product.category === category && product.status === 'low').length,
+  }))
+);
 
 const filtered = computed(() => {
   let p = D.products;
   if (filter.value !== 'all') p = p.filter(x => x.category === filter.value);
+  if (stockFilter.value !== 'all') p = p.filter(x => x.status === stockFilter.value);
   if (search.value) {
     const q = search.value.toLowerCase();
     p = p.filter(x => x.name.toLowerCase().includes(q) || x.sku.toLowerCase().includes(q));
   }
   return p;
 });
+const filteredSummary = computed(() => `${filtered.value.length} of ${D.products.length} products`);
 
 const detail = ref(null);
 function openDetail(p) { detail.value = p; }
@@ -32,6 +42,15 @@ function statusLabel(s) {
 }
 function statusBadge(s) {
   return 'badge-' + ({ ok: 'green', low: 'amber', out: 'red' }[s] || 'gray');
+}
+function hasActiveDemand(product) {
+  return D.orderItems.some(item => item.productId === product.id) ||
+    D.requestItems.some(item => item.productId === product.id);
+}
+function editGuardLabel(product) {
+  if (hasActiveDemand(product)) return 'Active orders or requests use this product';
+  if (product.status === 'out') return 'Out-of-stock product can only be reviewed';
+  return 'Ready for catalog maintenance';
 }
 </script>
 
@@ -53,6 +72,10 @@ function statusBadge(s) {
     </div>
     <button class="filter-chip" :class="{ active: filter === 'all' }" @click="filter = 'all'" :aria-pressed="filter === 'all'">{{ t('common.all') }}</button>
     <button v-for="cat in categories" :key="cat" class="filter-chip" :class="{ active: filter === cat }" @click="filter = cat" :aria-pressed="filter === cat">{{ cat }}</button>
+    <button v-for="status in ['all','ok','low','out']" :key="status" class="filter-chip" :class="{ active: stockFilter === status }" @click="stockFilter = status" :aria-pressed="stockFilter === status">
+      {{ status === 'all' ? 'All stock' : statusLabel(status) }}
+    </button>
+    <span class="flow-note">{{ filteredSummary }}</span>
   </div>
 
   <div class="catalog-grid" role="list" :aria-label="t('nav.catalog')">
@@ -87,6 +110,18 @@ function statusBadge(s) {
       <div style="padding:10px 12px;border-top:1px solid #F3F0EC;display:flex;justify-content:space-between;align-items:center">
         <span style="font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700">S/ {{ p.price.toFixed(2) }}</span>
         <span style="font-size:11px;color:#6B7280">{{ p.stock - p.reserved }} {{ p.unit }} {{ t('catalog.dispUnit') }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3" style="margin-top:18px">
+    <div v-for="item in categorySummary" :key="item.category" class="card card-pad">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <div>
+          <div class="card-title">{{ item.category }}</div>
+          <div class="flow-note">{{ item.total }} product(s)</div>
+        </div>
+        <span :class="'badge ' + (item.low ? 'badge-amber' : 'badge-green')">{{ item.low ? `${item.low} low` : 'OK' }}</span>
       </div>
     </div>
   </div>
@@ -145,7 +180,14 @@ function statusBadge(s) {
             </div>
           </div>
           <div style="display:flex;gap:8px;justify-content:flex-end">
+            <span :class="'badge ' + (hasActiveDemand(detail) ? 'badge-amber' : 'badge-green')" style="margin-right:auto">{{ editGuardLabel(detail) }}</span>
             <button class="btn btn-ghost" @click="closeDetail">Close</button>
+            <button class="btn btn-secondary" :disabled="hasActiveDemand(detail)">
+              <i class="pi pi-pencil"></i> Edit
+            </button>
+            <button class="btn btn-danger" :disabled="hasActiveDemand(detail) || detail.status !== 'out'">
+              <i class="pi pi-trash"></i> Remove
+            </button>
             <button class="btn btn-primary" @click="router.push('/ops/commercial/manual-order-entry'); closeDetail()">
               <i class="pi pi-file-edit"></i> Manual Order Entry
             </button>

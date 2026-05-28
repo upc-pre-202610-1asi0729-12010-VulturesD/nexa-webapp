@@ -10,7 +10,7 @@ export const orderStatusLabel = (s) => ({
   ready_for_operations: 'Ready for operations',
   ready_for_route: 'Ready for route',
   preparing: 'Preparing dispatch', dispatched: 'Dispatched', in_route: 'On route',
-  delivered: 'Delivered', incident: 'Incident',
+  delayed: 'Delayed delivery', delivered: 'Delivered', incident: 'Incident',
   observed: 'Observed', cancelled: 'Cancelled', rejected: 'Rejected',
   blocked: 'Blocked',
 }[s] || s);
@@ -22,7 +22,7 @@ export const orderStatusBadge = (s) => 'badge-' + ({
   ready_for_dispatch: 'blue', ready_for_operations: 'blue',
   ready_for_route: 'blue',
   preparing: 'amber', dispatched: 'blue', in_route: 'blue',
-  delivered: 'green', observed: 'orange', cancelled: 'gray',
+  delayed: 'orange', delivered: 'green', observed: 'orange', cancelled: 'gray',
   rejected: 'red', blocked: 'red', incident: 'red',
 }[s] || 'gray');
 

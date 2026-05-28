@@ -54,11 +54,13 @@ const sections = computed(() => {
 });
 
 const mobileItems = computed(() => {
+  const pendingOrders = ds.D.purchaseOrders.filter(o => ['validating', 'blocked', 'document_pending'].includes(o.status)).length;
+  const openDispatches = ds.D.dispatchOrders.filter(d => !['delivered'].includes(d.status)).length;
   if (roleKey.value === 'logistics') {
     return [
       { to: dashboardTo.value, icon: 'pi-th-large', label: t('nav.dashboard') },
       { to: '/ops/operations/inventory-control', icon: 'pi-database', label: t('nav.inventory') },
-      { to: '/ops/operations/dispatch-orders', icon: 'pi-send', label: t('nav.dispatchBoard') },
+      { to: '/ops/operations/dispatch-orders', icon: 'pi-send', label: t('nav.dispatchBoard'), badge: openDispatches },
       { to: '/ops/operations/proof-of-delivery', icon: 'pi-camera', label: t('nav.evidence') },
       { to: '/ops/operations/company-administration', icon: 'pi-building', label: t('nav.companyAdministration') },
     ];
@@ -67,7 +69,7 @@ const mobileItems = computed(() => {
     { to: dashboardTo.value, icon: 'pi-th-large', label: t('nav.dashboard') },
     { to: '/ops/product-catalog', icon: 'pi-box', label: t('nav.catalog') },
     { to: '/ops/commercial/purchase-requests', icon: 'pi-inbox', label: t('nav.requests') },
-    { to: '/ops/commercial/purchase-orders', icon: 'pi-file-edit', label: t('nav.orders') },
+    { to: '/ops/commercial/purchase-orders', icon: 'pi-file-edit', label: t('nav.orders'), badge: pendingOrders },
     { to: '/ops/commercial/manual-order-entry', icon: 'pi-plus-circle', label: t('nav.createOrder') },
   ];
 });
@@ -191,6 +193,7 @@ function setLang(l) {
           :aria-current="isNavActive(item) ? 'page' : undefined"
         >
           <i :class="'pi ' + item.icon" aria-hidden="true"></i>{{ item.label }}
+          <span v-if="item.badge" class="mobile-nav-count">{{ item.badge }}</span>
         </button>
       </div>
     </nav>
