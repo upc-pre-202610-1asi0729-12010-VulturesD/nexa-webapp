@@ -11,17 +11,20 @@ const D = ds.D;
 
 const search = ref('');
 const filter = ref('all');
+const stockFilter = ref('all');
 const categories = computed(() => [...new Set(D.products.map(p => p.category))]);
 
 const filtered = computed(() => {
   let p = D.products;
   if (filter.value !== 'all') p = p.filter(x => x.category === filter.value);
+  if (stockFilter.value !== 'all') p = p.filter(x => x.status === stockFilter.value);
   if (search.value) {
     const q = search.value.toLowerCase();
     p = p.filter(x => x.name.toLowerCase().includes(q) || x.sku.toLowerCase().includes(q));
   }
   return p;
 });
+const filteredSummary = computed(() => `${filtered.value.length} of ${D.products.length} products`);
 
 const detail = ref(null);
 function openDetail(p) { detail.value = p; }
@@ -53,6 +56,10 @@ function statusBadge(s) {
     </div>
     <button class="filter-chip" :class="{ active: filter === 'all' }" @click="filter = 'all'" :aria-pressed="filter === 'all'">{{ t('common.all') }}</button>
     <button v-for="cat in categories" :key="cat" class="filter-chip" :class="{ active: filter === cat }" @click="filter = cat" :aria-pressed="filter === cat">{{ cat }}</button>
+    <button v-for="status in ['all','ok','low','out']" :key="status" class="filter-chip" :class="{ active: stockFilter === status }" @click="stockFilter = status" :aria-pressed="stockFilter === status">
+      {{ status === 'all' ? 'All stock' : statusLabel(status) }}
+    </button>
+    <span class="flow-note">{{ filteredSummary }}</span>
   </div>
 
   <div class="catalog-grid" role="list" :aria-label="t('nav.catalog')">
