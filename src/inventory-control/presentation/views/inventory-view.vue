@@ -61,6 +61,10 @@ const filteredMovements = computed(() => {
   if (movementFilter.value === 'all') return D.movements;
   return D.movements.filter(movement => movement.type === movementFilter.value);
 });
+function availablePercent(product) {
+  if (!product.stock) return 0;
+  return Math.max(0, Math.round(((product.stock - product.reserved) / product.stock) * 100));
+}
 </script>
 
 <template>
@@ -199,7 +203,14 @@ const filteredMovements = computed(() => {
             <td><span class="badge-temp" style="font-size:10px">{{ p.temp }}</span></td>
             <td style="font-weight:600">{{ p.stock }} <span style="font-size:11px;color:#9CA3AF">{{ p.unit }}</span></td>
             <td><span :style="{ color: p.reserved > 0 ? '#2563EB' : '#9CA3AF', fontWeight: p.reserved > 0 ? '600' : '400' }">{{ p.reserved }} {{ p.unit }}</span></td>
-            <td><span :style="{ fontWeight: '600', color: p.stock - p.reserved <= 0 ? '#B91C1C' : p.stock - p.reserved < p.minStock ? '#C2410C' : '#15803D' }">{{ p.stock - p.reserved }} {{ p.unit }}</span></td>
+            <td>
+              <div style="font-weight:600" :style="{ color: p.stock - p.reserved <= 0 ? '#B91C1C' : p.stock - p.reserved < p.minStock ? '#C2410C' : '#15803D' }">
+                {{ p.stock - p.reserved }} {{ p.unit }}
+              </div>
+              <div style="height:5px;background:#F3F0EC;border-radius:9999px;margin-top:5px;overflow:hidden">
+                <div :style="{ width: availablePercent(p) + '%', height:'100%', background: availablePercent(p) < 25 ? '#EF4444' : availablePercent(p) < 50 ? '#F97316' : '#22C55E' }"></div>
+              </div>
+            </td>
             <td style="font-size:12px;color:#6B7280">{{ p.minStock }} {{ p.unit }}</td>
             <td style="font-size:12px;color:#6B7280">{{ p.warehouse }}</td>
             <td><span :class="'badge ' + (p.status === 'ok' ? 'badge-green' : p.status === 'low' ? 'badge-amber' : 'badge-red')">{{ stockStatusLabel(p.status) }}</span></td>
