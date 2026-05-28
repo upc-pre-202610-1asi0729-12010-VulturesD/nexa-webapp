@@ -139,5 +139,6 @@ v1.2.0
 ## Scope Notes
 
 - Fake API data is for frontend validation and academic demonstration.
+- Warehouse monitoring data is simulated in the Fake API and should be treated as UI validation data only.
 - Production backend integration is not included in this WebApp repository.
 - Firebase deployment is not claimed as completed in this version.
