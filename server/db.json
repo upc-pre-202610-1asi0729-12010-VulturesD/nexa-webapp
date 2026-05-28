@@ -1183,6 +1183,102 @@
       "orderId": null,
       "note": "Import - MarAzul del Pacifico supplier",
       "user": "Carlos Rios"
+    },
+    {
+      "id": "MOV-RES-001",
+      "date": "2026-05-20",
+      "type": "reserva",
+      "productId": "PRD-005",
+      "lotId": "LOT-2026-009",
+      "qty": -8,
+      "orderId": "ORD-2026-0408",
+      "dispatchOrderId": "DSP-2026-0086",
+      "invoiceDocumentIds": [
+        "DOC-01-01",
+        "DOC-01-02"
+      ],
+      "note": "Reservation linked to purchase order for second-pass validation.",
+      "user": "System"
+    },
+    {
+      "id": "MOV-RES-002",
+      "date": "2026-05-20",
+      "type": "reserva",
+      "productId": "PRD-007",
+      "lotId": "LOT-2026-012",
+      "qty": -3,
+      "orderId": "ORD-2026-0408",
+      "dispatchOrderId": "DSP-2026-0086",
+      "invoiceDocumentIds": [
+        "DOC-01-01",
+        "DOC-01-02"
+      ],
+      "note": "Reservation linked to purchase order for second-pass validation.",
+      "user": "System"
+    },
+    {
+      "id": "MOV-RES-003",
+      "date": "2026-05-19",
+      "type": "reserva",
+      "productId": "PRD-008",
+      "lotId": "LOT-2026-015",
+      "qty": -20,
+      "orderId": "ORD-2026-0410",
+      "dispatchOrderId": "DSP-2026-0088",
+      "invoiceDocumentIds": [
+        "DOC-03-01",
+        "DOC-03-02"
+      ],
+      "note": "Reservation linked to purchase order for second-pass validation.",
+      "user": "System"
+    },
+    {
+      "id": "MOV-RES-004",
+      "date": "2026-05-20",
+      "type": "reserva",
+      "productId": "PRD-005",
+      "lotId": "LOT-2026-009",
+      "qty": -8,
+      "orderId": "ORD-2026-0411",
+      "dispatchOrderId": "DSP-2026-0089",
+      "invoiceDocumentIds": [
+        "DOC-04-01",
+        "DOC-04-02"
+      ],
+      "note": "Reservation linked to purchase order for second-pass validation.",
+      "user": "System"
+    },
+    {
+      "id": "MOV-RES-005",
+      "date": "2026-05-20",
+      "type": "reserva",
+      "productId": "PRD-007",
+      "lotId": "LOT-2026-012",
+      "qty": -3,
+      "orderId": "ORD-2026-0411",
+      "dispatchOrderId": "DSP-2026-0089",
+      "invoiceDocumentIds": [
+        "DOC-04-01",
+        "DOC-04-02"
+      ],
+      "note": "Reservation linked to purchase order for second-pass validation.",
+      "user": "System"
+    },
+    {
+      "id": "MOV-RES-006",
+      "date": "2026-05-20",
+      "type": "reserva",
+      "productId": "PRD-001",
+      "lotId": "LOT-2026-014",
+      "qty": -30,
+      "orderId": "ORD-2026-0412",
+      "dispatchOrderId": "DSP-2026-0090",
+      "invoiceDocumentIds": [
+        "DOC-05-01",
+        "DOC-05-02"
+      ],
+      "note": "Reservation linked to purchase order for second-pass validation.",
+      "user": "System"
     }
   ],
   "clients": [
