@@ -84,8 +84,26 @@ function addLine(p) {
 function removeLine(id) { lines.value = lines.value.filter(l => l.productId !== id); }
 const total = computed(() => lines.value.reduce((s, l) => s + l.price * l.qty, 0));
 const hasInvalidLines = computed(() => lines.value.some(l => !l.qty || l.qty < 1 || l.qty > l.max));
+const deliveryDateWarning = computed(() => {
+  if (!delivery.value.date) return 'Delivery date is required.';
+  const selected = new Date(`${delivery.value.date}T00:00:00`);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (selected <= today) return 'Delivery date must be at least tomorrow.';
+  return '';
+});
+const canConfirmOrder = computed(() =>
+  !!selectedClient.value &&
+  !!lines.value.length &&
+  !hasInvalidLines.value &&
+  !deliveryDateWarning.value &&
+  !isCreditBlocked.value
+);
 function confirm() {
-  if (!selectedClient.value || !lines.value.length || hasInvalidLines.value) return;
+  if (!canConfirmOrder.value) {
+    toast.add({ severity: 'warn', summary: 'Review order data', detail: deliveryDateWarning.value || 'Client, stock and quantities must be valid.', life: 3500 });
+    return;
+  }
   const newId = ds.nextOrderId();
   const today = new Date().toISOString().slice(0, 10);
   ds.addOrder({
@@ -299,6 +317,7 @@ function confirm() {
       <div class="field" style="margin-bottom:14px">
         <div class="field-label">Delivery Date</div>
         <div class="field-input"><i class="pi pi-calendar"></i><input type="date" v-model="delivery.date" /></div>
+        <div v-if="deliveryDateWarning" class="field-error">{{ deliveryDateWarning }}</div>
       </div>
       <div class="field" style="margin-bottom:14px">
         <div class="field-label">Address</div>
@@ -318,7 +337,7 @@ function confirm() {
       </div>
       <div style="display:flex;gap:8px;margin-top:20px">
         <button class="btn btn-ghost" @click="step = 2"><i class="pi pi-arrow-left"></i> Back</button>
-        <button class="btn btn-primary" style="flex:1;justify-content:center" @click="step = 4">Continue to Review</button>
+        <button class="btn btn-primary" style="flex:1;justify-content:center" :disabled="!!deliveryDateWarning" @click="step = 4">Continue to Review</button>
       </div>
     </div>
   </div>
@@ -350,9 +369,13 @@ function confirm() {
           <i class="pi pi-info-circle"></i>
           <div>The purchase order will enter <strong>Commercial Validation</strong>. Stock and commercial conditions will be reviewed before confirmation.</div>
         </div>
+        <div v-if="!canConfirmOrder" class="banner banner-warning" style="margin-top:12px">
+          <i class="pi pi-exclamation-triangle"></i>
+          <div>{{ deliveryDateWarning || 'Review client, quantities and available stock before confirming.' }}</div>
+        </div>
         <div style="display:flex;gap:8px;margin-top:16px">
           <button class="btn btn-ghost" @click="step = 3"><i class="pi pi-arrow-left"></i> Back</button>
-          <button class="btn btn-primary" style="flex:1;justify-content:center" @click="confirm"><i class="pi pi-check"></i> Confirm Purchase Order</button>
+          <button class="btn btn-primary" style="flex:1;justify-content:center" :disabled="!canConfirmOrder" @click="confirm"><i class="pi pi-check"></i> Confirm Purchase Order</button>
         </div>
       </div>
     </div>
