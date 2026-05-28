@@ -22,6 +22,7 @@ const lotMovements = computed(() => {
 });
 const stockSearch = ref('');
 const stockFilter = ref('all');
+const movementFilter = ref('all');
 
 const filteredStock = computed(() => {
   let p = D.products;
@@ -54,8 +55,12 @@ function movementTypeLabel(type) {
     salida: 'Outbound',
     reserva: 'Reservation',
     ajuste: 'Adjustment',
-  }[type] || type;
+}[type] || type;
 }
+const filteredMovements = computed(() => {
+  if (movementFilter.value === 'all') return D.movements;
+  return D.movements.filter(movement => movement.type === movementFilter.value);
+});
 </script>
 
 <template>
@@ -268,9 +273,14 @@ function movementTypeLabel(type) {
   <div v-if="tab === 'movements'" class="card" style="overflow:hidden" role="tabpanel">
     <div class="card-header">
       <span class="card-title">{{ t('inventory.stockMovements') }}</span>
-      <button class="btn btn-secondary btn-sm" disabled title="Available in AV2">
-        <i class="pi pi-plus" aria-hidden="true"></i> {{ t('inventory.register') }}
-      </button>
+      <div class="filter-bar" style="margin-bottom:0">
+        <button v-for="type in ['all','ingreso','salida','reserva','ajuste']" :key="type" class="filter-chip" :class="{ active: movementFilter === type }" @click="movementFilter = type">
+          {{ type === 'all' ? 'All movements' : movementTypeLabel(type) }}
+        </button>
+        <button class="btn btn-secondary btn-sm" disabled title="Available in AV2">
+          <i class="pi pi-plus" aria-hidden="true"></i> {{ t('inventory.register') }}
+        </button>
+      </div>
     </div>
     <table class="data-table" role="table" :aria-label="t('inventory.stockMovements')">
       <thead>
@@ -286,7 +296,7 @@ function movementTypeLabel(type) {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="m in D.movements" :key="m.id">
+        <tr v-for="m in filteredMovements" :key="m.id">
           <td style="font-size:12px;color:#6B7280;white-space:nowrap">{{ m.date }}</td>
           <td>
             <span :style="{
@@ -302,6 +312,14 @@ function movementTypeLabel(type) {
           <td><span class="mono" v-if="m.orderId">{{ m.orderId }}</span><span v-else style="color:#9CA3AF">—</span></td>
           <td style="font-size:12px;color:#6B7280;max-width:200px">{{ m.note || '—' }}</td>
           <td style="font-size:12px;color:#6B7280">{{ m.user }}</td>
+        </tr>
+        <tr v-if="!filteredMovements.length">
+          <td colspan="8">
+            <div class="empty-state" style="padding:24px">
+              <div class="empty-state-icon"><i class="pi pi-filter"></i></div>
+              <div class="empty-state-title">No stock movements for this filter</div>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
