@@ -24,6 +24,9 @@ const selectedOrder = computed(() =>
 const selectedDocs = computed(() => selectedOrder.value?.docs || []);
 const pendingCount = computed(() => D.businessDocuments.filter(doc => doc.required && ['pending', 'observed', 'rejected'].includes(doc.status)).length);
 const acceptedCount = computed(() => D.businessDocuments.filter(doc => ['accepted', 'uploaded', 'generated'].includes(doc.status)).length);
+const invoiceDocs = computed(() => D.businessDocuments.filter(doc => doc.type?.startsWith('invoice')));
+const invoiceAcceptedCount = computed(() => invoiceDocs.value.filter(doc => ['accepted', 'uploaded', 'generated'].includes(doc.status)).length);
+const invoiceRejectedCount = computed(() => invoiceDocs.value.filter(doc => ['rejected', 'observed'].includes(doc.status)).length);
 
 function nextStatus(doc) {
   const order = ['pending', 'generated', 'uploaded', 'accepted'];
@@ -60,6 +63,11 @@ function advance(doc) {
       <div class="kpi-label"><i class="pi pi-upload" style="color:#2563EB"></i> External portals</div>
       <div class="kpi-value" style="color:#2563EB">{{ D.portalUploadTasks.length }}</div>
       <div class="kpi-sub">Manual checklist, no real integration</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-label"><i class="pi pi-file-check" style="color:#7C3AED"></i> Invoice records</div>
+      <div class="kpi-value" style="color:#7C3AED">{{ invoiceAcceptedCount }}/{{ invoiceDocs.length }}</div>
+      <div class="kpi-sub">{{ invoiceRejectedCount }} observed or rejected</div>
     </div>
   </div>
 
