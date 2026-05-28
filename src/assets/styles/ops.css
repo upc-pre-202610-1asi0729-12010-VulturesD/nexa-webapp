@@ -574,6 +574,19 @@ button,
 }
 
 @media (max-width: 760px) {
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .topbar {
+    padding: 0 14px;
+  }
+
+  .topbar-company-name {
+    max-width: 56vw;
+  }
+
   .grid-4 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -612,6 +625,14 @@ button,
   .flow-list-item,
   .flow-row-between {
     align-items: flex-start;
+  }
+
+  .data-table {
+    min-width: 720px;
+  }
+
+  .card:has(.data-table) {
+    overflow-x: auto;
   }
 
   .flow-list-item {
