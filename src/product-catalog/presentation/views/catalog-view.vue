@@ -13,6 +13,13 @@ const search = ref('');
 const filter = ref('all');
 const stockFilter = ref('all');
 const categories = computed(() => [...new Set(D.products.map(p => p.category))]);
+const categorySummary = computed(() =>
+  categories.value.map(category => ({
+    category,
+    total: D.products.filter(product => product.category === category).length,
+    low: D.products.filter(product => product.category === category && product.status === 'low').length,
+  }))
+);
 
 const filtered = computed(() => {
   let p = D.products;
@@ -94,6 +101,18 @@ function statusBadge(s) {
       <div style="padding:10px 12px;border-top:1px solid #F3F0EC;display:flex;justify-content:space-between;align-items:center">
         <span style="font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700">S/ {{ p.price.toFixed(2) }}</span>
         <span style="font-size:11px;color:#6B7280">{{ p.stock - p.reserved }} {{ p.unit }} {{ t('catalog.dispUnit') }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3" style="margin-top:18px">
+    <div v-for="item in categorySummary" :key="item.category" class="card card-pad">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <div>
+          <div class="card-title">{{ item.category }}</div>
+          <div class="flow-note">{{ item.total }} product(s)</div>
+        </div>
+        <span :class="'badge ' + (item.low ? 'badge-amber' : 'badge-green')">{{ item.low ? `${item.low} low` : 'OK' }}</span>
       </div>
     </div>
   </div>
