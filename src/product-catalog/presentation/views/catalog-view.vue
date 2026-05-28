@@ -43,6 +43,15 @@ function statusLabel(s) {
 function statusBadge(s) {
   return 'badge-' + ({ ok: 'green', low: 'amber', out: 'red' }[s] || 'gray');
 }
+function hasActiveDemand(product) {
+  return D.orderItems.some(item => item.productId === product.id) ||
+    D.requestItems.some(item => item.productId === product.id);
+}
+function editGuardLabel(product) {
+  if (hasActiveDemand(product)) return 'Active orders or requests use this product';
+  if (product.status === 'out') return 'Out-of-stock product can only be reviewed';
+  return 'Ready for catalog maintenance';
+}
 </script>
 
 <template>
@@ -171,7 +180,14 @@ function statusBadge(s) {
             </div>
           </div>
           <div style="display:flex;gap:8px;justify-content:flex-end">
+            <span :class="'badge ' + (hasActiveDemand(detail) ? 'badge-amber' : 'badge-green')" style="margin-right:auto">{{ editGuardLabel(detail) }}</span>
             <button class="btn btn-ghost" @click="closeDetail">Close</button>
+            <button class="btn btn-secondary" :disabled="hasActiveDemand(detail)">
+              <i class="pi pi-pencil"></i> Edit
+            </button>
+            <button class="btn btn-danger" :disabled="hasActiveDemand(detail) || detail.status !== 'out'">
+              <i class="pi pi-trash"></i> Remove
+            </button>
             <button class="btn btn-primary" @click="router.push('/ops/commercial/manual-order-entry'); closeDetail()">
               <i class="pi pi-file-edit"></i> Manual Order Entry
             </button>
