@@ -36,6 +36,20 @@ const isCreditBlocked = computed(() => {
   const c = selectedClient.value;
   return !!c?.creditLimit && c.creditUsed >= c.creditLimit;
 });
+const selectedClientState = computed(() => {
+  const c = selectedClient.value;
+  if (!c) return { tone: 'neutral', label: 'No client selected', message: 'Select a client to validate commercial conditions.' };
+  if (isCreditBlocked.value) {
+    return { tone: 'danger', label: 'Blocked', message: 'Credit limit is exhausted. Order cannot continue.' };
+  }
+  if (creditPercent(c) >= 80) {
+    return { tone: 'warning', label: 'Review credit', message: 'Credit usage is high. Confirm condition before order entry.' };
+  }
+  if (c.status !== 'active') {
+    return { tone: 'warning', label: 'Observed', message: 'Client is observed. Review commercial notes before confirming.' };
+  }
+  return { tone: 'success', label: 'Validated', message: 'Client can continue to product selection.' };
+});
 const filteredClients = computed(() => {
   const q = clientSearch.value.trim().toLowerCase();
   if (!q) return D.clients;
@@ -168,6 +182,15 @@ function confirm() {
           <div class="card card-pad" style="margin-bottom:12px">
             <div style="font-size:10px;font-weight:700;color:#2563EB;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;display:flex;align-items:center;gap:5px">
               <i class="pi pi-file-edit"></i> Commercial Conditions
+            </div>
+            <div
+              :class="'banner ' + (selectedClientState.tone === 'danger' ? 'banner-danger' : selectedClientState.tone === 'warning' ? 'banner-warning' : selectedClientState.tone === 'success' ? 'banner-success' : 'banner-info')"
+              style="margin-bottom:12px"
+            >
+              <i :class="'pi ' + (selectedClientState.tone === 'danger' ? 'pi-times-circle' : selectedClientState.tone === 'warning' ? 'pi-exclamation-triangle' : 'pi-check-circle')"></i>
+              <div>
+                <strong>{{ selectedClientState.label }}.</strong> {{ selectedClientState.message }}
+              </div>
             </div>
 
             <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px">
