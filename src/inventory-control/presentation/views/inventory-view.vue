@@ -22,6 +22,7 @@ const lotMovements = computed(() => {
 });
 const stockSearch = ref('');
 const stockFilter = ref('all');
+const movementFilter = ref('all');
 
 const filteredStock = computed(() => {
   let p = D.products;
@@ -35,6 +36,14 @@ const filteredStock = computed(() => {
 const sortedLots   = computed(() => [...D.lots].sort((a, b) => new Date(a.expiry) - new Date(b.expiry)));
 const expiringLots = computed(() => D.lots.filter(l => daysUntil(l.expiry) <= 10));
 const urgentLot    = computed(() => sortedLots.value.find(l => daysUntil(l.expiry) <= 10));
+const lowStockProducts = computed(() =>
+  D.products.filter(product => product.status === 'low' || product.stock - product.reserved < product.minStock)
+);
+const reservationRate = computed(() => {
+  const totalStock = D.products.reduce((sum, product) => sum + Number(product.stock || 0), 0);
+  const reserved = D.products.reduce((sum, product) => sum + Number(product.reserved || 0), 0);
+  return totalStock ? Math.round((reserved / totalStock) * 100) : 0;
+});
 
 function stockStatusLabel(s) {
   return s === 'ok' ? t('inventory.stockOk') : s === 'low' ? t('inventory.stockLow') : t('inventory.stockOut');
@@ -46,7 +55,15 @@ function movementTypeLabel(type) {
     salida: 'Outbound',
     reserva: 'Reservation',
     ajuste: 'Adjustment',
-  }[type] || type;
+}[type] || type;
+}
+const filteredMovements = computed(() => {
+  if (movementFilter.value === 'all') return D.movements;
+  return D.movements.filter(movement => movement.type === movementFilter.value);
+});
+function availablePercent(product) {
+  if (!product.stock) return 0;
+  return Math.max(0, Math.round(((product.stock - product.reserved) / product.stock) * 100));
 }
 </script>
 
@@ -66,6 +83,24 @@ function movementTypeLabel(type) {
     <div><strong>{{ expiringLots.length }} lot(s) due soon</strong> —
       {{ expiringLots.map(l => ds.productName(l.productId) + ' (' + l.id + ')').join(' · ') }}.
       Prioritize release according to FEFO.
+    </div>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:18px">
+    <div class="card kpi-card">
+      <div class="kpi-label"><i class="pi pi-lock" style="color:#2563EB"></i> Reserved stock</div>
+      <div class="kpi-value" style="color:#2563EB">{{ reservationRate }}%</div>
+      <div class="kpi-sub">Reserved across current catalog</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-label"><i class="pi pi-exclamation-triangle" style="color:#F97316"></i> Low stock</div>
+      <div class="kpi-value" style="color:#F97316">{{ lowStockProducts.length }}</div>
+      <div class="kpi-sub">Products below minimum or marked low</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-label"><i class="pi pi-hourglass" style="color:#B91C1C"></i> FEFO risk</div>
+      <div class="kpi-value" style="color:#B91C1C">{{ expiringLots.length }}</div>
+      <div class="kpi-sub">Lots due in 10 days or less</div>
     </div>
   </div>
 
@@ -168,7 +203,14 @@ function movementTypeLabel(type) {
             <td><span class="badge-temp" style="font-size:10px">{{ p.temp }}</span></td>
             <td style="font-weight:600">{{ p.stock }} <span style="font-size:11px;color:#9CA3AF">{{ p.unit }}</span></td>
             <td><span :style="{ color: p.reserved > 0 ? '#2563EB' : '#9CA3AF', fontWeight: p.reserved > 0 ? '600' : '400' }">{{ p.reserved }} {{ p.unit }}</span></td>
-            <td><span :style="{ fontWeight: '600', color: p.stock - p.reserved <= 0 ? '#B91C1C' : p.stock - p.reserved < p.minStock ? '#C2410C' : '#15803D' }">{{ p.stock - p.reserved }} {{ p.unit }}</span></td>
+            <td>
+              <div style="font-weight:600" :style="{ color: p.stock - p.reserved <= 0 ? '#B91C1C' : p.stock - p.reserved < p.minStock ? '#C2410C' : '#15803D' }">
+                {{ p.stock - p.reserved }} {{ p.unit }}
+              </div>
+              <div style="height:5px;background:#F3F0EC;border-radius:9999px;margin-top:5px;overflow:hidden">
+                <div :style="{ width: availablePercent(p) + '%', height:'100%', background: availablePercent(p) < 25 ? '#EF4444' : availablePercent(p) < 50 ? '#F97316' : '#22C55E' }"></div>
+              </div>
+            </td>
             <td style="font-size:12px;color:#6B7280">{{ p.minStock }} {{ p.unit }}</td>
             <td style="font-size:12px;color:#6B7280">{{ p.warehouse }}</td>
             <td><span :class="'badge ' + (p.status === 'ok' ? 'badge-green' : p.status === 'low' ? 'badge-amber' : 'badge-red')">{{ stockStatusLabel(p.status) }}</span></td>
@@ -242,9 +284,14 @@ function movementTypeLabel(type) {
   <div v-if="tab === 'movements'" class="card" style="overflow:hidden" role="tabpanel">
     <div class="card-header">
       <span class="card-title">{{ t('inventory.stockMovements') }}</span>
-      <button class="btn btn-secondary btn-sm" disabled title="Available in AV2">
-        <i class="pi pi-plus" aria-hidden="true"></i> {{ t('inventory.register') }}
-      </button>
+      <div class="filter-bar" style="margin-bottom:0">
+        <button v-for="type in ['all','ingreso','salida','reserva','ajuste']" :key="type" class="filter-chip" :class="{ active: movementFilter === type }" @click="movementFilter = type">
+          {{ type === 'all' ? 'All movements' : movementTypeLabel(type) }}
+        </button>
+        <button class="btn btn-secondary btn-sm" disabled title="Available in AV2">
+          <i class="pi pi-plus" aria-hidden="true"></i> {{ t('inventory.register') }}
+        </button>
+      </div>
     </div>
     <table class="data-table" role="table" :aria-label="t('inventory.stockMovements')">
       <thead>
@@ -260,7 +307,7 @@ function movementTypeLabel(type) {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="m in D.movements" :key="m.id">
+        <tr v-for="m in filteredMovements" :key="m.id">
           <td style="font-size:12px;color:#6B7280;white-space:nowrap">{{ m.date }}</td>
           <td>
             <span :style="{
@@ -276,6 +323,14 @@ function movementTypeLabel(type) {
           <td><span class="mono" v-if="m.orderId">{{ m.orderId }}</span><span v-else style="color:#9CA3AF">—</span></td>
           <td style="font-size:12px;color:#6B7280;max-width:200px">{{ m.note || '—' }}</td>
           <td style="font-size:12px;color:#6B7280">{{ m.user }}</td>
+        </tr>
+        <tr v-if="!filteredMovements.length">
+          <td colspan="8">
+            <div class="empty-state" style="padding:24px">
+              <div class="empty-state-icon"><i class="pi pi-filter"></i></div>
+              <div class="empty-state-title">No stock movements for this filter</div>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
