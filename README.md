@@ -149,6 +149,12 @@ Release notes are maintained in [`docs/releases/`](docs/releases/) and mirrored 
 
 The repository Wiki documents project overview, bounded contexts, GitFlow strategy, frontend architecture, Fake API structure, local setup, and validation evidence.
 
+Source-controlled documentation mirrors key Wiki facts:
+
+- [Frontend Architecture](docs/frontend-architecture.md)
+- [Validation Evidence](docs/validation-evidence.md)
+- [Wiki Index](docs/wiki-index.md)
+
 ## Team
 
 | GitHub identity | Email |
