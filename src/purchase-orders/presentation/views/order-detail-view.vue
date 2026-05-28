@@ -26,9 +26,23 @@ const displayItems = computed(() => {
   }));
 });
 const orderDate = computed(() => order.value?.date || order.value?.createdAt?.slice(0, 10) || '');
+const confirmationChecks = computed(() => {
+  if (!order.value) return [];
+  return [
+    { key: 'client', label: 'Client selected', ok: !!client.value },
+    { key: 'items', label: 'Products attached', ok: displayItems.value.length > 0 },
+    { key: 'stock', label: 'Stock available', ok: displayItems.value.every(item => item.stockOk !== false) },
+    { key: 'total', label: 'Positive total', ok: Number(order.value.total || 0) > 0 },
+  ];
+});
+const canConfirmOrder = computed(() => confirmationChecks.value.every(check => check.ok));
 
 function confirmOrder() {
   if (!order.value) return;
+  if (!canConfirmOrder.value) {
+    toast.add({ severity: 'warn', summary: 'Validation pending', detail: 'Complete order checks before confirmation.', life: 3500 });
+    return;
+  }
   if (order.value.code) ds.updateOrderStatus(order.value.id, 'confirmed');
   else order.value.status = 'confirmed';
   toast.add({ severity: 'success', summary: t('orders.status.confirmed'), detail: `${order.value.id}`, life: 3500 });
@@ -131,6 +145,14 @@ const timeline = computed(() => {
     </div>
 
     <div class="card card-pad" v-if="client">
+      <div style="margin-bottom:14px">
+        <div class="card-title" style="margin-bottom:10px">Confirmation Checks</div>
+        <div v-for="check in confirmationChecks" :key="check.key" style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:5px 0">
+          <span>{{ check.label }}</span>
+          <span :class="'badge ' + (check.ok ? 'badge-green' : 'badge-red')">{{ check.ok ? 'OK' : 'Review' }}</span>
+        </div>
+      </div>
+      <div class="divider" style="margin:14px 0"></div>
       <div v-if="order.createdByName" style="margin-bottom:14px;padding:10px 12px;background:#F0F7FF;border:1px solid #BFDBFE;border-radius:8px">
         <div style="font-size:11px;font-weight:600;color:#2563EB;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px">Registered by</div>
         <div style="font-size:13px;font-weight:500;color:#1F2937">{{ order.createdByName }}</div>
