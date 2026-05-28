@@ -27,6 +27,7 @@ npm run mock:api
 | `/inventoryLots`     | Lot registry (FEFO)      |
 | `/stockMovements`    | Inventory movements      |
 | `/warehouses`        | Warehouse zones          |
+| `/coldChainReadings` | Cold-chain monitoring readings |
 | `/clients`           | B2B client accounts      |
 | `/purchaseOrders`    | Purchase orders          |
 | `/dispatchOrders`    | Dispatch orders          |
@@ -42,4 +43,5 @@ npm run mock:api
 - Dates are ISO strings (`YYYY-MM-DD`).
 - `orders[].items` is an embedded array — not a separate collection.
 - `warehouses[].zones` is embedded — not a separate collection.
+- Cold-chain readings are fixture data for frontend validation, not certified sensor telemetry.
 - Passwords in `users` are plaintext for demo purposes only.
