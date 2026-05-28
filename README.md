@@ -91,6 +91,16 @@ The Vite app runs on `http://localhost:5173/`. The local Fake API runs on `http:
 
 Supporting contexts include `iam`, `analytics`, `communications`, `customer-portals`, `buyer-portal`, `subscriptions`, `shared`, and the application shell under `src/app`.
 
+## Context Ownership
+
+| Bounded context | Owner | Support |
+|---|---|---|
+| Sales | DiegoS284 | Cmarin2802, R0obxdnt-bit |
+| Logistics | Cmarin2802 | DiegoS284, GerardRojasMancilla |
+| Warehouse | JoaquinVerde115 | R0obxdnt-bit, DiegoS284 |
+| Invoicing | GerardRojasMancilla | Cmarin2802, DiegoS284 |
+| Catalog Management | R0obxdnt-bit | JoaquinVerde115, DiegoS284 |
+
 ## GitFlow Strategy
 
 The repository uses `main` for released states and `develop` for integrated work before release. Feature work is reconstructed through `feature/*` branches, release stabilization through `release/*` branches, and small production corrections through `hotfix/*` branches. Remote branches are kept clean: only `main` and `develop` are expected to remain active after publication.
