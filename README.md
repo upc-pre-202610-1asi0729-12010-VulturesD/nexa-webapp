@@ -24,6 +24,9 @@
 ![University](https://img.shields.io/badge/University-UPC-0a2540?style=flat-square)
 ![Team](https://img.shields.io/badge/Team-King-2a67d9?style=flat-square)
 ![Version](https://img.shields.io/badge/Version-v1.2.0-22c55e?style=flat-square)
+[![WebApp CI Validation](https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-webapp/actions/workflows/webapp-ci-validation.yml/badge.svg)](https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-webapp/actions/workflows/webapp-ci-validation.yml)
+[![Release Integrity Check](https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-webapp/actions/workflows/release-integrity-check.yml/badge.svg)](https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-webapp/actions/workflows/release-integrity-check.yml)
+[![Latest Release](https://img.shields.io/github/v/release/upc-pre-202610-1asi0730-12242-king/nexa-webapp?sort=semver&style=flat-square)](https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-webapp/releases/tag/v1.2.0)
 
 </div>
 
@@ -81,6 +84,23 @@ The Vite app runs on `http://localhost:5173/`. The local Fake API runs on `http:
 | `npm run mock:api` | Alias for the local Fake API. |
 | `npm run dev:all` | Start Fake API and Vite together. |
 
+## Project Structure
+
+```txt
+src/
+├── app/                    Application shell, routes, layouts, shared stores
+├── iam/                    Authentication and profile context
+├── product-catalog/        Catalog Management context
+├── purchase-orders/        Sales order context
+├── purchase-requests/      Sales request context
+├── dispatch-orders/        Logistics dispatch context
+├── inventory-control/      Warehouse inventory context
+├── business-documents/     Invoicing document context
+├── buyer-portal/           Buyer-facing portal context
+├── shared/                 Shared infrastructure and utilities
+└── assets/                 Styles and brand assets
+```
+
 ## Bounded Contexts
 
 | Bounded context | Scope |
@@ -120,6 +140,14 @@ v1.1.0
 v1.1.1
 v1.2.0
 ```
+
+## Releases
+
+Release notes are maintained in [`docs/releases/`](docs/releases/) and mirrored in GitHub Releases. Source archives are enough for academic review; generated `dist/` bundles are not uploaded.
+
+## Wiki
+
+The repository Wiki documents project overview, bounded contexts, GitFlow strategy, frontend architecture, Fake API structure, local setup, and validation evidence.
 
 ## Team
 
