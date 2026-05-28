@@ -35,6 +35,14 @@ const filteredStock = computed(() => {
 const sortedLots   = computed(() => [...D.lots].sort((a, b) => new Date(a.expiry) - new Date(b.expiry)));
 const expiringLots = computed(() => D.lots.filter(l => daysUntil(l.expiry) <= 10));
 const urgentLot    = computed(() => sortedLots.value.find(l => daysUntil(l.expiry) <= 10));
+const lowStockProducts = computed(() =>
+  D.products.filter(product => product.status === 'low' || product.stock - product.reserved < product.minStock)
+);
+const reservationRate = computed(() => {
+  const totalStock = D.products.reduce((sum, product) => sum + Number(product.stock || 0), 0);
+  const reserved = D.products.reduce((sum, product) => sum + Number(product.reserved || 0), 0);
+  return totalStock ? Math.round((reserved / totalStock) * 100) : 0;
+});
 
 function stockStatusLabel(s) {
   return s === 'ok' ? t('inventory.stockOk') : s === 'low' ? t('inventory.stockLow') : t('inventory.stockOut');
@@ -66,6 +74,24 @@ function movementTypeLabel(type) {
     <div><strong>{{ expiringLots.length }} lot(s) due soon</strong> —
       {{ expiringLots.map(l => ds.productName(l.productId) + ' (' + l.id + ')').join(' · ') }}.
       Prioritize release according to FEFO.
+    </div>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:18px">
+    <div class="card kpi-card">
+      <div class="kpi-label"><i class="pi pi-lock" style="color:#2563EB"></i> Reserved stock</div>
+      <div class="kpi-value" style="color:#2563EB">{{ reservationRate }}%</div>
+      <div class="kpi-sub">Reserved across current catalog</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-label"><i class="pi pi-exclamation-triangle" style="color:#F97316"></i> Low stock</div>
+      <div class="kpi-value" style="color:#F97316">{{ lowStockProducts.length }}</div>
+      <div class="kpi-sub">Products below minimum or marked low</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-label"><i class="pi pi-hourglass" style="color:#B91C1C"></i> FEFO risk</div>
+      <div class="kpi-value" style="color:#B91C1C">{{ expiringLots.length }}</div>
+      <div class="kpi-sub">Lots due in 10 days or less</div>
     </div>
   </div>
 
