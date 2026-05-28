@@ -1,0 +1,37 @@
+name: Feature request
+description: Propose a scoped WebApp improvement.
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user or academic requirement does this solve?
+    validations:
+      required: true
+  - type: dropdown
+    id: context
+    attributes:
+      label: Bounded context
+      options:
+        - Sales
+        - Logistics
+        - Warehouse
+        - Invoicing
+        - Catalog Management
+        - Shared UI
+        - Fake API
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation plan
+      description: Explain how this will be checked locally.
