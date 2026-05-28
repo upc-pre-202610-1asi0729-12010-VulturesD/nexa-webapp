@@ -4,6 +4,15 @@
   "version": "1.2.0",
   "type": "module",
   "description": "Nexa B2B cold-chain distribution web application",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-webapp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-webapp/issues"
+  },
+  "homepage": "https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-webapp#readme",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
