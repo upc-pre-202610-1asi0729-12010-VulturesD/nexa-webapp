@@ -28,8 +28,10 @@ npm run mock:api
 | `/stockMovements`    | Inventory movements      |
 | `/warehouses`        | Warehouse zones          |
 | `/clients`           | B2B client accounts      |
-| `/orders`            | Orders                   |
-| `/dispatches`        | Dispatch records         |
+| `/purchaseOrders`    | Purchase orders          |
+| `/dispatchOrders`    | Dispatch orders          |
+| `/businessDocuments` | Associated business documents |
+| `/proofOfDelivery`   | Proof of delivery records |
 | `/alerts`            | Operational alerts       |
 | `/activityLog`       | Recent activity feed     |
 | `/users`             | Demo user accounts       |

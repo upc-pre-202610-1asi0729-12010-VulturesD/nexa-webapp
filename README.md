@@ -23,13 +23,7 @@
 ![Cycle](https://img.shields.io/badge/Cycle-2026--10-0a2540?style=flat-square)
 ![University](https://img.shields.io/badge/University-UPC-0a2540?style=flat-square)
 ![Team](https://img.shields.io/badge/Team-King-2a67d9?style=flat-square)
-![Status](https://img.shields.io/badge/Status-TB1%20Active-22c55e?style=flat-square)
-
-<br/>
-
-🌐 **[Ver aplicación →](https://nexa-2f1bb.web.app)**
-
-<br/>
+![Version](https://img.shields.io/badge/Version-v1.2.0-22c55e?style=flat-square)
 
 </div>
 
@@ -37,272 +31,101 @@
 
 ## Overview
 
-TB1 frontend SPA for the Nexa cold-chain distribution platform. Uses mock authentication and a cloud-hosted Fake API (json-server on Render) to demonstrate the first web application increment. No real backend is included in this iteration. Route guards protect the demo operations and portal scopes.
+Nexa WebApp is the Vue 3 operational and buyer-facing application for a B2B cold-chain distribution platform. It supports distributor operators who manage commercial orders, catalog availability, warehouse stock, logistics execution, invoices, and customer portal activity.
 
-Two surfaces share a single design system:
+Current version: `v1.2.0`.
 
-| Surface | Audience | Modules |
-|---|---|---|
-| **Nexa Ops** | Distributor operators | Dashboard, Catalog, Inventory Control, Purchase Orders, Create Order, Dispatch, Clients, Analytics, Settings |
-| **Nexa Portal** | B2B commercial clients | Home, Catalog, Cart, My Orders |
+Current status: active WebApp iteration for the academic project. This repository does not represent a final v2 or v3 product release.
 
----
-
-## URLs desplegadas
-
-| Recurso | URL |
-|---|---|
-| **Frontend** (Firebase Hosting) | [https://nexa-2f1bb.web.app](https://nexa-2f1bb.web.app) |
-| **Fake API** (Render) | [https://nexa-webapp-dev2.onrender.com/api/v1](https://nexa-webapp-dev2.onrender.com/api/v1) |
-| **Landing page** | [https://upc-pre-202610-1asi0730-12242-king.github.io/nexa-website/](https://upc-pre-202610-1asi0730-12242-king.github.io/nexa-website/) |
-
-> **Modelo de despliegue:** el frontend se sirve desde Firebase Hosting. La Fake API corre como Node Web Service en Render (json-server). Son servicios independientes. En producción, `VITE_API_BASE_URL` apunta siempre a la URL de Render.
-
----
-
-## Demo credentials
-
-| Rol | Email | Contraseña | Superficie |
-|---|---|---|---|
-| Coordinación comercial | valeria@ventas.com | demo1234 | ops |
-| Jefatura logística | roberto@logistica.com | demo1234 | ops |
-| Comprador B2B | lucia@cevichero.pe | demo1234 | portal |
-
----
+Firebase deployment will be configured and validated in a later milestone. The current repository keeps local and Fake API configuration ready for development and academic review.
 
 ## Tech Stack
 
-| Capa | Tecnología |
+| Layer | Technology |
 |---|---|
-| Framework | Vue 3 (Composition API, `<script setup>`) |
+| Framework | Vue 3 with Composition API |
 | Build tool | Vite |
-| UI library | PrimeVue 4 + PrimeFlex + PrimeIcons |
-| Theming | `@primeuix/themes` (preset Aura personalizado) |
-| Routing | Vue Router 4 (hash history para Firebase Hosting) |
-| Estado | Pinia |
+| UI | PrimeVue 4, PrimeFlex, PrimeIcons |
+| State | Pinia |
+| Routing | Vue Router 4 |
 | HTTP | Axios |
-| i18n | Vue I18n (EN por defecto / ES secundario) |
-| Fake API | json-server (desplegado en Render) |
+| i18n | Vue I18n |
+| Fake API | json-server fixtures under `server/` |
 
----
-
-## Variables de entorno
-
-| Archivo | Valor | Cuándo aplica |
-|---|---|---|
-| `.env.development` | `http://localhost:3000/api/v1` | `npm run dev` (local) |
-| `.env.production` | `https://nexa-webapp-dev2.onrender.com/api/v1` | `npm run build` |
-
----
-
-## Desarrollo local
+## Local Setup
 
 ```bash
 npm install
-npm run dev      # app en http://localhost:5173/
+npm run dev
 ```
 
-> Para desarrollo local con Fake API en local (opcional):
-> ```bash
-> npm run server   # Fake API en http://localhost:3000
-> npm run dev      # app apuntando a localhost:3000
-> ```
-> En producción la app apunta directamente a Render — no es necesario levantar el servidor local.
-
----
-
-## Fake API — Endpoints disponibles
-
-La Fake API (json-server) está desplegada en Render y expone los siguientes endpoints bajo `/api/v1/`:
-
-```
-GET  /api/v1/users
-GET  /api/v1/products
-GET  /api/v1/categories
-GET  /api/v1/clients
-GET  /api/v1/orders
-GET  /api/v1/inventory-lots
-GET  /api/v1/stock-movements
-GET  /api/v1/dispatches
-GET  /api/v1/warehouses
-GET  /api/v1/alerts
-GET  /api/v1/activity-log
-```
-
-Base URL en producción: `https://nexa-webapp-dev2.onrender.com/api/v1`
-
-> Esta no es una API real de producción. Será reemplazada por la Web API ASP.NET Core en iteraciones posteriores.
-
----
-
-## Despliegue
-
-### Fake API — Render
-
-El directorio `server/` contiene el servicio json-server desplegado en [Render](https://render.com/) con esta configuración:
-
-| Parámetro | Valor |
-|---|---|
-| Root Directory | `server` |
-| Build Command | `npm install` |
-| Start Command | `npm start` |
-| Environment | Node |
-
-`server/package.json`:
-```json
-{
-  "name": "nexa-mock-api",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "start": "json-server --watch db.json --routes routes.json --host 0.0.0.0 --port $PORT"
-  },
-  "dependencies": {
-    "json-server": "^0.17.4"
-  }
-}
-```
-
-URL activa: `https://nexa-webapp-dev2.onrender.com/api/v1`
-
-### Frontend — Firebase Hosting
+Optional local Fake API:
 
 ```bash
-npm run build
-firebase deploy --only hosting
+npm run mock:api
+npm run dev
 ```
 
-URL activa: [https://nexa-2f1bb.web.app](https://nexa-2f1bb.web.app)
+The Vite app runs on `http://localhost:5173/`. The local Fake API runs on `http://localhost:3000` when `npm run mock:api` is active.
 
-> **Primera vez:** `firebase login` → `firebase init` (seleccionar Hosting, proyecto existente, `dist`, Y, No) → genera `firebase.json` y `.firebaserc`.
+## Available Scripts
 
----
-
-## Domain-Driven Frontend Structure
-
-```
-src/<bounded-context>/
-├── application/
-│   └── <bounded-context>.store.js     Pinia store + orquestación de casos de uso
-├── domain/
-│   ├── model/
-│   │   ├── entities/                  Clases de entidad del dominio
-│   │   ├── value-objects/             Tipos de valor inmutables
-│   │   └── events/                    Eventos de dominio
-│   └── repositories/                  Contratos de repositorio (sin dependencia de infraestructura)
-├── infrastructure/
-│   ├── <bounded-context>-api.js       Servicio HTTP con Axios
-│   ├── <entity>.assembler.js          Mapeo API ↔ entidades ↔ recursos
-│   └── <entity>.resource.js           DTO para la capa de interfaz
-└── presentation/
-    ├── views/                         Componentes Vue de vista
-    └── <bounded-context>-routes.js    Definición de rutas
-```
-
----
+| Script | Purpose |
+|---|---|
+| `npm run dev` | Start the Vite development server. |
+| `npm run build` | Build the production bundle. |
+| `npm run preview` | Preview the production build locally. |
+| `npm run server` | Start the json-server Fake API. |
+| `npm run mock:api` | Alias for the local Fake API. |
+| `npm run dev:all` | Start Fake API and Vite together. |
 
 ## Bounded Contexts
 
-| Contexto | Tipo | Descripción |
-|---|---|---|
-| `iam` | Core | Autenticación demo, sesión de usuario, perfil |
-| `product-catalog` | Core | Catálogo de productos y categorías |
-| `purchase-orders` | Core | Captura asistida y seguimiento de órdenes B2B |
-| `inventory-control` | Core | Lotes de inventario, disponibilidad de stock, FEFO |
-| `dispatch-orders` | Core | Panel de despacho, estado de entrega, POD simulado |
-| `analytics` | Support | Modelos de lectura operativos derivados de otros contextos |
-| `clients` | Support | Gestión de clientes comerciales para TB1 |
-| `app` | Shell | Composición de rutas, layouts, stores transversales |
-| `shared` | Kernel | Clases base, cliente HTTP compartido, utilidades |
-
----
-
-## Routing
-
-```
-/#/auth/login         Inicio de sesión
-/#/auth/recover       Recuperación de contraseña
-/#/auth/blocked       Estado de cuenta bloqueada
-
-/#/ops/dashboard      KPIs y alertas
-/#/ops/catalog        Catálogo de productos
-/#/ops/inventory      Control de inventario (lotes, FEFO, movimientos)
-/#/ops/orders         Lista de órdenes de compra
-/#/ops/orders/new     Crear orden de compra (flujo asistido)
-/#/ops/orders/:id     Detalle de orden de compra
-/#/ops/dispatch       Operaciones de despacho
-/#/ops/clients        Gestión de clientes
-/#/ops/reports        Analítica y reportes operativos
-/#/ops/settings       Configuración de empresa
-/#/ops/profile        Perfil de usuario
-
-/#/portal/home        Inicio del portal B2B
-/#/portal/catalog     Catálogo B2B con carrito
-/#/portal/orders      Seguimiento de pedidos
-```
-
-> `/ops/reports` es la ruta pública del módulo de analítica. El contexto interno, store y documentación usan el nombre canónico `analytics`.
-
----
-
-## TB1 Scope Boundaries
-
-- Fake API en Render (`server/db.json`) — sin backend productivo real
-- Sin persistencia MySQL real
-- Sin autenticación de producción
-- Sin contrato OpenAPI
-- Sin servicio real de Proof of Delivery
-
----
-
-## Branching Strategy
-
-GitFlow:
-
-| Branch | Propósito |
+| Bounded context | Scope |
 |---|---|
-| `main` | Releases estables y revisados |
-| `develop` | Rama de integración |
-| `feature/*` | Nuevas funcionalidades y mejoras |
-| `release/*` | Release candidates para TB1 |
-| `hotfix/*` | Correcciones críticas sobre main (solo si necesario) |
+| Sales | Purchase orders, manual order entry, commercial validation, customer account flow. |
+| Logistics | Dispatch orders, delivery tracking, route and proof-of-delivery support data. |
+| Warehouse | Inventory lots, stock movement, warehouses, cold-chain monitoring. |
+| Invoicing | Business documents, invoice-ready summaries, document status views. |
+| Catalog Management | Product catalog, categories, promotions, buyer-facing catalog availability. |
 
-Todos los commits siguen [Conventional Commits 1.0.0](https://www.conventionalcommits.org/): `type(scope): description`.
+Supporting contexts include `iam`, `analytics`, `communications`, `customer-portals`, `buyer-portal`, `subscriptions`, `shared`, and the application shell under `src/app`.
 
----
+## GitFlow Strategy
 
-## Related Repositories
+The repository uses `main` for released states and `develop` for integrated work before release. Feature work is reconstructed through `feature/*` branches, release stabilization through `release/*` branches, and small production corrections through `hotfix/*` branches. Remote branches are kept clean: only `main` and `develop` are expected to remain active after publication.
 
-| Repositorio | Descripción |
-|---|---|
-| [nexa-report](https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-report) | Informe académico |
-| [nexa-website](https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-website) | Landing page — [ver](https://upc-pre-202610-1asi0730-12242-king.github.io/nexa-website/) |
-| [nexa-platform](https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-platform) | Capa de backend (ASP.NET Core, planificado para siguiente entrega) |
+Released tags use pure SemVer:
 
----
+```txt
+v0.1.0
+v0.2.0
+v1.0.0
+v1.0.1
+v1.1.0
+v1.1.1
+v1.2.0
+```
 
 ## Team
 
-**Organización:** [upc-pre-202610-1asi0730-12242-king](https://github.com/upc-pre-202610-1asi0730-12242-king)
+| GitHub identity | Email |
+|---|---|
+| JoaquinVerde115 | u20241a054@upc.edu.pe |
+| R0obxdnt-bit | u202416289@upc.edu.pe |
+| Cmarin2802 | cesarmarin2802@gmail.com |
+| GerardRojasMancilla | u202413142@upc.edu.pe |
+| DiegoS284 | diego64g284@gmail.com |
 
-| Código | Integrante | Rol |
-|---|---|---|
-| U202323040 | Yucra Sandoval, Diego Sebastian | Team Leader |
-| U202411937 | Marín Cueva, César Fernando | Team Member |
-| U20241A054 | Verde Bueno, Joaquín Francisco | Team Member |
-| U202416289 | Torrejón De Los Santos, Gino Rodrigo | Team Member |
-| U202413142 | Rojas Mancilla, Gerard Gianpier | Team Member |
+## Related Repositories
 
----
+| Repository | Purpose |
+|---|---|
+| `nexa-webapp` | Vue WebApp for operational and buyer-facing workflows. |
+| `nexa-website` | Public landing website for Nexa. |
 
-<div align="center">
+## Scope Notes
 
-<br/>
-
-**Nexa** · Universidad Peruana de Ciencias Aplicadas · 2026-10
-
-*1ASI0730 — Aplicaciones Web · Ingeniería de Software*
-
-<br/>
-
-</div>
+- Fake API data is for frontend validation and academic demonstration.
+- Production backend integration is not included in this WebApp repository.
+- Firebase deployment is not claimed as completed in this version.

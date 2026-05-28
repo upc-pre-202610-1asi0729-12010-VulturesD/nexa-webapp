@@ -1,5 +1,5 @@
-import { Entity } from '@/shared/domain/model/Entity';
-import { RoleKey } from '../value-objects/RoleKey.value-object';
+import { Entity } from '@/shared/domain/model/entity';
+import { RoleKey } from '../value-objects/role-key.value-object';
 
 export class User extends Entity {
   constructor({

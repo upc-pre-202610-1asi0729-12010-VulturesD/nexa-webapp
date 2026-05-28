@@ -1,5 +1,5 @@
-import { Entity } from '@/shared/domain/model/Entity';
-import { TemperatureRange } from '../value-objects/TemperatureRange.value-object';
+import { Entity } from '@/shared/domain/model/entity';
+import { TemperatureRange } from '../value-objects/temperature-range.value-object';
 import { toNumber } from '@/shared/utils/number.utils';
 
 export class Product extends Entity {

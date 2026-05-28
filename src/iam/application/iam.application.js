@@ -1,4 +1,4 @@
-import { iamApiService } from '../infrastructure/iam-api.service';
+import { iamApiService } from '../infrastructure/iam-api';
 import { UserAssembler } from '../infrastructure/user.assembler';
 
 /**

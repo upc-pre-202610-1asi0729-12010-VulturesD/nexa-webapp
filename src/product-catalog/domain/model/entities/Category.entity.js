@@ -1,4 +1,4 @@
-import { Entity } from '@/shared/domain/model/Entity';
+import { Entity } from '@/shared/domain/model/entity';
 
 export class Category extends Entity {
   constructor({ id, name, cat } = {}) {

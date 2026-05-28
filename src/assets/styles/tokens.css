@@ -19,6 +19,27 @@
   --nexa-blue-800: #1E40AF;
   --nexa-blue-900: #1E3A8A;
 
+  /* ——— NEXA FLOW OS TOKENS ——— */
+  --nexa-primary: #2563eb;
+  --nexa-primary-50: #eff6ff;
+  --nexa-primary-100: #dbeafe;
+  --nexa-primary-600: #2563eb;
+  --nexa-primary-700: #1d4ed8;
+  --nexa-ice: #f0f7ff;
+  --nexa-frost: #e0f2fe;
+  --nexa-cold: #0284c7;
+  --nexa-chilled: #0891b2;
+  --nexa-frozen: #4f46e5;
+  --nexa-slate-950: #0f172a;
+  --nexa-slate-700: #334155;
+  --nexa-slate-500: #64748b;
+  --nexa-slate-200: #e2e8f0;
+  --nexa-slate-50: #f8fafc;
+  --nexa-success: #16a34a;
+  --nexa-warning: #f59e0b;
+  --nexa-danger: #dc2626;
+  --nexa-info: #2563eb;
+
   /* ——— WARM ACCENT ——— */
   --nexa-peach-50:  #FFF7ED;
   --nexa-peach-100: #FFEDD5;

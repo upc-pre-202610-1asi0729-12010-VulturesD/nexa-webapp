@@ -3,19 +3,30 @@ import { ref, computed } from 'vue';
 import { iamApplication } from '@/iam/application/iam.application';
 
 export const useAuthStore = defineStore('auth', () => {
-  const user  = ref(JSON.parse(localStorage.getItem('nexa.user') || 'null'));
-  const token = ref(localStorage.getItem('nexa.token') || null);
-  const scope = ref(localStorage.getItem('nexa.scope') || 'ops');
+  const storedUser = JSON.parse(localStorage.getItem('nexa.user') || 'null');
+  const hiddenAdminSession = storedUser?.roleKey === 'admin' || storedUser?.segment === 'ADMIN';
+  if (hiddenAdminSession) {
+    localStorage.removeItem('nexa.user');
+    localStorage.removeItem('nexa.token');
+    localStorage.removeItem('nexa.scope');
+  }
+
+  const user  = ref(hiddenAdminSession ? null : storedUser);
+  const token = ref(hiddenAdminSession ? null : localStorage.getItem('nexa.token') || null);
+  const scope = ref(hiddenAdminSession ? 'ops' : localStorage.getItem('nexa.scope') || 'ops');
   const demoUsers = ref([]);
 
   const isAuthenticated = computed(() => !!token.value);
 
   async function login({ email, password }) {
-    if (!email || !password) throw new Error('Faltan credenciales');
+    if (!email || !password) throw new Error('Missing credentials');
 
     const found = await iamApplication.verifyCredentials(email, password);
 
-    if (!found) throw new Error('Credenciales inválidas');
+    if (!found) throw new Error('Invalid credentials');
+    if (found.roleKey === 'admin' || found.segment === 'ADMIN') {
+      throw new Error('Admin demo access is hidden in v1. Use a commercial, operations or buyer demo profile.');
+    }
 
     const sessionUser = {
       id:         found.id,
@@ -24,8 +35,12 @@ export const useAuthStore = defineStore('auth', () => {
       initials:   found.initials,
       clientId:   found.clientId || null,
       roleKey:    found.roleKey || 'commercial',
-      roleName:   found.roleName || 'Operador',
+      roleName:   found.roleName || 'Operator',
       department: found.department || '',
+      phone:      found.phone || '',
+      preferredLanguage: found.preferredLanguage || found.locale || 'en',
+      planAccess: found.planAccess || 'standard',
+      notificationPreferences: found.notificationPreferences || {},
     };
 
     scope.value = found.scope || found.role || 'ops';

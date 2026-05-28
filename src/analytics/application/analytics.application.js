@@ -1,4 +1,4 @@
-import { analyticsApiService } from '../infrastructure/analytics-api.service';
+import { analyticsApiService } from '../infrastructure/analytics-api';
 
 export const analyticsApplication = {
   getAlerts() {

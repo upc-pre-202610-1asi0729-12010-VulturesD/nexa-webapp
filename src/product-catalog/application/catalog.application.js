@@ -1,4 +1,4 @@
-import { catalogApiService } from '../infrastructure/catalog-api.service';
+import { catalogApiService } from '../infrastructure/catalog-api';
 import { ProductAssembler } from '../infrastructure/product.assembler';
 
 const mapProductResource = (product) => ProductAssembler.toResource(ProductAssembler.toEntity(product));
