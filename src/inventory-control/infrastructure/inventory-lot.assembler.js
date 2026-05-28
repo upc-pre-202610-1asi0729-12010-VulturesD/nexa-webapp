@@ -1,4 +1,4 @@
-import { InventoryLot } from '@/inventory-control/domain/model/entities/InventoryLot.entity';
+import { InventoryLot } from '@/inventory-control/domain/model/entities/inventory-lot.entity';
 import { InventoryLotResource } from './inventory-lot.resource';
 
 export const InventoryLotAssembler = {

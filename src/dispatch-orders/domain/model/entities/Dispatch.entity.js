@@ -1,6 +1,6 @@
-import { Entity } from '@/shared/domain/model/Entity';
-import { DispatchStatus } from '../value-objects/DispatchStatus.value-object';
-import { PodEvidenceMock } from '../value-objects/PodEvidenceMock.value-object';
+import { Entity } from '@/shared/domain/model/entity';
+import { DispatchStatus } from '../value-objects/dispatch-status.value-object';
+import { PodEvidenceMock } from '../value-objects/pod-evidence-mock.value-object';
 
 export class Dispatch extends Entity {
   constructor({
