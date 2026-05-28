@@ -22,8 +22,19 @@ const selectedOrder = computed(() =>
 );
 
 const selectedDocs = computed(() => selectedOrder.value?.docs || []);
+const selectedPaymentState = computed(() => {
+  const order = selectedOrder.value;
+  if (!order) return { label: 'No order selected', badge: 'badge-gray', message: 'Select a purchase order to review billing state.' };
+  if (order.paymentStatus === 'failed') return { label: 'Payment failed', badge: 'badge-red', message: 'Review payment evidence before documents are visible to buyer.' };
+  if (order.paymentStatus === 'confirmed' || order.status === 'delivered') return { label: 'Payment confirmed', badge: 'badge-green', message: 'Billing information is ready for customer follow-up.' };
+  if (order.paymentCondition === 'cash') return { label: 'Cash pending', badge: 'badge-amber', message: 'Cash orders require payment confirmation before closing.' };
+  return { label: 'Credit terms', badge: 'badge-blue', message: `Payment condition: ${order.paymentCondition || 'standard'}.` };
+});
 const pendingCount = computed(() => D.businessDocuments.filter(doc => doc.required && ['pending', 'observed', 'rejected'].includes(doc.status)).length);
 const acceptedCount = computed(() => D.businessDocuments.filter(doc => ['accepted', 'uploaded', 'generated'].includes(doc.status)).length);
+const invoiceDocs = computed(() => D.businessDocuments.filter(doc => doc.type?.startsWith('invoice')));
+const invoiceAcceptedCount = computed(() => invoiceDocs.value.filter(doc => ['accepted', 'uploaded', 'generated'].includes(doc.status)).length);
+const invoiceRejectedCount = computed(() => invoiceDocs.value.filter(doc => ['rejected', 'observed'].includes(doc.status)).length);
 
 function nextStatus(doc) {
   const order = ['pending', 'generated', 'uploaded', 'accepted'];
@@ -60,6 +71,11 @@ function advance(doc) {
       <div class="kpi-label"><i class="pi pi-upload" style="color:#2563EB"></i> External portals</div>
       <div class="kpi-value" style="color:#2563EB">{{ D.portalUploadTasks.length }}</div>
       <div class="kpi-sub">Manual checklist, no real integration</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-label"><i class="pi pi-file-check" style="color:#7C3AED"></i> Invoice records</div>
+      <div class="kpi-value" style="color:#7C3AED">{{ invoiceAcceptedCount }}/{{ invoiceDocs.length }}</div>
+      <div class="kpi-sub">{{ invoiceRejectedCount }} observed or rejected</div>
     </div>
   </div>
 
@@ -101,6 +117,12 @@ function advance(doc) {
         <span :class="'badge ' + orderStatusBadge(selectedOrder.status)">{{ orderStatusLabel(selectedOrder.status) }}</span>
       </div>
       <div class="flow-panel-pad">
+        <div class="banner banner-info">
+          <i class="pi pi-credit-card"></i>
+          <div>
+            <strong>{{ selectedPaymentState.label }}.</strong> {{ selectedPaymentState.message }}
+          </div>
+        </div>
         <div v-if="selectedOrder.task" class="banner banner-warning">
           <i class="pi pi-upload"></i>
           <div>
