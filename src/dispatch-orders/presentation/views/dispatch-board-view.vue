@@ -19,6 +19,7 @@ const columns = [
   { key: 'preparing', label: 'Preparing' },
   { key: 'ready_for_route', label: 'Ready for route' },
   { key: 'in_route', label: 'On route' },
+  { key: 'delayed', label: 'Delayed' },
   { key: 'delivered', label: 'Delivered' },
   { key: 'incident', label: 'Incident' },
 ];
@@ -46,6 +47,10 @@ function byColumn(column) {
 function nextStatus(status) {
   const flow = ['validating', 'document_pending', 'ready_for_operations', 'preparing', 'ready_for_route', 'in_route', 'delivered'];
   return flow[Math.min(flow.indexOf(status) + 1, flow.length - 1)] || 'preparing';
+}
+
+function isDelayed(dispatch) {
+  return dispatch.status === 'delayed' || (dispatch.eta && new Date(dispatch.eta) < new Date() && !['delivered', 'incident'].includes(dispatch.status));
 }
 
 function advance(dispatch) {
@@ -124,6 +129,10 @@ function advance(dispatch) {
             <span class="flow-note">Responsible</span>
             <strong>{{ dispatch.responsible }}</strong>
           </div>
+        </div>
+        <div v-if="isDelayed(dispatch)" class="banner banner-warning" style="margin:10px 0 0;padding:9px">
+          <i class="pi pi-clock"></i>
+          <div>{{ dispatch.delayReason || 'ETA requires review before buyer update.' }}</div>
         </div>
         <div v-if="dispatch.incidentNote" class="banner banner-danger" style="margin:10px 0 0;padding:9px">
           <i class="pi pi-exclamation-triangle"></i>
