@@ -19,6 +19,15 @@ const items = computed(() => order.value ? ds.orderItemsFor(order.value.id) : []
 const events = computed(() => order.value ? ds.timelineForOrder(order.value.id) : []);
 const temps = computed(() => order.value ? ds.temperatureForOrder(order.value.id) : []);
 const pod = computed(() => dispatch.value ? ds.D.proofOfDelivery.find(item => item.dispatchOrderId === dispatch.value.id) : null);
+const temperatureSummary = computed(() => {
+  const records = temps.value;
+  const alerts = records.filter(log => log.status !== 'ok');
+  return {
+    total: records.length,
+    alerts: alerts.length,
+    latest: records[records.length - 1],
+  };
+});
 
 function setStatus(status) {
   ds.updateDispatchStatus(dispatch.value.id, status);
@@ -112,6 +121,12 @@ function setStatus(status) {
           <span class="demo-label">Simulated temperature</span>
         </div>
         <div class="flow-panel-pad flow-stack">
+          <div :class="temperatureSummary.alerts ? 'banner banner-warning' : 'banner banner-success'" style="margin-bottom:0">
+            <i :class="temperatureSummary.alerts ? 'pi pi-exclamation-triangle' : 'pi pi-thermometer'"></i>
+            <div>
+              {{ temperatureSummary.alerts ? `${temperatureSummary.alerts} temperature record(s) require review.` : 'Temperature records remain inside expected range.' }}
+            </div>
+          </div>
           <div :class="pod?.status === 'complete' ? 'banner banner-success' : 'banner banner-warning'" style="margin-bottom:0">
             <i :class="pod?.status === 'complete' ? 'pi pi-check-circle' : 'pi pi-camera'"></i>
             <div>{{ pod?.status === 'complete' ? 'Simulated POD completed with photo/signature.' : 'POD pending: register reference photo and signature.' }}</div>
