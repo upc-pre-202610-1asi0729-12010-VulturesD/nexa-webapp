@@ -21,6 +21,10 @@ export const DispatchAssembler = {
       evidenceRequired: entity.evidenceRequired,
       evidenceDone: entity.evidenceDone,
       checklist: entity.checklist,
+      routeName: entity.routeName,
+      eta: entity.eta,
+      delayReason: entity.delayReason,
+      temperatureStatus: entity.temperatureStatus,
     });
   },
 };

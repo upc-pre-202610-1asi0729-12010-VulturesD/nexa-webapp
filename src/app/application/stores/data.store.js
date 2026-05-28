@@ -457,12 +457,12 @@ export const useDataStore = defineStore('data', () => {
     if (!dispatch) return null;
     const existing = D.value.proofOfDelivery.find(pod => pod.dispatchOrderId === dispatch.id);
     const payload = {
-      status: 'complete',
+      status: dispatch.status === 'delayed' ? 'observed' : 'complete',
       photoMock: true,
       signatureMock: true,
       receivedBy: contactByClientId(dispatch.clientId)?.name || 'Client',
       completedAt: new Date().toISOString(),
-      notes: 'Simulated POD completed for demo.',
+      notes: dispatch.status === 'delayed' ? 'Simulated POD observed due to delayed delivery state.' : 'Simulated POD completed for demo.',
     };
     if (existing) {
       Object.assign(existing, payload);
