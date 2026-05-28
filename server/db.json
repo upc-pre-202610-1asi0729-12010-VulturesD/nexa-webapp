@@ -2838,7 +2838,13 @@
       "priority": "normal",
       "createdAt": "2026-05-20T11:00:00Z",
       "requestedDeliveryDate": "2026-05-21",
-      "deliveryAddressId": "ADDR-002"
+      "deliveryAddressId": "ADDR-002",
+      "invoiceDocumentIds": [
+        "DOC-01-01",
+        "DOC-01-02"
+      ],
+      "dispatchOrderId": "DSP-2026-0086",
+      "paymentStatus": "credit_terms"
     },
     {
       "id": "ORD-2026-0409",
@@ -2856,7 +2862,13 @@
       "priority": "medium",
       "createdAt": "2026-05-18T10:00:00Z",
       "requestedDeliveryDate": "2026-05-19",
-      "deliveryAddressId": null
+      "deliveryAddressId": null,
+      "invoiceDocumentIds": [
+        "DOC-02-01",
+        "DOC-02-02"
+      ],
+      "dispatchOrderId": "DSP-2026-0087",
+      "paymentStatus": "confirmed"
     },
     {
       "id": "ORD-2026-0410",
@@ -2874,7 +2886,13 @@
       "priority": "low",
       "createdAt": "2026-05-19T15:30:00Z",
       "requestedDeliveryDate": "2026-05-20",
-      "deliveryAddressId": "ADDR-004"
+      "deliveryAddressId": "ADDR-004",
+      "invoiceDocumentIds": [
+        "DOC-03-01",
+        "DOC-03-02"
+      ],
+      "dispatchOrderId": "DSP-2026-0088",
+      "paymentStatus": "pending_cash"
     },
     {
       "id": "ORD-2026-0411",
@@ -2892,7 +2910,13 @@
       "priority": "medium",
       "createdAt": "2026-05-20T08:20:00Z",
       "requestedDeliveryDate": "2026-05-21",
-      "deliveryAddressId": "ADDR-003"
+      "deliveryAddressId": "ADDR-003",
+      "invoiceDocumentIds": [
+        "DOC-04-01",
+        "DOC-04-02"
+      ],
+      "dispatchOrderId": "DSP-2026-0089",
+      "paymentStatus": "credit_terms"
     },
     {
       "id": "ORD-2026-0412",
@@ -2910,7 +2934,13 @@
       "priority": "high",
       "createdAt": "2026-05-20T09:10:00Z",
       "requestedDeliveryDate": "2026-05-22",
-      "deliveryAddressId": "ADDR-003"
+      "deliveryAddressId": "ADDR-003",
+      "invoiceDocumentIds": [
+        "DOC-05-01",
+        "DOC-05-02"
+      ],
+      "dispatchOrderId": "DSP-2026-0090",
+      "paymentStatus": "credit_terms"
     },
     {
       "id": "ORD-2026-0413",
@@ -2929,7 +2959,13 @@
       "createdAt": "2026-05-20T12:00:00Z",
       "requestedDeliveryDate": "2026-05-24",
       "deliveryAddressId": null,
-      "blockReason": "Credit exhausted"
+      "blockReason": "Credit exhausted",
+      "invoiceDocumentIds": [
+        "DOC-06-01",
+        "DOC-06-02"
+      ],
+      "dispatchOrderId": "DSP-2026-0085",
+      "paymentStatus": "credit_terms"
     },
     {
       "id": "ORD-2026-0414",
@@ -2947,7 +2983,13 @@
       "priority": "medium",
       "createdAt": "2026-05-20T13:40:00Z",
       "requestedDeliveryDate": "2026-05-25",
-      "deliveryAddressId": null
+      "deliveryAddressId": null,
+      "invoiceDocumentIds": [
+        "DOC-0414-1",
+        "DOC-0414-2"
+      ],
+      "dispatchOrderId": "DSP-2026-0091",
+      "paymentStatus": "credit_terms"
     },
     {
       "id": "ORD-2026-0415",
@@ -2965,7 +3007,13 @@
       "priority": "high",
       "createdAt": "2026-05-19T15:20:00Z",
       "requestedDeliveryDate": "2026-05-24",
-      "deliveryAddressId": null
+      "deliveryAddressId": null,
+      "invoiceDocumentIds": [
+        "DOC-0415-1",
+        "DOC-0415-2"
+      ],
+      "dispatchOrderId": "DSP-2026-0092",
+      "paymentStatus": "credit_terms"
     },
     {
       "id": "ORD-2026-0416",
@@ -2983,7 +3031,12 @@
       "priority": "normal",
       "createdAt": "2026-05-20T14:58:07.024Z",
       "requestedDeliveryDate": "2026-05-23",
-      "deliveryAddressId": "ADDR-003"
+      "deliveryAddressId": "ADDR-003",
+      "invoiceDocumentIds": [
+        "DOC-008"
+      ],
+      "dispatchOrderId": "DSP-2026-0093",
+      "paymentStatus": "credit_terms"
     }
   ],
   "orderItems": [
@@ -2995,7 +3048,8 @@
       "unit": "block",
       "price": 28,
       "estimatedWeightKg": 40,
-      "stockOk": true
+      "stockOk": true,
+      "inventoryLotId": "LOT-2026-009"
     },
     {
       "id": "OI-002",
@@ -3005,7 +3059,8 @@
       "unit": "block",
       "price": 52,
       "estimatedWeightKg": 15,
-      "stockOk": true
+      "stockOk": true,
+      "inventoryLotId": "LOT-2026-012"
     },
     {
       "id": "OI-003",
@@ -3015,7 +3070,8 @@
       "unit": "kg",
       "price": 6.8,
       "estimatedWeightKg": 20,
-      "stockOk": true
+      "stockOk": true,
+      "inventoryLotId": "LOT-2026-015"
     },
     {
       "id": "OI-004",
@@ -3025,7 +3081,8 @@
       "unit": "block",
       "price": 28,
       "estimatedWeightKg": 40,
-      "stockOk": true
+      "stockOk": true,
+      "inventoryLotId": "LOT-2026-009"
     },
     {
       "id": "OI-005",
@@ -3035,7 +3092,8 @@
       "unit": "block",
       "price": 52,
       "estimatedWeightKg": 15,
-      "stockOk": true
+      "stockOk": true,
+      "inventoryLotId": "LOT-2026-012"
     },
     {
       "id": "OI-006",
@@ -3045,7 +3103,8 @@
       "unit": "kg",
       "price": 18.5,
       "estimatedWeightKg": 30,
-      "stockOk": true
+      "stockOk": true,
+      "inventoryLotId": "LOT-2026-014"
     },
     {
       "id": "OI-007",
@@ -3055,7 +3114,8 @@
       "unit": "kg",
       "price": 38,
       "estimatedWeightKg": 12,
-      "stockOk": false
+      "stockOk": false,
+      "inventoryLotId": "LOT-2026-011"
     },
     {
       "id": "OI-008",
@@ -3065,7 +3125,8 @@
       "unit": "kg",
       "price": 35,
       "estimatedWeightKg": 8,
-      "stockOk": true
+      "stockOk": true,
+      "inventoryLotId": "LOT-2026-017"
     },
     {
       "id": "OI-009",
@@ -3075,7 +3136,8 @@
       "unit": "kg",
       "price": 24.5,
       "estimatedWeightKg": 12,
-      "stockOk": true
+      "stockOk": true,
+      "inventoryLotId": "LOT-013"
     },
     {
       "id": "OI-010",
@@ -3085,7 +3147,8 @@
       "unit": "kg",
       "price": 31.2,
       "estimatedWeightKg": 16,
-      "stockOk": true
+      "stockOk": true,
+      "inventoryLotId": "LOT-014"
     },
     {
       "id": "OI-011",
@@ -3095,7 +3158,8 @@
       "unit": "kg",
       "price": 6.8,
       "estimatedWeightKg": 20,
-      "stockOk": true
+      "stockOk": true,
+      "inventoryLotId": "LOT-2026-015"
     },
     {
       "id": "OI-012",
@@ -3105,7 +3169,8 @@
       "unit": "kg",
       "price": 18.5,
       "estimatedWeightKg": 2,
-      "stockOk": true
+      "stockOk": true,
+      "inventoryLotId": "LOT-2026-014"
     }
   ],
   "orderTimelineEvents": [
@@ -3941,7 +4006,9 @@
       "driverName": "Not assigned",
       "responsible": "Roberto Garcia",
       "requiresPOD": true,
-      "documentProgress": "1/5"
+      "documentProgress": "1/5",
+      "temperatureStatus": "ok",
+      "delayReason": ""
     },
     {
       "id": "DSP-2026-0089",
@@ -3958,7 +4025,9 @@
       "driverName": "Juan Ccoya Mamani",
       "responsible": "Roberto Garcia",
       "requiresPOD": false,
-      "documentProgress": "2/5"
+      "documentProgress": "2/5",
+      "temperatureStatus": "ok",
+      "delayReason": ""
     },
     {
       "id": "DSP-2026-0088",
@@ -3975,7 +4044,9 @@
       "driverName": "Pedro Quispe Condori",
       "responsible": "Roberto Garcia",
       "requiresPOD": true,
-      "documentProgress": "5/5"
+      "documentProgress": "5/5",
+      "temperatureStatus": "ok",
+      "delayReason": ""
     },
     {
       "id": "DSP-2026-0087",
@@ -3992,7 +4063,9 @@
       "driverName": "Luis Caceres Vega",
       "responsible": "Roberto Garcia",
       "requiresPOD": true,
-      "documentProgress": "6/6"
+      "documentProgress": "6/6",
+      "temperatureStatus": "ok",
+      "delayReason": ""
     },
     {
       "id": "DSP-2026-0086",
@@ -4009,7 +4082,9 @@
       "driverName": "Ruth Paredes",
       "responsible": "Roberto Garcia",
       "requiresPOD": true,
-      "documentProgress": "4/6"
+      "documentProgress": "4/6",
+      "temperatureStatus": "ok",
+      "delayReason": ""
     },
     {
       "id": "DSP-2026-0085",
@@ -4027,7 +4102,9 @@
       "responsible": "Roberto Garcia",
       "requiresPOD": true,
       "documentProgress": "0/4",
-      "incidentNote": "Credit blocked before dispatch."
+      "incidentNote": "Credit blocked before dispatch.",
+      "temperatureStatus": "review",
+      "delayReason": ""
     },
     {
       "id": "DSP-2026-0091",
@@ -4044,7 +4121,9 @@
       "driverName": "Not assigned",
       "responsible": "Roberto Garcia",
       "requiresPOD": true,
-      "documentProgress": "1/3"
+      "documentProgress": "1/3",
+      "temperatureStatus": "review",
+      "delayReason": ""
     },
     {
       "id": "DSP-2026-0092",
@@ -4061,7 +4140,9 @@
       "driverName": "Marco Salazar",
       "responsible": "Roberto Garcia",
       "requiresPOD": true,
-      "documentProgress": "3/3"
+      "documentProgress": "3/3",
+      "temperatureStatus": "ok",
+      "delayReason": ""
     },
     {
       "id": "DSP-2026-0093",
@@ -4078,7 +4159,9 @@
       "driverName": "Not assigned",
       "responsible": "Roberto Garcia",
       "requiresPOD": true,
-      "documentProgress": "0/6"
+      "documentProgress": "0/6",
+      "temperatureStatus": "ok",
+      "delayReason": ""
     }
   ],
   "dispatchItems": [
