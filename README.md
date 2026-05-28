@@ -101,6 +101,8 @@ Supporting contexts include `iam`, `analytics`, `communications`, `customer-port
 | Invoicing | GerardRojasMancilla | Cmarin2802, DiegoS284 |
 | Catalog Management | R0obxdnt-bit | JoaquinVerde115, DiegoS284 |
 
+Warehouse scope is focused on availability, lots, stock movement, warehouse records, and cold-chain monitoring. Catalog Management owns the product and promotion data that buyers and operators use before orders are created.
+
 ## GitFlow Strategy
 
 The repository uses `main` for released states and `develop` for integrated work before release. Feature work is reconstructed through `feature/*` branches, release stabilization through `release/*` branches, and small production corrections through `hotfix/*` branches. Remote branches are kept clean: only `main` and `develop` are expected to remain active after publication.
