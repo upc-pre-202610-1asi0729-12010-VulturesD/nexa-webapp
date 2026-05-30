@@ -84,3 +84,15 @@ npm install
 npm run dev:all
 ```
 *The Vite application runs on `http://localhost:5173/` and the local Mock API runs on `http://localhost:3000`.*
+
+---
+
+## 🔗 Nexa Repository Navigation Matrix
+
+Below is the repository mapping for the Nexa platform, tracking purpose, versions, and deployment statuses:
+
+| Repository | Purpose | Status / Version | Links |
+| :--- | :--- | :---: | :--- |
+| 📘 **Nexa Report** | Academic report, product research, requirements elicitation, UML and database models, and project evidence. | `v2.0.0` Stable | [Repo](https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-report-v1) \| [PDF Build Actions](https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-report-v1/actions) |
+| 🌐 **Nexa Website** | Public B2B landing website and product value entry point. | `v2.2.0` Stable | [Repo](https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-website) \| [Live Deployment](https://upc-pre-202610-1asi0730-12242-king.github.io/nexa-website/) |
+| 💻 **Nexa WebApp** | Core single-page operational frontend managing cold-storage inventory, dispatches, orders, catalog and invoicing. | `v1.2.0` Stable | [Repo](https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-webapp) \| [Live Deployment](https://upc-pre-202610-1asi0730-12242-king.github.io/nexa-webapp/) |
