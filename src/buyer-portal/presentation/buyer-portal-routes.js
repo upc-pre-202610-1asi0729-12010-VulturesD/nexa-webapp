@@ -7,6 +7,7 @@ export const buyerPortalRoutes = [
   { path: 'purchase-orders/success', name: 'buyer-purchase-orders-success', component: () => import('@/buyer-portal/presentation/views/buyer-order-success-view.vue') },
   { path: 'purchase-orders/:id', name: 'buyer-purchase-order-detail', component: () => import('@/buyer-portal/presentation/views/buyer-order-detail-view.vue') },
   { path: 'business-documents', name: 'buyer-business-documents', component: () => import('@/buyer-portal/presentation/views/buyer-business-documents-view.vue') },
+  { path: 'payment-methods', name: 'buyer-payment-methods', component: () => import('@/buyer-portal/presentation/views/buyer-payment-methods-view.vue') },
   { path: 'premium', name: 'portal.premium', component: () => import('@/buyer-portal/presentation/views/buyer-premium-preview-view.vue') },
   { path: 'profile', name: 'buyer-profile', component: () => import('@/buyer-portal/presentation/views/buyer-profile-view.vue') },
   { path: 'legal/terms', name: 'portal.legal.terms', component: () => import('@/buyer-portal/presentation/views/buyer-legal-view.vue'), props: { page: 'terms' } },
