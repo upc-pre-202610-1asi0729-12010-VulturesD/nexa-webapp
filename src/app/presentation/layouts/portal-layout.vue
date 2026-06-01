@@ -89,7 +89,7 @@ function goRequestBuilder() {
     <!-- Terms footer -->
     <footer class="portal-footer" role="contentinfo">
       <span>{{ t('footer.rights') }}</span>
-      <div class="portal-footer-links">
+      <nav class="portal-footer-links" aria-label="Portal legal links">
         <button
           v-for="link in footerLinks"
           :key="link.to"
@@ -99,7 +99,7 @@ function goRequestBuilder() {
         >
           {{ link.label }}
         </button>
-      </div>
+      </nav>
     </footer>
 
     <nav class="portal-bottom-nav" role="navigation" :aria-label="t('common.mobileNav')">
