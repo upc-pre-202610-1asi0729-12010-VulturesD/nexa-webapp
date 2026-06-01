@@ -369,6 +369,7 @@ input, select, textarea { font-family: inherit; }
 .buyer-card { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; overflow: hidden; transition: box-shadow 140ms, transform 140ms; }
 .buyer-card:hover { box-shadow: 0 12px 24px rgba(15,23,42,.08); transform: translateY(-1px); }
 .buyer-kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; }
+.catalog-brand-line { margin-top: 5px; color: #475569; font-size: 11px; font-weight: 700; line-height: 1.3; }
 .buyer-product-visual { height: clamp(150px, 11vw, 198px); display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #EFF6FF, #E0F2FE); position: relative; overflow: hidden; }
 .buyer-product-visual .pi { font-size: 42px; color: rgba(37,99,235,.42); }
 .premium-lock { display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px; border-radius: 999px; background: #EEF2FF; color: #4F46E5; font-size: 11px; font-weight: 800; border: 1px solid #C7D2FE; }
