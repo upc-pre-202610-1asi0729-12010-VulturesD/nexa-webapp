@@ -24,6 +24,7 @@ const navItems = [
   { to: '/portal/purchase-requests', label: 'My Requests', icon: 'pi-inbox' },
   { to: '/portal/purchase-orders', label: 'My Orders', icon: 'pi-truck' },
   { to: '/portal/business-documents', label: 'Business Documents', icon: 'pi-file-check' },
+  { to: '/portal/payment-methods', label: 'Payments', icon: 'pi-credit-card' },
   { to: '/portal/premium', label: 'Premium', icon: 'pi-sparkles' },
   { to: '/portal/profile', label: 'Profile', icon: 'pi-user-edit' },
 ];

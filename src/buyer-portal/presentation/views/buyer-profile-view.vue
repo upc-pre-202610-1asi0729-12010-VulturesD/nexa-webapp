@@ -13,7 +13,9 @@ const ds = useDataStore();
 const client = computed(() => ds.clientById(auth.user?.clientId) || {});
 const savedProfile = JSON.parse(localStorage.getItem(`nexa.buyerProfile.${auth.user?.id}`) || '{}');
 const avatarPreview = ref(savedProfile.avatarPreview || '');
-const preferredPayment = ref(savedProfile.preferredPaymentMethod || client.value.preferredPaymentMethod || 'card_demo');
+const paymentStorage = computed(() => JSON.parse(localStorage.getItem(`nexa.paymentMethods.${auth.user?.id || 'buyer'}`) || '{}'));
+const paymentMethodsCount = computed(() => paymentStorage.value.methods?.length || 0);
+const defaultPayment = computed(() => paymentStorage.value.methods?.find(method => method.isDefault) || paymentStorage.value.methods?.[0]);
 
 const form = reactive({
   fullName: savedProfile.fullName || auth.user?.name || '',
@@ -32,8 +34,6 @@ const form = reactive({
   preferredLanguage: savedProfile.preferredLanguage || auth.user?.preferredLanguage || 'en',
   catalogView: savedProfile.catalogView || 'grid',
   communicationChannel: savedProfile.communicationChannel || 'portal',
-  cardholderName: savedProfile.cardholderName || auth.user?.name || '',
-  paymentLabel: savedProfile.paymentLabel || 'Purchasing team reference',
 });
 
 const notifications = reactive({
@@ -44,13 +44,6 @@ const notifications = reactive({
   promotionAlerts: savedProfile.notifications?.promotionAlerts ?? true,
   temperatureAlerts: savedProfile.notifications?.temperatureAlerts ?? false,
 });
-
-const paymentMethods = [
-  { key: 'card_demo', title: 'Card', icon: 'pi-credit-card', badge: 'Demo' },
-  { key: 'apple_pay_demo', title: 'Apple Pay', icon: 'pi-apple', badge: 'Coming soon' },
-  { key: 'google_pay_demo', title: 'Google Pay', icon: 'pi-google', badge: 'Coming soon' },
-  { key: 'paypal_demo', title: 'PayPal', icon: 'pi-wallet', badge: 'Coming soon' },
-];
 
 const planLabel = computed(() => auth.user?.planAccess || ds.D.company.subscriptionPlan || 'standard');
 const initials = computed(() => auth.user?.initials || form.fullName.split(' ').slice(0, 2).map(part => part[0]).join('').toUpperCase() || 'BP');
@@ -65,7 +58,6 @@ function saveProfile() {
   localStorage.setItem(`nexa.buyerProfile.${auth.user?.id}`, JSON.stringify({
     ...form,
     avatarPreview: avatarPreview.value,
-    preferredPaymentMethod: preferredPayment.value,
     notifications: { ...notifications },
   }));
   toast.add({ severity: 'success', summary: 'Buyer profile saved', detail: 'Demo profile changes were stored locally.', life: 3000 });
@@ -83,7 +75,7 @@ function endSession() {
       <div>
         <span class="eyebrow">Buyer Portal</span>
         <h1>Buyer Profile</h1>
-        <p>Manage buyer identity, delivery preferences, notifications and demo payment methods.</p>
+        <p>Manage buyer identity, delivery preferences, notifications and payment references.</p>
       </div>
     </section>
 
@@ -169,29 +161,25 @@ function endSession() {
         <div class="flow-panel-head">
           <div>
             <div class="flow-title">Payment Methods</div>
-            <div class="flow-subtitle">Payment methods are shown for product experience only. No real payment processing is enabled in this demo.</div>
+            <div class="flow-subtitle">Payment references are managed in their own screen for checkout and invoicing preview.</div>
           </div>
-          <span class="demo-label">UI preview</span>
         </div>
-        <div class="flow-panel-pad">
-          <div class="payment-method-grid">
-            <button
-              v-for="method in paymentMethods"
-              :key="method.key"
-              class="payment-method-card"
-              :class="{ active: preferredPayment === method.key }"
-              @click="preferredPayment = method.key"
-            >
-              <i :class="'pi ' + method.icon" aria-hidden="true"></i>
-              <strong>{{ method.title }}</strong>
-              <span class="demo-label">{{ method.badge }}</span>
-            </button>
+        <div class="flow-panel-pad payment-summary-panel">
+          <div class="flow-kpi-icon"><i class="pi pi-credit-card"></i></div>
+          <div>
+            <div style="font-weight:800;color:#0F172A">
+              {{ paymentMethodsCount ? `${paymentMethodsCount} saved payment reference(s)` : 'No payment references saved yet' }}
+            </div>
+            <div class="flow-note">
+              <template v-if="defaultPayment">
+                Default: {{ defaultPayment.brand }} {{ defaultPayment.last4 ? `ending in ${defaultPayment.last4}` : defaultPayment.label }}
+              </template>
+              <template v-else>
+                Add a card or wallet reference before previewing checkout payment selection.
+              </template>
+            </div>
           </div>
-          <div class="form-grid" style="margin-top:16px">
-            <label class="field"><span class="field-label">Cardholder name</span><input class="plain-input" v-model="form.cardholderName" placeholder="Demo buyer name" /></label>
-            <label class="field"><span class="field-label">Last four digits placeholder</span><input class="plain-input" value="•••• 4242" disabled /></label>
-            <label class="field span-full"><span class="field-label">Billing label</span><input class="plain-input" v-model="form.paymentLabel" /></label>
-          </div>
+          <button class="btn btn-primary" @click="router.push('/portal/payment-methods')"><i class="pi pi-arrow-right"></i> Manage payments</button>
         </div>
       </section>
 
