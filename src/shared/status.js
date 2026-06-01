@@ -1,4 +1,15 @@
 export const ORDER_STATUS_FLOW = ['submitted', 'validating', 'confirmed', 'document_pending', 'ready_for_dispatch', 'ready_for_route', 'preparing', 'in_route', 'delivered'];
+export const ORDER_TRACKING_STEPS = [
+  ['submitted', 'Request received'],
+  ['validating', 'Commercial validation'],
+  ['confirmed', 'Purchase order confirmed'],
+  ['document_pending', 'Business documents prepared'],
+  ['ready_for_dispatch', 'Ready for operations'],
+  ['ready_for_route', 'Ready for route'],
+  ['preparing', 'Preparing dispatch'],
+  ['in_route', 'On route'],
+  ['delivered', 'Delivered'],
+];
 export const ORDER_STATUS_FILTERS = ['validating', 'document_pending', 'confirmed', 'ready_for_dispatch', 'ready_for_route', 'preparing', 'in_route', 'dispatched', 'delivered', 'incident', 'blocked'];
 
 export const orderStatusLabel = (s) => ({
@@ -35,13 +46,58 @@ export const orderStepState = (status, step) => {
   const aliases = { dispatched: 'in_route', ready_for_operations: 'ready_for_dispatch' };
   const normalizedStatus = aliases[status] || status;
   const normalizedStep = aliases[step] || step;
-  const current = ORDER_STATUS_FLOW.indexOf(status);
   const target = ORDER_STATUS_FLOW.indexOf(normalizedStep);
   const normalizedCurrent = ORDER_STATUS_FLOW.indexOf(normalizedStatus);
   if (normalizedCurrent < 0 || target < 0) return 'pending';
   if (target < normalizedCurrent) return 'done';
   if (target === normalizedCurrent) return 'active';
   return 'pending';
+};
+
+const statusAliases = {
+  ready_for_operations: 'ready_for_dispatch',
+  dispatched: 'in_route',
+  document_ready: 'document_pending',
+  documents_prepared: 'document_pending',
+  approved: 'validating',
+  converted_to_order: 'confirmed',
+};
+
+export const normalizeOrderStatus = (status) => statusAliases[status] || status;
+
+export const timelineEventForStep = (events = [], step) => {
+  const normalizedStep = normalizeOrderStatus(step);
+  return [...events]
+    .filter(event => normalizeOrderStatus(event.status) === normalizedStep)
+    .sort((a, b) => new Date(a.timestamp || a.createdAt || 0) - new Date(b.timestamp || b.createdAt || 0))
+    .at(-1);
+};
+
+export const formatTimelineDateTime = (value) => {
+  if (!value) return 'Pending';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return 'Pending';
+  return date.toLocaleString('en-US', {
+    month: 'short',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+};
+
+export const buildOrderTrackingSteps = (order, events = []) => {
+  const visibleEvents = events.filter(event => event.visibleToBuyer !== false);
+  return ORDER_TRACKING_STEPS.map(([key, label], index) => {
+    const event = timelineEventForStep(visibleEvents, key);
+    return {
+      key,
+      label,
+      index: index + 1,
+      state: orderStepState(order?.status, key),
+      timestamp: event?.timestamp || event?.createdAt || null,
+      dateLabel: formatTimelineDateTime(event?.timestamp || event?.createdAt),
+    };
+  });
 };
 
 export const daysUntil = (dateStr, today = new Date()) => {

@@ -12,7 +12,7 @@ const cart = useCartStore();
 const auth = useAuthStore();
 const ds = useDataStore();
 
-const requestedDeliveryDate = ref('2026-05-23');
+const requestedDeliveryDate = ref(new Date().toISOString().slice(0, 10));
 const deliveryAddressId = ref('');
 const comments = ref('');
 const submittedRequestId = ref('');

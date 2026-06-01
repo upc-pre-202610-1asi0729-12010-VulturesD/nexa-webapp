@@ -4,7 +4,8 @@ import { useRouter } from 'vue-router';
 import { useDataStore } from '@/app/application/stores/data.store';
 import { useCartStore } from '@/app/application/stores/cart.store';
 import { useAuthStore } from '@/iam/application/iam.store';
-import { orderStatusLabel, orderStatusBadge, requestStatusLabel, requestStatusBadge, orderStepState } from '@/shared/status';
+import { orderStatusLabel, orderStatusBadge, requestStatusLabel, requestStatusBadge, buildOrderTrackingSteps } from '@/shared/status';
+import { creditSummary } from '@/shared/credit';
 
 const router = useRouter();
 const ds = useDataStore();
@@ -16,21 +17,21 @@ const client = computed(() => ds.clientById(auth.user?.clientId));
 const hasClient = computed(() => Boolean(client.value));
 const myRequests = computed(() => D.purchaseRequests.filter(request => request.clientId === auth.user?.clientId));
 const myOrders = computed(() => D.purchaseOrders.filter(order => order.clientId === auth.user?.clientId));
-const activeOrder = computed(() => myOrders.value.find(order => !['delivered', 'cancelled', 'rejected'].includes(order.status)) || myOrders.value[0]);
-const activeRequest = computed(() => myRequests.value.find(request => !['converted_to_order', 'rejected'].includes(request.status)));
+const credit = computed(() => creditSummary(client.value || {}));
+const recordTime = (record) => {
+  const direct = record?.createdAt || record?.requestedDeliveryDate || record?.date;
+  const directTime = direct ? new Date(direct).getTime() : 0;
+  if (directTime) return directTime;
+  return Number(String(record?.id || record?.code || '').split('-').pop()) || 0;
+};
+const recentOrders = computed(() => [...myOrders.value].sort((a, b) => recordTime(b) - recordTime(a)));
+const recentRequests = computed(() => [...myRequests.value].sort((a, b) => recordTime(b) - recordTime(a)));
+const activeOrder = computed(() => recentOrders.value.find(order => !['delivered', 'cancelled', 'rejected'].includes(order.status)) || recentOrders.value[0]);
+const activeRequest = computed(() => recentRequests.value.find(request => !['converted_to_order', 'rejected'].includes(request.status)));
 const activePromos = computed(() => D.promotions.filter(promo => promo.status === 'active' && ['buyer_portal', 'client_specific'].includes(promo.visibility)).slice(0, 3));
 const featured = computed(() => D.products.filter(product => product.isVisibleToBuyer && product.status !== 'out').slice(0, 4));
+const trackingSteps = computed(() => activeOrder.value ? buildOrderTrackingSteps(activeOrder.value, ds.timelineForOrder(activeOrder.value.id)) : []);
 
-const trackingSteps = [
-  ['submitted', 'Request received'],
-  ['validating', 'Commercial validation'],
-  ['confirmed', 'Purchase order confirmed'],
-  ['document_pending', 'Business documents prepared'],
-  ['ready_for_dispatch', 'Ready for operations'],
-  ['preparing', 'Preparing dispatch'],
-  ['in_route', 'On route'],
-  ['delivered', 'Delivered'],
-];
 </script>
 
 <template>
@@ -59,7 +60,7 @@ const trackingSteps = [
       </div>
     </section>
 
-    <div class="grid-4" style="margin-bottom:22px">
+    <div class="buyer-kpi-grid" style="margin-bottom:22px">
       <button class="buyer-card flow-panel-pad" style="text-align:left" @click="router.push('/portal/product-catalog')">
         <div class="flow-kpi-icon"><i class="pi pi-box"></i></div>
         <div class="flow-title" style="margin-top:10px">Product Catalog</div>
@@ -79,6 +80,11 @@ const trackingSteps = [
         <div class="flow-kpi-icon" style="background:#F0FDF4;color:#15803D"><i class="pi pi-file-check"></i></div>
         <div class="flow-title" style="margin-top:10px">Business Documents</div>
         <div class="flow-note">Reference invoice, guide, CDR and POD documents.</div>
+      </button>
+      <button class="buyer-card flow-panel-pad" style="text-align:left" @click="router.push('/portal/profile')">
+        <div class="flow-kpi-icon" style="background:#EEF2FF;color:#4F46E5"><i class="pi pi-credit-card"></i></div>
+        <div class="flow-title" style="margin-top:10px">Monthly Credit</div>
+        <div class="flow-note">Available S/ {{ credit.available.toLocaleString() }} of S/ {{ credit.limit.toLocaleString() }}.</div>
       </button>
     </div>
 
@@ -103,13 +109,14 @@ const trackingSteps = [
             </div>
             <div class="flow-timeline-horizontal">
               <div
-                v-for="([key, label], index) in trackingSteps"
-                :key="key"
+                v-for="step in trackingSteps"
+                :key="step.key"
                 class="flow-track-step"
-                :class="orderStepState(activeOrder.status, key)"
+                :class="step.state"
               >
-                <div class="flow-track-index">{{ index + 1 }}</div>
-                <div class="flow-track-label">{{ label }}</div>
+                <div class="flow-track-index">{{ step.index }}</div>
+                <div class="flow-track-label">{{ step.label }}</div>
+                <div class="flow-track-date">{{ step.dateLabel }}</div>
               </div>
             </div>
           </template>
