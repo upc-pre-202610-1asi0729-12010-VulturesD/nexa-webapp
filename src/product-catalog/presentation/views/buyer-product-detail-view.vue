@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useDataStore } from '@/app/application/stores/data.store';
 import { useCartStore } from '@/app/application/stores/cart.store';
 import { coldTypeLabel, coldTypeBadge } from '@/shared/status';
+import { brandForProduct } from '@/product-catalog/application/product-brand';
 
 const route = useRoute();
 const router = useRouter();
@@ -27,7 +28,7 @@ const related = computed(() => product.value ? ds.D.products.filter(item => item
       <button class="btn btn-ghost btn-sm" @click="router.push('/portal/product-catalog')"><i class="pi pi-arrow-left"></i> Product Catalog</button>
       <div>
         <div class="page-title">{{ product.name }}</div>
-        <div class="page-subtitle">{{ product.sku }} - {{ product.category }}</div>
+        <div class="page-subtitle">{{ product.sku }} - {{ product.category }} - Brand: {{ brandForProduct(product) }}</div>
       </div>
     </div>
 
@@ -45,6 +46,7 @@ const related = computed(() => product.value ? ds.D.products.filter(item => item
             <span :class="coldTypeBadge(product.coldType)">{{ coldTypeLabel(product.coldType) }}</span>
             <span class="badge-temp">{{ product.temperatureRange }}</span>
             <span class="flow-pill flow-pill-green">{{ product.commercialAvailability }}</span>
+            <span class="flow-pill">{{ brandForProduct(product) }}</span>
           </div>
           <div>
             <div class="buyer-title" style="color:#0F172A">{{ product.name }}</div>
@@ -62,6 +64,10 @@ const related = computed(() => product.value ? ds.D.products.filter(item => item
             <div class="flow-panel-pad" style="background:#F8FAFC;border-radius:10px">
               <div class="flow-eyebrow">Ref. Price</div>
               <strong>S/ {{ product.price.toFixed(2) }}</strong>
+            </div>
+            <div class="flow-panel-pad" style="background:#F8FAFC;border-radius:10px">
+              <div class="flow-eyebrow">Brand</div>
+              <strong>{{ brandForProduct(product) }}</strong>
             </div>
           </div>
           <div v-if="promos.length" class="banner banner-warning">
@@ -86,7 +92,7 @@ const related = computed(() => product.value ? ds.D.products.filter(item => item
         <div class="grid-3 flow-panel-pad">
           <article v-for="item in related" :key="item.id" class="buyer-card flow-panel-pad">
             <div style="font-weight:800">{{ item.name }}</div>
-            <div class="flow-note">{{ item.category }} - {{ item.temperatureRange }}</div>
+            <div class="flow-note">{{ brandForProduct(item) }} - {{ item.category }} - {{ item.temperatureRange }}</div>
             <button class="btn btn-ghost btn-sm" style="margin-top:12px" @click="router.push('/portal/product-catalog/' + item.id)">View</button>
           </article>
         </div>
