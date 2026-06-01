@@ -205,6 +205,22 @@ export const useDataStore = defineStore('data', () => {
     createResource('activityLog', entry);
   }
 
+  function addUser(payload) {
+    const user = {
+      id: nextCode('USR', D.value.users, 3),
+      tenantId: D.value.company.id || 'TEN-001',
+      status: 'active',
+      planAccess: D.value.company.subscriptionPlan || 'standard',
+      password: 'demo1234',
+      lastLogin: null,
+      ...payload,
+    };
+    D.value.users.unshift(user);
+    createResource('users', user);
+    addActivity(`User created: ${user.email}`, 'success');
+    return user;
+  }
+
   function addPurchaseRequest({ clientId, buyerUserId, deliveryAddressId, requestedDeliveryDate, comments, items = [] }) {
     const id = nextCode('REQ-2026', D.value.purchaseRequests, 4);
     const request = {
@@ -574,6 +590,7 @@ export const useDataStore = defineStore('data', () => {
     temperatureForOrder,
     promotionsForProduct,
     nextOrderId,
+    addUser,
     addOrder,
     addPurchaseRequest,
     updateRequestStatus,
