@@ -18,15 +18,15 @@ const auth   = useAuthStore();
 const ds     = useDataStore();
 
 const navItems = [
-  { to: '/portal/home', label: 'Home', icon: 'pi-home' },
-  { to: '/portal/product-catalog', label: 'Product Catalog', icon: 'pi-box' },
-  { to: '/portal/request-builder', label: 'Request Builder', icon: 'pi-shopping-cart' },
-  { to: '/portal/purchase-requests', label: 'My Requests', icon: 'pi-inbox' },
-  { to: '/portal/purchase-orders', label: 'My Orders', icon: 'pi-truck' },
-  { to: '/portal/business-documents', label: 'Business Documents', icon: 'pi-file-check' },
-  { to: '/portal/payment-methods', label: 'Payments', icon: 'pi-credit-card' },
-  { to: '/portal/premium', label: 'Premium', icon: 'pi-sparkles' },
-  { to: '/portal/profile', label: 'Profile', icon: 'pi-user-edit' },
+  { to: '/portal/home', labelKey: 'portal.nav.home', icon: 'pi-home' },
+  { to: '/portal/product-catalog', labelKey: 'portal.nav.catalog', icon: 'pi-box' },
+  { to: '/portal/request-builder', labelKey: 'portal.nav.requestBuilder', icon: 'pi-shopping-cart' },
+  { to: '/portal/purchase-requests', labelKey: 'portal.nav.requests', icon: 'pi-inbox' },
+  { to: '/portal/purchase-orders', labelKey: 'portal.nav.orders', icon: 'pi-truck' },
+  { to: '/portal/business-documents', labelKey: 'portal.nav.documents', icon: 'pi-file-check' },
+  { to: '/portal/payment-methods', labelKey: 'portal.nav.payments', icon: 'pi-credit-card' },
+  { to: '/portal/premium', labelKey: 'portal.nav.premium', icon: 'pi-sparkles' },
+  { to: '/portal/profile', labelKey: 'portal.nav.profile', icon: 'pi-user-edit' },
 ];
 
 const footerLinks = [
@@ -66,7 +66,7 @@ function goRequestBuilder() {
           :aria-current="route.path.startsWith(n.to) ? 'page' : undefined"
           @click="router.push(n.to)"
         >
-          {{ n.label }}
+          {{ t(n.labelKey) }}
         </button>
       </nav>
       <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
@@ -116,7 +116,7 @@ function goRequestBuilder() {
           :class="['pi', n.icon]"
           aria-hidden="true"
         ></i>
-        <span>{{ n.label }}</span>
+        <span>{{ t(n.labelKey) }}</span>
       </button>
     </nav>
 

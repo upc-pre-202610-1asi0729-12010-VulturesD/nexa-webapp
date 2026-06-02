@@ -27,7 +27,7 @@ const steps = [
       <div class="tl-spine"></div>
       <div class="tl-content">
         <div class="tl-title">{{ label }}</div>
-        <div class="tl-meta">{{ events.find(event => event.status === key)?.timestamp || 'Simulated data' }}</div>
+        <div class="tl-meta">{{ events.find(event => event.status === key)?.timestamp || 'Pending' }}</div>
       </div>
     </div>
   </div>

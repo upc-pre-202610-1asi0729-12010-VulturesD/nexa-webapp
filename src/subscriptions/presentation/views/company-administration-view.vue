@@ -373,7 +373,7 @@ function saveLocal(showToast = true) {
                   <option>Company owner</option>
                   <option>Commercial operator</option>
                   <option>Buyer portal access</option>
-                  <option>Read-only demo</option>
+                  <option>Read-only access</option>
                 </select>
               </label>
               <div class="team-access-status">
@@ -390,7 +390,7 @@ function saveLocal(showToast = true) {
         <div class="flow-panel-head">
           <div>
             <div class="flow-title">Subscription Overview</div>
-            <div class="flow-subtitle">This demo uses simulated subscription data. No billing is active in v1.</div>
+            <div class="flow-subtitle">Review the current service plan and request changes through commercial operations.</div>
           </div>
           <button class="btn btn-secondary"><i class="pi pi-send"></i> Request plan change</button>
         </div>

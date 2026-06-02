@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue';
 import { useAuthStore } from '@/iam/application/iam.store';
 import { useDataStore } from '@/app/application/stores/data.store';
-import { orderStatusLabel } from '@/shared/status';
+import { orderStatusLabel, displayCode } from '@/shared/status';
 
 const auth = useAuthStore();
 const ds = useDataStore();
@@ -12,7 +12,7 @@ const draft = ref('');
 const messages = ref([
   {
     role: 'assistant',
-    body: 'Ask about your requests, orders, documents or delivery status. Demo responses are based on simulated data.',
+    body: 'Ask about your requests, orders, documents or delivery status. I can guide you to the right portal action.',
   },
 ]);
 
@@ -35,7 +35,7 @@ function answer(question) {
   const q = question.toLowerCase();
   if (q.includes('where') || q.includes('order')) {
     if (!latestOrder.value) return 'No confirmed purchase order is active yet. Open My Requests to review commercial validation status.';
-    return `Your latest purchase order ${latestOrder.value.id} is ${orderStatusLabel(latestOrder.value.status)}. Open My Orders to review the tracking timeline.`;
+    return `Your latest purchase order ${displayCode(latestOrder.value)} is ${orderStatusLabel(latestOrder.value.status)}. Open My Orders to review the tracking timeline.`;
   }
   if (q.includes('document')) {
     return `${myDocs.value.length} buyer-visible business document(s) are available. Some files may remain pending until commercial validation is completed.`;
@@ -54,7 +54,7 @@ function answer(question) {
   if (q.includes('validation')) {
     return 'Commercial validation means the supplier reviews product availability, delivery conditions, business documents and buyer account status before confirming a purchase order.';
   }
-  return 'This demo assistant can guide you to Product Catalog, My Requests, My Orders and Business Documents. No real AI service is connected in v1.';
+  return 'I can guide you to Product Catalog, My Requests, My Orders and Business Documents.';
 }
 
 function ask(text) {
@@ -68,22 +68,22 @@ function ask(text) {
 
 <template>
   <div class="assistant-preview" :class="{ open }">
-    <button class="assistant-launcher" @click="open = !open" aria-label="Open Nexa Assistant preview">
+    <button class="assistant-launcher" @click="open = !open" aria-label="Open Nexa Assistant">
       <i class="pi pi-sparkles" aria-hidden="true"></i>
       <span>Nexa Assistant</span>
     </button>
 
-    <section v-if="open" class="assistant-panel" aria-label="Nexa Assistant preview">
+    <section v-if="open" class="assistant-panel" aria-label="Nexa Assistant">
       <div class="assistant-head">
         <div>
           <div class="assistant-title">Nexa Assistant</div>
-          <div class="assistant-subtitle">Buyer Portal preview</div>
+          <div class="assistant-subtitle">Buyer Portal guidance</div>
         </div>
         <button class="btn btn-ghost btn-sm" @click="open = false" aria-label="Close assistant"><i class="pi pi-times"></i></button>
       </div>
 
       <div class="assistant-disclaimer">
-        Assistant responses are simulated for the demo. No real AI service is connected in v1.
+        Guidance is based on your visible portal records and available actions.
       </div>
 
       <div class="assistant-chips">
@@ -97,7 +97,7 @@ function ask(text) {
       </div>
 
       <form class="assistant-input" @submit.prevent="ask()">
-        <input v-model="draft" type="text" placeholder="Ask a demo question..." aria-label="Ask Nexa Assistant" />
+        <input v-model="draft" type="text" placeholder="Ask about an order, document or request..." aria-label="Ask Nexa Assistant" />
         <button class="btn btn-primary btn-sm" type="submit" :disabled="!draft.trim()">Send</button>
       </form>
     </section>

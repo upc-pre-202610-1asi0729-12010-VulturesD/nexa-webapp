@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/iam/application/iam.store';
 import { useDataStore } from '@/app/application/stores/data.store';
-import { documentStatusLabel, documentStatusBadge } from '@/shared/status';
+import { documentStatusLabel, documentStatusBadge, displayCode } from '@/shared/status';
 
 const router = useRouter();
 const auth = useAuthStore();
@@ -23,7 +23,6 @@ const visibleDocs = computed(() => docs.value.filter(doc => doc.visibleToBuyer))
       <div class="page-title">Business Documents</div>
       <div class="page-subtitle">{{ visibleDocs.length }} downloadable documents. Pending states mean S1 is still working on the checklist.</div>
     </div>
-    <span class="demo-label">Simulated download</span>
   </div>
 
   <section class="flow-panel">
@@ -31,7 +30,7 @@ const visibleDocs = computed(() => docs.value.filter(doc => doc.visibleToBuyer))
       <thead><tr><th>Purchase Order</th><th>Document</th><th>Status</th><th>Visible</th><th>Action</th></tr></thead>
       <tbody>
         <tr v-for="doc in docs" :key="doc.id">
-          <td><span class="mono">{{ doc.orderId }}</span></td>
+          <td><span class="mono">{{ displayCode(ds.purchaseOrderById(doc.orderId)) }}</span></td>
           <td>
             <div style="font-weight:800">{{ doc.label }}</div>
             <div class="flow-note">{{ doc.fileName }}</div>
