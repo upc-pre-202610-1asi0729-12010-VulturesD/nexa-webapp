@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '@/iam/application/iam.store';
 import { useDataStore } from '@/app/application/stores/data.store';
-import { orderStatusLabel, orderStatusBadge, buildOrderTrackingSteps, documentStatusLabel, documentStatusBadge, coldTypeLabel, coldTypeBadge } from '@/shared/status';
+import { orderStatusLabel, orderStatusBadge, buildOrderTrackingSteps, documentStatusLabel, documentStatusBadge, coldTypeLabel, coldTypeBadge, displayCode } from '@/shared/status';
 
 const route = useRoute();
 const router = useRouter();
@@ -35,12 +35,11 @@ const steps = computed(() => order.value ? buildOrderTrackingSteps(order.value, 
       <button class="btn btn-ghost btn-sm" @click="router.push('/portal/purchase-orders')"><i class="pi pi-arrow-left"></i> Purchase Orders</button>
       <div style="flex:1">
         <div class="flow-row">
-          <span class="page-title mono">{{ order.id }}</span>
+          <span class="page-title mono">{{ displayCode(order) }}</span>
           <span :class="'badge ' + orderStatusBadge(order.status)">{{ orderStatusLabel(order.status) }}</span>
         </div>
         <div class="page-subtitle">Delivery {{ order.requestedDeliveryDate }} - {{ dispatch?.routeName || 'Route not assigned yet' }}</div>
       </div>
-      <span class="demo-label">Simulated tracking</span>
     </div>
 
     <section class="buyer-shell-band" style="margin-bottom:18px">
@@ -127,7 +126,7 @@ const steps = computed(() => order.value ? buildOrderTrackingSteps(order.value, 
         <div class="flow-panel-pad flow-stack">
           <div class="banner banner-info" style="margin-bottom:0">
             <i class="pi pi-map"></i>
-            <div>Map tracking and telemetry are simulated for the demo; real integration remains a future Premium capability.</div>
+            <div>Map tracking and telemetry are planned for Premium operations and will appear here when connected to live route data.</div>
           </div>
           <div v-for="log in temps" :key="log.id" class="flow-row-between">
             <span>{{ new Date(log.timestamp).toLocaleTimeString('en-US') }}</span>

@@ -69,7 +69,7 @@ function updateStatus(promo, status) {
       <div class="page-title">Promotions Manager</div>
       <div class="page-subtitle">Operations-owned Buyer Portal promotions, always subject to commercial validation.</div>
     </div>
-    <span class="demo-label">Simulated data</span>
+    <span class="demo-label">Commercial campaigns</span>
   </div>
 
   <div class="grid-3" style="margin-bottom:18px">

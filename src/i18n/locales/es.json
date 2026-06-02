@@ -26,7 +26,7 @@
     "pillDelivery": "Entrega documentada",
     "backToSite": "← Volver al sitio",
     "rights": "© 2026 Nexa · Todos los derechos reservados",
-    "noUsers": "Usuarios demo no disponibles. Verifica la configuración de la API."
+    "noUsers": "Perfiles de trabajo no disponibles. Verifica la configuración de la API."
   },
   "nav": {
     "main": "Principal",
@@ -57,7 +57,7 @@
     "myRequests": "Mis solicitudes",
     "myOrders": "Mis pedidos",
     "tracking": "Tracking",
-    "premium": "Premium preview",
+    "premium": "Premium",
     "settings": "Configuración",
     "profile": "Mi perfil"
   },
@@ -278,6 +278,17 @@
     "avatarHint": "Iniciales automáticas"
   },
   "portal": {
+    "nav": {
+      "home": "Inicio",
+      "catalog": "Catalogo",
+      "requestBuilder": "Crear solicitud",
+      "requests": "Mis solicitudes",
+      "orders": "Mis ordenes",
+      "documents": "Documentos",
+      "payments": "Pagos",
+      "premium": "Premium",
+      "profile": "Perfil"
+    },
     "home": "Inicio",
     "catalog": "Catálogo",
     "myOrders": "Mis pedidos",
@@ -328,7 +339,7 @@
     "noExpiring": "Sin lotes críticos",
     "allStockNormal": "Todos los stocks en niveles normales",
     "noSalesData": "Sin datos de ventas",
-    "demoBanner": "Los datos mostrados provienen del período actual de demostración. La integración con el API de nexa-platform habilitará analítica histórica y exportación.",
+    "demoBanner": "Los datos operativos reflejan el periodo comercial actual. La integracion backend habilitara historicos, exportaciones y alertas automatizadas.",
     "activeOrders": "Pedidos activos",
     "ofPeriod": "de {total} en el período",
     "completedDeliveries": "Entregas completadas",

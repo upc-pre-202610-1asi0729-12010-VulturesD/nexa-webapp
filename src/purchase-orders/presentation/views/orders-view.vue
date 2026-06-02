@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useDataStore } from '@/app/application/stores/data.store';
-import { ORDER_STATUS_FILTERS, orderStatusLabel, orderStatusBadge, priorityLabel } from '@/shared/status';
+import { ORDER_STATUS_FILTERS, orderStatusLabel, orderStatusBadge, priorityLabel, displayCode } from '@/shared/status';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -21,7 +21,7 @@ const filtered = computed(() => {
   if (filter.value !== 'all') arr = arr.filter(o => o.status === filter.value);
   if (search.value) {
     const q = search.value.toLowerCase();
-    arr = arr.filter(o => o.id.toLowerCase().includes(q) || ds.clientName(o.clientId).toLowerCase().includes(q));
+    arr = arr.filter(o => displayCode(o).toLowerCase().includes(q) || ds.clientName(o.clientId).toLowerCase().includes(q));
   }
   return arr;
 });
@@ -69,7 +69,7 @@ const filtered = computed(() => {
       </thead>
       <tbody>
         <tr v-for="o in filtered" :key="o.id" style="cursor:pointer" @click="router.push(`/ops/commercial/purchase-orders/${o.id}`)">
-          <td><span class="mono">{{ o.id }}</span></td>
+          <td><span class="mono">{{ displayCode(o) }}</span></td>
           <td>
             <div style="font-weight:500;font-size:13px">{{ ds.clientName(o.clientId) }}</div>
             <div style="font-size:11px;color:#9CA3AF">{{ ds.clientById(o.clientId)?.type || ds.clientById(o.clientId)?.segment }}</div>

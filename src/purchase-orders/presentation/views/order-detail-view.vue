@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import { useI18n } from 'vue-i18n';
 import { useDataStore } from '@/app/application/stores/data.store';
-import { ORDER_STATUS_FLOW, orderStatusLabel, orderStatusBadge, priorityLabel, orderStepState } from '@/shared/status';
+import { ORDER_STATUS_FLOW, orderStatusLabel, orderStatusBadge, priorityLabel, orderStepState, displayCode, timelineEventForStep, formatTimelineDateTime } from '@/shared/status';
 
 const route = useRoute();
 const router = useRouter();
@@ -26,6 +26,7 @@ const displayItems = computed(() => {
   }));
 });
 const orderDate = computed(() => order.value?.date || order.value?.createdAt?.slice(0, 10) || '');
+const orderEvents = computed(() => order.value ? ds.timelineForOrder(order.value.id) : []);
 const confirmationChecks = computed(() => {
   if (!order.value) return [];
   return [
@@ -61,7 +62,7 @@ const timeline = computed(() => {
     const state = orderStepState(order.value.status, status);
     return {
       title: orderStatusLabel(status),
-      meta: index === 0 ? orderDate.value : state === 'active' ? t('common.view') : '—',
+      meta: formatTimelineDateTime(timelineEventForStep(orderEvents.value, status)?.timestamp || timelineEventForStep(orderEvents.value, status)?.createdAt || (index === 0 ? order.value?.createdAt || orderDate.value : null)),
       done: state === 'done' || state === 'active',
     };
   });
@@ -83,7 +84,7 @@ const timeline = computed(() => {
     <button class="btn btn-ghost btn-sm" @click="router.push('/ops/commercial/purchase-orders')"><i class="pi pi-arrow-left"></i> {{ t('nav.orders') }}</button>
     <div style="flex:1">
       <div style="display:flex;align-items:center;gap:10px">
-        <span class="page-title" style="font-family:'JetBrains Mono',monospace">{{ order.id }}</span>
+        <span class="page-title" style="font-family:'JetBrains Mono',monospace">{{ displayCode(order) }}</span>
         <span :class="'badge ' + orderStatusBadge(order.status)">{{ orderStatusLabel(order.status) }}</span>
         <span :class="'badge-priority-' + order.priority">{{ priorityLabel(order.priority) }}</span>
       </div>

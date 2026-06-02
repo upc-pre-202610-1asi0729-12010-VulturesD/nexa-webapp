@@ -12,6 +12,21 @@ export const ORDER_TRACKING_STEPS = [
 ];
 export const ORDER_STATUS_FILTERS = ['validating', 'document_pending', 'confirmed', 'ready_for_dispatch', 'ready_for_route', 'preparing', 'in_route', 'dispatched', 'delivered', 'incident', 'blocked'];
 
+export const displayCode = (record = {}) => record.code || record.id || record.requestId || record.orderId || '';
+
+export const recordTimestamp = (record = {}, events = []) => {
+  const eventTimes = events
+    .map(event => new Date(event.timestamp || event.createdAt || event.updatedAt || 0).getTime())
+    .filter(time => Number.isFinite(time) && time > 0);
+  const direct = record.updatedAt || record.createdAt || record.requestedDeliveryDate || record.date;
+  const directTime = direct ? new Date(direct).getTime() : 0;
+  const idTime = Number(String(displayCode(record)).split('-').pop()) || 0;
+  return Math.max(directTime || 0, idTime, ...eventTimes);
+};
+
+export const latestByActivity = (records = [], eventsForRecord = () => []) => [...records]
+  .sort((a, b) => recordTimestamp(b, eventsForRecord(b)) - recordTimestamp(a, eventsForRecord(a)))[0] || null;
+
 export const orderStatusLabel = (s) => ({
   draft: 'Draft', submitted: 'Submitted', in_review: 'In review',
   needs_adjustment: 'Needs adjustment', approved: 'Approved',

@@ -2,7 +2,7 @@ import { createI18n } from 'vue-i18n';
 import es from './locales/es.json';
 import en from './locales/en.json';
 
-const ENGLISH_FIRST_VERSION = '2026-05-20';
+const ENGLISH_FIRST_VERSION = '2026-06-05';
 const stored = typeof localStorage !== 'undefined' ? localStorage.getItem('nexa.lang') : null;
 const migrated = typeof localStorage !== 'undefined' ? localStorage.getItem('nexa.lang.version') : null;
 

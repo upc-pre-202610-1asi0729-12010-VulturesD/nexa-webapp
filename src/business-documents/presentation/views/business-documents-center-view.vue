@@ -127,7 +127,7 @@ function advance(doc) {
           <i class="pi pi-upload"></i>
           <div>
             <strong>External portal task:</strong> {{ selectedOrder.task.status }} - due {{ selectedOrder.task.dueDate }}.
-            This is a simulated manual upload, not a real integration.
+            Complete this manual upload before the external customer portal deadline.
           </div>
         </div>
 

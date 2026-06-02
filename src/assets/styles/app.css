@@ -2,7 +2,8 @@
    NEXA WEBAPP — Global app styles (overrides + auth + portal)
    ============================================================ */
 
-html, body, #app { height: 100%; width: 100%; }
+html, body, #app { min-height: 100%; width: 100%; }
+#app { display: block; height: auto; overflow: visible; }
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;

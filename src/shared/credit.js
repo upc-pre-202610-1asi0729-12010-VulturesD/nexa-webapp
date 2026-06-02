@@ -44,11 +44,13 @@ export function creditBarColor(client = {}) {
 export function creditSummary(client = {}) {
   const limit = creditLimit(client);
   const used = creditUsed(client);
+  const due = Number(client.monthlyCreditDue ?? client.creditDue ?? used);
   const status = creditStatus(client);
   return {
     limit,
     used,
     available: Math.max(0, limit - used),
+    due,
     percent: creditPercent(client),
     status,
     statusLabel: creditStatusLabel(status),
