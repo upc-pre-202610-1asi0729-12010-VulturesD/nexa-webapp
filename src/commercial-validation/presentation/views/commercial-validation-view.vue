@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import { useDataStore } from '@/app/application/stores/data.store';
 import { requestStatusLabel, requestStatusBadge, coldTypeLabel, coldTypeBadge, documentStatusLabel, documentStatusBadge } from '@/shared/status';
+import { creditSummary } from '@/shared/credit';
 
 const route = useRoute();
 const router = useRouter();
@@ -19,6 +20,7 @@ const portal = computed(() => client.value ? ds.portalForClient(client.value.id)
 const requirements = computed(() => client.value ? ds.portalRequirementsForClient(client.value.id)?.requiredDocumentTypes || [] : []);
 const messages = computed(() => request.value ? ds.messagesForRequest(request.value.id) : []);
 const convertedOrder = computed(() => request.value?.convertedOrderId ? ds.purchaseOrderById(request.value.convertedOrderId) : null);
+const credit = computed(() => creditSummary(client.value || {}));
 
 const availabilityRows = computed(() => items.value.map((item) => {
   const product = ds.productById(item.productId) || {};
@@ -32,7 +34,11 @@ const availabilityRows = computed(() => items.value.map((item) => {
 }));
 
 const hasStockIssues = computed(() => availabilityRows.value.some(row => !row.ok));
-const isCreditBlocked = computed(() => client.value?.creditStatus === 'blocked' || (client.value?.creditLimit && client.value.creditUsed >= client.value.creditLimit));
+const requestTotal = computed(() => availabilityRows.value.reduce((sum, row) => sum + Number(row.product.price || 0) * Number(row.item.quantity || 0), 0));
+const isCreditBlocked = computed(() =>
+  ['blocked', 'overdue'].includes(credit.value.status) ||
+  (credit.value.limit > 0 && credit.value.available < requestTotal.value)
+);
 
 function approve() {
   ds.updateRequestStatus(request.value.id, 'approved');
@@ -136,9 +142,17 @@ function docTypeLabel(type) {
           </div>
           <div class="flow-row-between">
             <span>Credit Status</span>
-            <span :class="'badge ' + (isCreditBlocked ? 'badge-red' : client.creditStatus === 'attention' ? 'badge-amber' : 'badge-green')">
-              {{ isCreditBlocked ? 'Blocked' : client.creditStatus || 'ok' }}
+            <span :class="'badge ' + (isCreditBlocked ? 'badge-red' : credit.badgeClass)">
+              {{ isCreditBlocked ? 'Blocked' : credit.statusLabel }}
             </span>
+          </div>
+          <div v-if="credit.limit" class="credit-summary-box">
+            <div class="flow-row-between"><span>Monthly used</span><strong>S/ {{ credit.used.toLocaleString() }}</strong></div>
+            <div class="flow-row-between"><span>Available</span><strong>S/ {{ credit.available.toLocaleString() }}</strong></div>
+            <div class="credit-bar-wrap" role="progressbar" :aria-valuenow="credit.percent" aria-valuemin="0" aria-valuemax="100">
+              <div class="credit-bar" :style="{ width: credit.percent + '%', background: credit.barColor }"></div>
+            </div>
+            <div class="flow-note">Period {{ credit.period }} - due {{ credit.dueDate }} - request total S/ {{ requestTotal.toLocaleString() }}</div>
           </div>
           <div v-if="portal">
             <div class="flow-eyebrow">External Portal</div>
