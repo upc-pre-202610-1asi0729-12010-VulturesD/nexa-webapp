@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router';
 import { useDataStore } from '@/app/application/stores/data.store';
 import { useCartStore } from '@/app/application/stores/cart.store';
 import { useAuthStore } from '@/iam/application/iam.store';
-import { orderStatusLabel, orderStatusBadge, requestStatusLabel, requestStatusBadge, buildOrderTrackingSteps } from '@/shared/status';
+import { orderStatusLabel, orderStatusBadge, requestStatusLabel, requestStatusBadge, buildOrderTrackingSteps, displayCode, recordTimestamp } from '@/shared/status';
 import { creditSummary } from '@/shared/credit';
 
 const router = useRouter();
@@ -18,16 +18,23 @@ const hasClient = computed(() => Boolean(client.value));
 const myRequests = computed(() => D.purchaseRequests.filter(request => request.clientId === auth.user?.clientId));
 const myOrders = computed(() => D.purchaseOrders.filter(order => order.clientId === auth.user?.clientId));
 const credit = computed(() => creditSummary(client.value || {}));
-const recordTime = (record) => {
-  const direct = record?.createdAt || record?.requestedDeliveryDate || record?.date;
-  const directTime = direct ? new Date(direct).getTime() : 0;
-  if (directTime) return directTime;
-  return Number(String(record?.id || record?.code || '').split('-').pop()) || 0;
-};
-const recentOrders = computed(() => [...myOrders.value].sort((a, b) => recordTime(b) - recordTime(a)));
-const recentRequests = computed(() => [...myRequests.value].sort((a, b) => recordTime(b) - recordTime(a)));
-const activeOrder = computed(() => recentOrders.value.find(order => !['delivered', 'cancelled', 'rejected'].includes(order.status)) || recentOrders.value[0]);
-const activeRequest = computed(() => recentRequests.value.find(request => !['converted_to_order', 'rejected'].includes(request.status)));
+const orderTime = (order) => recordTimestamp(order, ds.timelineForOrder(order.id));
+const recentOrders = computed(() => [...myOrders.value].sort((a, b) => orderTime(b) - orderTime(a)));
+const recentRequests = computed(() => [...myRequests.value].sort((a, b) => recordTimestamp(b) - recordTimestamp(a)));
+const latestOrder = computed(() => recentOrders.value.find(order => !['delivered', 'cancelled', 'rejected'].includes(order.status)) || recentOrders.value[0]);
+const latestRequest = computed(() => recentRequests.value.find(request => !['converted_to_order', 'rejected'].includes(request.status)) || recentRequests.value[0]);
+const currentActivity = computed(() => {
+  const order = latestOrder.value;
+  const request = latestRequest.value;
+  if (!order && !request) return null;
+  if (!order) return { type: 'request', record: request };
+  if (!request) return { type: 'order', record: order };
+  return recordTimestamp(request) > orderTime(order)
+    ? { type: 'request', record: request }
+    : { type: 'order', record: order };
+});
+const activeOrder = computed(() => currentActivity.value?.type === 'order' ? currentActivity.value.record : null);
+const activeRequest = computed(() => currentActivity.value?.type === 'request' ? currentActivity.value.record : null);
 const activePromos = computed(() => D.promotions.filter(promo => promo.status === 'active' && ['buyer_portal', 'client_specific'].includes(promo.visibility)).slice(0, 3));
 const featured = computed(() => D.products.filter(product => product.isVisibleToBuyer && product.status !== 'out').slice(0, 4));
 const trackingSteps = computed(() => activeOrder.value ? buildOrderTrackingSteps(activeOrder.value, ds.timelineForOrder(activeOrder.value.id)) : []);
@@ -89,7 +96,7 @@ const trackingSteps = computed(() => activeOrder.value ? buildOrderTrackingSteps
     </div>
 
     <div class="flow-grid-12">
-      <section class="flow-panel span-7">
+      <section class="flow-panel span-12">
         <div class="flow-panel-head">
           <div>
             <div class="flow-title">Current Status</div>
@@ -102,7 +109,7 @@ const trackingSteps = computed(() => activeOrder.value ? buildOrderTrackingSteps
           <template v-if="activeOrder">
             <div class="flow-row-between" style="margin-bottom:16px">
               <div>
-                <div class="mono" style="font-size:17px;font-weight:800;color:#1D4ED8">{{ activeOrder.id }}</div>
+                <div class="mono" style="font-size:17px;font-weight:800;color:#1D4ED8">{{ displayCode(activeOrder) }}</div>
                 <div class="flow-note">Requested delivery {{ activeOrder.requestedDeliveryDate }} - {{ activeOrder.totalEstimatedWeightKg }} estimated kg</div>
               </div>
               <button class="btn btn-primary" @click="router.push('/portal/purchase-orders/' + activeOrder.id)">Open Tracking</button>
@@ -123,7 +130,7 @@ const trackingSteps = computed(() => activeOrder.value ? buildOrderTrackingSteps
           <template v-else-if="activeRequest">
             <div class="banner banner-info" style="margin-bottom:0">
               <i class="pi pi-info-circle"></i>
-              <div>Your request <strong>{{ activeRequest.id }}</strong> is {{ requestStatusLabel(activeRequest.status) }}. S1 will review it before confirming the purchase order.</div>
+              <div>Your request <strong>{{ displayCode(activeRequest) }}</strong> is {{ requestStatusLabel(activeRequest.status) }}. S1 will review it before confirming the purchase order.</div>
             </div>
           </template>
           <template v-else>
@@ -139,7 +146,7 @@ const trackingSteps = computed(() => activeOrder.value ? buildOrderTrackingSteps
       <section class="flow-panel span-5">
         <div class="flow-panel-head">
           <div class="flow-title">Active Offers</div>
-          <span class="premium-lock"><i class="pi pi-lock"></i> Premium preview</span>
+          <span class="premium-lock"><i class="pi pi-lock"></i> Premium</span>
         </div>
         <div class="flow-panel-pad flow-stack">
           <div v-for="promo in activePromos" :key="promo.id" class="flow-list-item">

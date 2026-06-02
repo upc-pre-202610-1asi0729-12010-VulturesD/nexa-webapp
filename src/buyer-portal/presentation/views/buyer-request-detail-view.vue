@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import { useAuthStore } from '@/iam/application/iam.store';
 import { useDataStore } from '@/app/application/stores/data.store';
-import { requestStatusLabel, requestStatusBadge, coldTypeLabel, coldTypeBadge } from '@/shared/status';
+import { requestStatusLabel, requestStatusBadge, coldTypeLabel, coldTypeBadge, displayCode } from '@/shared/status';
 
 const route = useRoute();
 const router = useRouter();
@@ -50,7 +50,7 @@ function sendMessage() {
       <button class="btn btn-ghost btn-sm" @click="router.push('/portal/purchase-requests')"><i class="pi pi-arrow-left"></i> Purchase Requests</button>
       <div>
         <div class="flow-row">
-          <span class="page-title mono">{{ request.id }}</span>
+          <span class="page-title mono">{{ displayCode(request) }}</span>
           <span :class="'badge ' + requestStatusBadge(request.status)">{{ requestStatusLabel(request.status) }}</span>
         </div>
         <div class="page-subtitle">Requested delivery {{ request.requestedDeliveryDate }}</div>
@@ -59,7 +59,7 @@ function sendMessage() {
 
     <div v-if="convertedOrder" class="banner banner-success">
       <i class="pi pi-check-circle"></i>
-      <div>This request has already been converted into purchase order <strong>{{ convertedOrder.id }}</strong>.</div>
+      <div>This request has already been converted into purchase order <strong>{{ displayCode(convertedOrder) }}</strong>.</div>
       <button class="btn btn-success btn-sm" @click="router.push('/portal/purchase-orders/' + convertedOrder.id)">View Tracking</button>
     </div>
 

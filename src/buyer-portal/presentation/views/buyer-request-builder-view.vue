@@ -5,6 +5,7 @@ import { useToast } from 'primevue/usetoast';
 import { useCartStore } from '@/app/application/stores/cart.store';
 import { useAuthStore } from '@/iam/application/iam.store';
 import { useDataStore } from '@/app/application/stores/data.store';
+import { displayCode } from '@/shared/status';
 
 const router = useRouter();
 const toast = useToast();
@@ -16,6 +17,7 @@ const requestedDeliveryDate = ref(new Date().toISOString().slice(0, 10));
 const deliveryAddressId = ref('');
 const comments = ref('');
 const submittedRequestId = ref('');
+const submittedRequest = ref(null);
 
 const client = computed(() => ds.clientById(auth.user?.clientId));
 const addresses = computed(() => ds.D.deliveryAddresses.filter(address => address.clientId === auth.user?.clientId));
@@ -41,6 +43,7 @@ function submitRequest() {
     })),
   });
   submittedRequestId.value = request.id;
+  submittedRequest.value = request;
   cart.clear();
   toast.add({ severity: 'success', summary: 'Request submitted', detail: request.id, life: 3500 });
 }
@@ -64,7 +67,7 @@ function submitRequest() {
       <div class="flow-note" style="margin:10px auto 22px;max-width:520px">
         The commercial team will review it before confirming the purchase order. You can follow the status in My Requests.
       </div>
-      <div class="mono" style="font-size:20px;font-weight:800;color:#1D4ED8;margin-bottom:22px">{{ submittedRequestId }}</div>
+      <div class="mono" style="font-size:20px;font-weight:800;color:#1D4ED8;margin-bottom:22px">{{ displayCode(submittedRequest) }}</div>
       <div class="flow-row" style="justify-content:center">
         <button class="btn btn-ghost" @click="router.push('/portal/product-catalog')">Back to Catalog</button>
         <button class="btn btn-primary" @click="router.push('/portal/purchase-requests/' + submittedRequestId)">View Request</button>
