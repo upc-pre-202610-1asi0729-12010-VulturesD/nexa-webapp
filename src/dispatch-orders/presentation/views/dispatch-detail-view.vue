@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import { useDataStore } from '@/app/application/stores/data.store';
 import { orderStatusLabel, orderStatusBadge, coldTypeLabel, coldTypeBadge, documentStatusLabel, documentStatusBadge } from '@/shared/status';
+import { creditSummary } from '@/shared/credit';
 
 const route = useRoute();
 const router = useRouter();
@@ -19,6 +20,7 @@ const items = computed(() => order.value ? ds.orderItemsFor(order.value.id) : []
 const events = computed(() => order.value ? ds.timelineForOrder(order.value.id) : []);
 const temps = computed(() => order.value ? ds.temperatureForOrder(order.value.id) : []);
 const pod = computed(() => dispatch.value ? ds.D.proofOfDelivery.find(item => item.dispatchOrderId === dispatch.value.id) : null);
+const credit = computed(() => creditSummary(client.value || {}));
 const temperatureSummary = computed(() => {
   const records = temps.value;
   const alerts = records.filter(log => log.status !== 'ok');
@@ -78,6 +80,20 @@ function setStatus(status) {
           <div class="flow-row-between"><span>Purchase Order</span><strong class="mono">{{ dispatch.orderId }}</strong></div>
           <div class="flow-row-between"><span>Driver</span><strong>{{ dispatch.driverName }}</strong></div>
           <div class="flow-row-between"><span>Owner</span><strong>{{ dispatch.responsible }}</strong></div>
+          <div class="credit-summary-box">
+            <div class="flow-row-between">
+              <span>Credit condition</span>
+              <span :class="'badge ' + credit.badgeClass">{{ credit.statusLabel }}</span>
+            </div>
+            <template v-if="credit.limit">
+              <div class="flow-row-between"><span>Available</span><strong>S/ {{ credit.available.toLocaleString() }}</strong></div>
+              <div class="credit-bar-wrap" role="progressbar" :aria-valuenow="credit.percent" aria-valuemin="0" aria-valuemax="100">
+                <div class="credit-bar" :style="{ width: credit.percent + '%', background: credit.barColor }"></div>
+              </div>
+              <div class="flow-note">Period {{ credit.period }} - due {{ credit.dueDate }}</div>
+            </template>
+            <div class="flow-note">Visible for logistics coordination only. S1 owns commercial approval.</div>
+          </div>
         </div>
       </section>
 
