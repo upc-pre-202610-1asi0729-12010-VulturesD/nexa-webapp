@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import { useDataStore } from '@/app/application/stores/data.store';
 import { orderStatusLabel, orderStatusBadge, coldTypeLabel, coldTypeBadge } from '@/shared/status';
+import { creditSummary } from '@/shared/credit';
 
 const router = useRouter();
 const toast = useToast();
@@ -51,6 +52,10 @@ function nextStatus(status) {
 
 function isDelayed(dispatch) {
   return dispatch.status === 'delayed' || (dispatch.eta && new Date(dispatch.eta) < new Date() && !['delivered', 'incident'].includes(dispatch.status));
+}
+
+function creditFor(dispatch) {
+  return creditSummary(ds.clientById(dispatch.clientId) || {});
 }
 
 function advance(dispatch) {
@@ -110,6 +115,7 @@ function advance(dispatch) {
         <div class="flow-row" style="margin-top:10px;flex-wrap:wrap">
           <span :class="coldTypeBadge(dispatch.coldType)">{{ coldTypeLabel(dispatch.coldType) }}</span>
           <span :class="'badge ' + orderStatusBadge(dispatch.status)">{{ orderStatusLabel(dispatch.status) }}</span>
+          <span :class="'badge ' + creditFor(dispatch).badgeClass">{{ creditFor(dispatch).statusLabel }}</span>
         </div>
         <div class="divider" style="margin:10px 0"></div>
         <div class="flow-stack" style="gap:6px">
@@ -128,6 +134,10 @@ function advance(dispatch) {
           <div class="flow-row-between">
             <span class="flow-note">Responsible</span>
             <strong>{{ dispatch.responsible }}</strong>
+          </div>
+          <div v-if="creditFor(dispatch).limit" class="flow-row-between">
+            <span class="flow-note">Client credit</span>
+            <strong>S/ {{ creditFor(dispatch).available.toLocaleString() }} available</strong>
           </div>
         </div>
         <div v-if="isDelayed(dispatch)" class="banner banner-warning" style="margin:10px 0 0;padding:9px">
