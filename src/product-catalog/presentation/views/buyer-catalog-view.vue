@@ -16,6 +16,7 @@ const category = ref('all');
 const coldType = ref('all');
 const brand = ref('all');
 const onlyOffers = ref(false);
+const brandExpanded = ref(false);
 
 const categories = computed(() => ['all', ...new Set(D.products.filter(p => p.isVisibleToBuyer).map(p => p.category))]);
 const coldTypes = ['all', 'frozen', 'chilled', 'ambient'];
@@ -53,27 +54,49 @@ const isInCart = (id) => cart.items.some(item => item.productId === id);
     </button>
   </div>
 
-  <div class="filter-bar">
-    <div class="search-input">
-      <i class="pi pi-search"></i>
-      <input v-model="search" placeholder="Search product, SKU, category or brand..." />
-    </div>
-    <button v-for="item in categories" :key="item" class="filter-chip" :class="{ active: category === item }" @click="category = item">
-      {{ item === 'all' ? 'All categories' : item }}
-    </button>
-    <button v-for="item in coldTypes" :key="item" class="filter-chip" :class="{ active: coldType === item }" @click="coldType = item">
-      {{ item === 'all' ? 'All cold types' : coldTypeLabel(item) }}
-    </button>
-    <button v-for="item in brands" :key="item" class="filter-chip" :class="{ active: brand === item }" @click="brand = item">
-      {{ item === 'all' ? 'All brands' : item }}
-    </button>
-    <button class="filter-chip" :class="{ active: onlyOffers }" @click="onlyOffers = !onlyOffers">
-      <i class="pi pi-tag"></i> Offers
-    </button>
-  </div>
+  <div class="catalog-layout">
+    <aside class="catalog-filter-panel" aria-label="Product catalog filters">
+      <div class="search-input catalog-search">
+        <i class="pi pi-search"></i>
+        <input v-model="search" placeholder="Search product, SKU, category or brand..." />
+      </div>
 
-  <div class="grid-4">
-    <article v-for="product in filtered" :key="product.id" class="buyer-card">
+      <section class="catalog-filter-section">
+        <div class="catalog-filter-title">Categories</div>
+        <button v-for="item in categories" :key="item" class="catalog-filter-option" :class="{ active: category === item }" @click="category = item">
+          {{ item === 'all' ? 'All categories' : item }}
+        </button>
+      </section>
+
+      <section class="catalog-filter-section">
+        <div class="catalog-filter-title">Cold type</div>
+        <button v-for="item in coldTypes" :key="item" class="catalog-filter-option" :class="{ active: coldType === item }" @click="coldType = item">
+          {{ item === 'all' ? 'All cold types' : coldTypeLabel(item) }}
+        </button>
+      </section>
+
+      <section class="catalog-filter-section">
+        <button class="catalog-filter-heading" type="button" @click="brandExpanded = !brandExpanded" :aria-expanded="brandExpanded">
+          <span>Brand</span>
+          <i :class="['pi', brandExpanded ? 'pi-chevron-up' : 'pi-chevron-down']"></i>
+        </button>
+        <button class="catalog-filter-option" :class="{ active: brand === 'all' }" @click="brand = 'all'">All brands</button>
+        <div v-if="brandExpanded" class="catalog-filter-collapsible">
+          <button v-for="item in brands.filter(item => item !== 'all')" :key="item" class="catalog-filter-option" :class="{ active: brand === item }" @click="brand = item">
+            {{ item }}
+          </button>
+        </div>
+      </section>
+
+      <section class="catalog-filter-section">
+        <button class="catalog-filter-option" :class="{ active: onlyOffers }" @click="onlyOffers = !onlyOffers">
+          <i class="pi pi-tag"></i> Offers
+        </button>
+      </section>
+    </aside>
+
+    <div class="grid-4 catalog-product-grid">
+      <article v-for="product in filtered" :key="product.id" class="buyer-card">
       <div class="buyer-product-visual" :class="'cat-' + product.cat" @click="router.push('/portal/product-catalog/' + product.id)" style="cursor:pointer">
         <i class="pi pi-box"></i>
         <span v-if="ds.promotionsForProduct(product.id).length" class="flow-pill flow-pill-amber" style="position:absolute;left:12px;top:12px">
@@ -108,6 +131,7 @@ const isInCart = (id) => cart.items.some(item => item.productId === id);
           View Details
         </button>
       </div>
-    </article>
+      </article>
+    </div>
   </div>
 </template>
