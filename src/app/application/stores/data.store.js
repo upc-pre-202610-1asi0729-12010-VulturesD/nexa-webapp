@@ -358,9 +358,43 @@ export const useDataStore = defineStore('data', () => {
     orderItems.forEach(item => createResource('orderItems', item));
     createDispatchForOrder(order);
     createDocumentChecklistForOrder(order);
-    addTimelineEvent(orderId, 'confirmed', 'Purchase order confirmed and sent to operations', true);
+    applyMonthlyCreditUsage(order.clientId, total);
+    const base = new Date(order.createdAt);
+    const minutesBefore = (minutes) => new Date(base.getTime() - minutes * 60000).toISOString();
+    addTimelineEvent(orderId, 'submitted', 'Request received from Buyer Portal', true, request.createdAt || minutesBefore(4));
+    addTimelineEvent(orderId, 'validating', 'Commercial validation completed by S1', true, minutesBefore(3));
+    addTimelineEvent(orderId, 'confirmed', 'Purchase order confirmed and sent to operations', true, minutesBefore(2));
+    addTimelineEvent(orderId, 'document_pending', 'Business documents pending preparation', true, minutesBefore(1));
+    addTimelineEvent(orderId, 'ready_for_dispatch', 'Ready for operations', true, order.createdAt);
     addActivity(`${request.id} converted to ${orderId}`, 'success');
     return order;
+  }
+
+  function applyMonthlyCreditUsage(clientId, amount) {
+    const client = clientById(clientId);
+    if (!client) return null;
+    const limit = Number(client.monthlyCreditLimit ?? client.creditLimit ?? 0);
+    if (!limit) return client;
+    const used = Number(client.monthlyCreditUsed ?? client.creditUsed ?? 0) + Number(amount || 0);
+    const available = Math.max(0, limit - used);
+    const status = used >= limit ? 'blocked' : used / limit >= 0.85 ? 'attention' : 'ok';
+    Object.assign(client, {
+      creditLimit: limit,
+      creditUsed: used,
+      creditStatus: status,
+      monthlyCreditLimit: limit,
+      monthlyCreditUsed: used,
+      monthlyCreditAvailable: available,
+      monthlyCreditStatus: status,
+    });
+    patchResource('clients', client.id, {
+      creditUsed: used,
+      creditStatus: status,
+      monthlyCreditUsed: used,
+      monthlyCreditAvailable: available,
+      monthlyCreditStatus: status,
+    });
+    return client;
   }
 
   function createDocumentChecklistForOrder(order) {
@@ -417,13 +451,13 @@ export const useDataStore = defineStore('data', () => {
     return dispatch;
   }
 
-  function addTimelineEvent(orderId, status, label, visibleToBuyer = true) {
+  function addTimelineEvent(orderId, status, label, visibleToBuyer = true, timestamp = new Date().toISOString()) {
     const event = {
       id: nextCode('OTE', D.value.orderTimelineEvents, 3),
       orderId,
       status,
       label,
-      timestamp: new Date().toISOString(),
+      timestamp,
       visibleToBuyer,
     };
     D.value.orderTimelineEvents.push(event);

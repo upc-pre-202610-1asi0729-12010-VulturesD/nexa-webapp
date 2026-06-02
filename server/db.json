@@ -1294,8 +1294,8 @@
       "type": "Retail",
       "address": "Av. La Mar 1240, Miraflores, Lima",
       "lastOrder": "2026-04-25",
-      "creditLimit": 15000,
-      "creditUsed": 8400,
+      "creditLimit": 120000,
+      "creditUsed": 18400,
       "businessName": "Intursa Retail Demo S.A.C.",
       "commercialName": "Intursa",
       "segment": "retail",
@@ -1312,7 +1312,13 @@
       "preferredDeliveryWindow": "8:00 a.m. - 1:00 p.m.",
       "coldChainReceivingNotes": "Receiving dock available from 8:00 a.m. to 1:00 p.m.",
       "preferredPaymentMethod": "card_demo",
-      "referenceNotes": "Coordinate reception with purchasing desk."
+      "referenceNotes": "Coordinate reception with purchasing desk.",
+      "monthlyCreditLimit": 120000,
+      "monthlyCreditUsed": 18400,
+      "monthlyCreditAvailable": 101600,
+      "monthlyCreditPeriod": "2026-06",
+      "monthlyCreditDueDate": "2026-06-30",
+      "monthlyCreditStatus": "ok"
     },
     {
       "tenantId": "TEN-001",
@@ -1326,8 +1332,8 @@
       "type": "Hotel",
       "address": "Vía Expresa 1451, San Isidro, Lima",
       "lastOrder": "2026-04-27",
-      "creditLimit": 30000,
-      "creditUsed": 12000,
+      "creditLimit": 90000,
+      "creditUsed": 22000,
       "businessName": "Restaurant El Cevichero S.A.C.",
       "commercialName": "El Cevichero",
       "segment": "horeca",
@@ -1346,7 +1352,13 @@
       "preferredDeliveryWindow": "7:00 a.m. - 11:00 a.m.",
       "coldChainReceivingNotes": "Kitchen team receives frozen products before lunch prep.",
       "preferredPaymentMethod": "card_demo",
-      "referenceNotes": "Call purchasing before arrival."
+      "referenceNotes": "Call purchasing before arrival.",
+      "monthlyCreditLimit": 90000,
+      "monthlyCreditUsed": 22000,
+      "monthlyCreditAvailable": 68000,
+      "monthlyCreditPeriod": "2026-06",
+      "monthlyCreditDueDate": "2026-06-30",
+      "monthlyCreditStatus": "ok"
     },
     {
       "tenantId": "TEN-001",
@@ -1366,10 +1378,16 @@
       "commercialName": "QuimiKost",
       "segment": "supermarket",
       "paymentCondition": "cash",
-      "creditStatus": "cash",
+      "creditStatus": "ok",
       "externalPortalId": "PORT-002",
       "documentProfile": "supermarket_full_docs",
-      "buyerUserId": null
+      "buyerUserId": null,
+      "monthlyCreditLimit": 0,
+      "monthlyCreditUsed": 0,
+      "monthlyCreditAvailable": 0,
+      "monthlyCreditPeriod": "2026-06",
+      "monthlyCreditDueDate": "2026-06-30",
+      "monthlyCreditStatus": "ok"
     },
     {
       "tenantId": "TEN-001",
@@ -1383,8 +1401,8 @@
       "type": "Catering",
       "address": "Jr. Los Nogales 380, San Luis, Lima",
       "lastOrder": "2026-04-23",
-      "creditLimit": 20000,
-      "creditUsed": 19200,
+      "creditLimit": 60000,
+      "creditUsed": 51200,
       "businessName": "Catering Andina S.A.C.",
       "commercialName": "Catering Andina",
       "segment": "catering",
@@ -1392,7 +1410,13 @@
       "creditStatus": "attention",
       "externalPortalId": null,
       "documentProfile": "horeca_standard_docs",
-      "buyerUserId": null
+      "buyerUserId": null,
+      "monthlyCreditLimit": 60000,
+      "monthlyCreditUsed": 51200,
+      "monthlyCreditAvailable": 8800,
+      "monthlyCreditPeriod": "2026-06",
+      "monthlyCreditDueDate": "2026-06-20",
+      "monthlyCreditStatus": "attention"
     },
     {
       "tenantId": "TEN-001",
@@ -1406,8 +1430,8 @@
       "type": "Minorista",
       "address": "Av. Túpac Amaru 2800, Independencia, Lima",
       "lastOrder": "2026-04-04",
-      "creditLimit": 10000,
-      "creditUsed": 10000,
+      "creditLimit": 30000,
+      "creditUsed": 30000,
       "businessName": "FreshMart Bodegas S.A.C.",
       "commercialName": "FreshMart",
       "segment": "retail",
@@ -1415,7 +1439,13 @@
       "creditStatus": "blocked",
       "externalPortalId": null,
       "documentProfile": "retail_basic_docs",
-      "buyerUserId": null
+      "buyerUserId": null,
+      "monthlyCreditLimit": 30000,
+      "monthlyCreditUsed": 30000,
+      "monthlyCreditAvailable": 0,
+      "monthlyCreditPeriod": "2026-06",
+      "monthlyCreditDueDate": "2026-06-15",
+      "monthlyCreditStatus": "overdue"
     },
     {
       "tenantId": "TEN-001",
@@ -1429,8 +1459,8 @@
       "type": "Distribuidor",
       "address": "Jr. San Martín 680, Trujillo, La Libertad",
       "lastOrder": "2026-04-20",
-      "creditLimit": 25000,
-      "creditUsed": 8000,
+      "creditLimit": 75000,
+      "creditUsed": 14000,
       "businessName": "HORECA Norte S.R.L.",
       "commercialName": "HORECA Norte",
       "segment": "distributor",
@@ -1438,7 +1468,13 @@
       "creditStatus": "ok",
       "externalPortalId": null,
       "documentProfile": "distributor_standard_docs",
-      "buyerUserId": null
+      "buyerUserId": null,
+      "monthlyCreditLimit": 75000,
+      "monthlyCreditUsed": 14000,
+      "monthlyCreditAvailable": 61000,
+      "monthlyCreditPeriod": "2026-06",
+      "monthlyCreditDueDate": "2026-06-30",
+      "monthlyCreditStatus": "ok"
     },
     {
       "id": "CLI-007",
@@ -1452,7 +1488,7 @@
       "type": "Minorista",
       "address": "Av. Los Heroes 550, San Juan de Miraflores, Lima",
       "lastOrder": "2026-05-08",
-      "creditLimit": 3500,
+      "creditLimit": 25000,
       "creditUsed": 900,
       "businessName": "Minimarket Don Luis E.I.R.L.",
       "commercialName": "Don Luis",
@@ -1464,7 +1500,13 @@
       "externalPortalId": null,
       "documentProfile": "small_whatsapp_docs",
       "documentProfileId": "small_whatsapp_docs",
-      "buyerUserId": null
+      "buyerUserId": null,
+      "monthlyCreditLimit": 25000,
+      "monthlyCreditUsed": 900,
+      "monthlyCreditAvailable": 24100,
+      "monthlyCreditPeriod": "2026-06",
+      "monthlyCreditDueDate": "2026-06-30",
+      "monthlyCreditStatus": "ok"
     }
   ],
   "orders": [
