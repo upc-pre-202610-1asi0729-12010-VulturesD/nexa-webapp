@@ -4455,33 +4455,33 @@
       "dispatchOrderId": "DSP-2026-0087",
       "orderId": "ORD-2026-0409",
       "status": "complete",
-      "photoMock": true,
-      "signatureMock": true,
       "receivedBy": "Jorge Paredes",
       "completedAt": "2026-05-19T16:45:00Z",
-      "notes": "Delivery without observations."
+      "notes": "Delivery without observations.",
+      "photoReference": true,
+      "signatureReference": true
     },
     {
       "id": "POD-002",
       "dispatchOrderId": "DSP-2026-0088",
       "orderId": "ORD-2026-0410",
       "status": "pending",
-      "photoMock": false,
-      "signatureMock": false,
       "receivedBy": null,
       "completedAt": null,
-      "notes": "Pending at route closure."
+      "notes": "Pending at route closure.",
+      "photoReference": false,
+      "signatureReference": false
     },
     {
       "id": "POD-003",
       "dispatchOrderId": "DSP-2026-0092",
       "orderId": "ORD-2026-0415",
       "status": "pending",
-      "photoMock": false,
-      "signatureMock": false,
       "receivedBy": "Por confirmar",
       "completedAt": null,
-      "notes": "POD pending."
+      "notes": "POD pending.",
+      "photoReference": false,
+      "signatureReference": false
     }
   ],
   "chatThreads": [
