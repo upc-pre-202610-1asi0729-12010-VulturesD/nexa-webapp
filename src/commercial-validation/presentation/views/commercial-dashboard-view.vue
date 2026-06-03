@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useDataStore } from '@/app/application/stores/data.store';
-import { requestStatusLabel, requestStatusBadge, orderStatusLabel, orderStatusBadge, documentStatusBadge } from '@/shared/status';
+import { requestStatusLabel, requestStatusBadge, orderStatusLabel, orderStatusBadge, documentStatusBadge, displayCode } from '@/shared/status';
 
 const router = useRouter();
 const ds = useDataStore();
@@ -13,9 +13,11 @@ const blockedOrders = computed(() => D.purchaseOrders.filter(o => ['blocked', 'i
 const validatingOrders = computed(() => D.purchaseOrders.filter(o => ['validating', 'document_pending'].includes(o.status)));
 const pendingDocs = computed(() => D.businessDocuments.filter(doc => doc.required && ['pending', 'observed', 'rejected'].includes(doc.status)));
 const pendingPortalTasks = computed(() => D.portalUploadTasks.filter(task => ['pending', 'blocked'].includes(task.status)));
+const pendingCreditRequests = computed(() => D.creditRequests.filter(request => ['submitted', 'in_review'].includes(request.status)));
 const recentActivity = computed(() => D.activityLog.slice(0, 7));
 const requestPreview = computed(() => newRequests.value.slice(0, 5));
 const docsPreview = computed(() => pendingDocs.value.slice(0, 6));
+const creditRequestsPreview = computed(() => pendingCreditRequests.value.slice(0, 4));
 </script>
 
 <template>
@@ -37,7 +39,7 @@ const docsPreview = computed(() => pendingDocs.value.slice(0, 6));
   <div class="flow-action-banner">
     <div>
       <div class="flow-eyebrow">S3 requests -> S1 validates/documents</div>
-      <div class="flow-title">There are {{ newRequests.length }} requests and {{ pendingDocs.length }} documents requiring commercial action.</div>
+      <div class="flow-title">There are {{ newRequests.length }} requests, {{ pendingCreditRequests.length }} credit cases and {{ pendingDocs.length }} documents requiring commercial action.</div>
       <div class="flow-note">Prioritize credit, availability, document profile and manual external portal upload.</div>
     </div>
     <button class="btn btn-primary" @click="router.push('/ops/commercial/business-documents')">
@@ -93,7 +95,7 @@ const docsPreview = computed(() => pendingDocs.value.slice(0, 6));
         <div v-for="request in requestPreview" :key="request.id" class="flow-list-item">
           <div>
             <div class="flow-row" style="margin-bottom:5px">
-              <span class="mono">{{ request.id }}</span>
+              <span class="mono">{{ displayCode(request) }}</span>
               <span :class="'badge ' + requestStatusBadge(request.status)">{{ requestStatusLabel(request.status) }}</span>
               <span :class="'badge-priority-' + (request.priority === 'normal' ? 'medium' : request.priority)">{{ request.priority }}</span>
             </div>
@@ -124,6 +126,28 @@ const docsPreview = computed(() => pendingDocs.value.slice(0, 6));
     </section>
 
     <section class="flow-panel span-4">
+      <div class="flow-panel-head">
+        <div>
+          <div class="flow-title">Credit Increase Requests</div>
+          <div class="flow-subtitle">Buyer credit messages assigned to Sales.</div>
+        </div>
+      </div>
+      <div class="flow-panel-pad flow-stack">
+        <div v-for="request in creditRequestsPreview" :key="request.id" class="flow-list-item">
+          <div>
+            <div class="flow-row" style="margin-bottom:5px">
+              <span class="mono">{{ request.id }}</span>
+              <span class="badge badge-amber">{{ request.status }}</span>
+            </div>
+            <div style="font-size:13px;font-weight:800">{{ ds.clientName(request.clientId) }}</div>
+            <div class="flow-note">Requested S/ {{ Number(request.requestedAmount || 0).toLocaleString() }} - {{ request.reason }}</div>
+          </div>
+        </div>
+        <div v-if="!creditRequestsPreview.length" class="flow-note">No credit increase requests pending.</div>
+      </div>
+    </section>
+
+    <section class="flow-panel span-4">
       <div class="flow-panel-head"><div class="flow-title">Quick Actions</div></div>
       <div class="flow-panel-pad flow-stack">
         <button class="btn btn-primary" @click="router.push('/ops/commercial/manual-order-entry')"><i class="pi pi-plus"></i> Manual Order Entry</button>
@@ -137,7 +161,7 @@ const docsPreview = computed(() => pendingDocs.value.slice(0, 6));
     <section class="flow-panel span-8">
       <div class="flow-panel-head">
         <div class="flow-title">Recent Commercial Activity</div>
-        <span class="demo-label">Simulated data</span>
+        <span class="demo-label">Operational activity</span>
       </div>
       <div class="flow-panel-pad">
         <div v-for="item in recentActivity" :key="item.id" class="activity-item">

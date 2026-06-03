@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useDataStore } from '@/app/application/stores/data.store';
-import { requestStatusLabel, requestStatusBadge } from '@/shared/status';
+import { requestStatusLabel, requestStatusBadge, displayCode } from '@/shared/status';
 
 const router = useRouter();
 const ds = useDataStore();
@@ -17,7 +17,7 @@ const filtered = computed(() => {
   if (search.value) {
     const q = search.value.toLowerCase();
     rows = rows.filter(item =>
-      item.id.toLowerCase().includes(q) ||
+      displayCode(item).toLowerCase().includes(q) ||
       ds.clientName(item.clientId).toLowerCase().includes(q) ||
       String(item.comments || '').toLowerCase().includes(q)
     );
@@ -75,7 +75,7 @@ function requestWeight(request) {
       <tbody>
         <tr v-for="request in filtered" :key="request.id" @click="router.push('/ops/commercial/purchase-requests/' + request.id)" style="cursor:pointer">
           <td>
-            <div class="mono">{{ request.id }}</div>
+            <div class="mono">{{ displayCode(request) }}</div>
             <div class="flow-note">{{ request.createdByRole === 'buyer' ? 'Buyer Portal' : 'Purchase Order manual' }}</div>
           </td>
           <td>

@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import { useDataStore } from '@/app/application/stores/data.store';
-import { requestStatusLabel, requestStatusBadge, coldTypeLabel, coldTypeBadge, documentStatusLabel, documentStatusBadge } from '@/shared/status';
+import { requestStatusLabel, requestStatusBadge, coldTypeLabel, coldTypeBadge, documentStatusLabel, documentStatusBadge, displayCode } from '@/shared/status';
 import { creditSummary } from '@/shared/credit';
 
 const route = useRoute();
@@ -42,7 +42,7 @@ const isCreditBlocked = computed(() =>
 
 function approve() {
   ds.updateRequestStatus(request.value.id, 'approved');
-  toast.add({ severity: 'success', summary: 'Request approved', detail: request.value.id, life: 3000 });
+  toast.add({ severity: 'success', summary: 'Request approved', detail: displayCode(request.value), life: 3000 });
 }
 
 function requestChanges() {
@@ -54,12 +54,12 @@ function requestChanges() {
     body: comment.value || 'Please adjust quantities or confirm the requested delivery conditions before validation.',
   });
   comment.value = '';
-  toast.add({ severity: 'warn', summary: 'Adjustment requested', detail: request.value.id, life: 3000 });
+  toast.add({ severity: 'warn', summary: 'Adjustment requested', detail: displayCode(request.value), life: 3000 });
 }
 
 function reject() {
   ds.updateRequestStatus(request.value.id, 'rejected');
-  toast.add({ severity: 'warn', summary: 'Request rejected', detail: request.value.id, life: 3000 });
+  toast.add({ severity: 'warn', summary: 'Request rejected', detail: displayCode(request.value), life: 3000 });
 }
 
 function convert() {
@@ -69,7 +69,7 @@ function convert() {
   }
   if (!['approved', 'converted_to_order'].includes(request.value.status)) approve();
   const order = ds.convertRequestToOrder(request.value.id);
-  toast.add({ severity: 'success', summary: 'Purchase order created', detail: order.id, life: 3500 });
+  toast.add({ severity: 'success', summary: 'Purchase order created', detail: displayCode(order), life: 3500 });
   router.push('/ops/commercial/purchase-orders/' + order.id);
 }
 
@@ -98,7 +98,7 @@ function docTypeLabel(type) {
       <div>
         <div class="flow-row" style="margin-bottom:5px">
           <button class="btn btn-ghost btn-sm" @click="router.push('/ops/commercial/purchase-requests')"><i class="pi pi-arrow-left"></i> Inbox</button>
-          <span class="page-title mono">{{ request.id }}</span>
+          <span class="page-title mono">{{ displayCode(request) }}</span>
           <span :class="'badge ' + requestStatusBadge(request.status)">{{ requestStatusLabel(request.status) }}</span>
         </div>
         <div class="page-subtitle">{{ ds.clientName(request.clientId) }} - requested delivery {{ request.requestedDeliveryDate }}</div>
@@ -112,7 +112,7 @@ function docTypeLabel(type) {
 
     <div v-if="convertedOrder" class="banner banner-success">
       <i class="pi pi-check-circle"></i>
-      <div>Request converted into <strong>{{ convertedOrder.id }}</strong>. A dispatch order card already exists for S2.</div>
+      <div>Request converted into <strong>{{ displayCode(convertedOrder) }}</strong>. A dispatch order card already exists for S2.</div>
     </div>
     <div v-else-if="isCreditBlocked" class="banner banner-danger">
       <i class="pi pi-ban"></i>

@@ -1,0 +1,13 @@
+[
+  {
+    "id": "CRQ-001",
+    "tenantId": "TEN-001",
+    "clientId": "CLI-001",
+    "requestedAmount": 150000,
+    "reason": "Seasonal imported dairy campaign requires a higher monthly purchasing line.",
+    "status": "in_review",
+    "assignedToRole": "sales",
+    "createdByUserId": "USR-003",
+    "createdAt": "2026-06-02T16:20:00Z"
+  }
+]
