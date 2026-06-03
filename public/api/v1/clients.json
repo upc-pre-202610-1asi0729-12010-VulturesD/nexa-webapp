@@ -18,7 +18,8 @@
     "monthlyCreditAvailable": 101600,
     "monthlyCreditPeriod": "2026-06",
     "monthlyCreditDueDate": "2026-06-30",
-    "monthlyCreditStatus": "ok"
+    "monthlyCreditStatus": "ok",
+    "monthlyCreditDue": 18400
   },
   {
     "id": "CLI-002",
@@ -39,7 +40,8 @@
     "monthlyCreditAvailable": 68000,
     "monthlyCreditPeriod": "2026-06",
     "monthlyCreditDueDate": "2026-06-30",
-    "monthlyCreditStatus": "ok"
+    "monthlyCreditStatus": "ok",
+    "monthlyCreditDue": 22000
   },
   {
     "id": "CLI-003",
@@ -60,7 +62,8 @@
     "monthlyCreditAvailable": 0,
     "monthlyCreditPeriod": "2026-06",
     "monthlyCreditDueDate": "2026-06-30",
-    "monthlyCreditStatus": "ok"
+    "monthlyCreditStatus": "ok",
+    "monthlyCreditDue": 0
   },
   {
     "id": "CLI-004",
@@ -81,7 +84,8 @@
     "monthlyCreditAvailable": 8800,
     "monthlyCreditPeriod": "2026-06",
     "monthlyCreditDueDate": "2026-06-20",
-    "monthlyCreditStatus": "attention"
+    "monthlyCreditStatus": "attention",
+    "monthlyCreditDue": 51200
   },
   {
     "id": "CLI-005",
@@ -102,7 +106,8 @@
     "monthlyCreditAvailable": 0,
     "monthlyCreditPeriod": "2026-06",
     "monthlyCreditDueDate": "2026-06-15",
-    "monthlyCreditStatus": "overdue"
+    "monthlyCreditStatus": "overdue",
+    "monthlyCreditDue": 30000
   },
   {
     "id": "CLI-006",
@@ -123,6 +128,7 @@
     "monthlyCreditAvailable": 61000,
     "monthlyCreditPeriod": "2026-06",
     "monthlyCreditDueDate": "2026-06-30",
-    "monthlyCreditStatus": "ok"
+    "monthlyCreditStatus": "ok",
+    "monthlyCreditDue": 14000
   }
 ]

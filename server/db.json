@@ -1318,7 +1318,8 @@
       "monthlyCreditAvailable": 101600,
       "monthlyCreditPeriod": "2026-06",
       "monthlyCreditDueDate": "2026-06-30",
-      "monthlyCreditStatus": "ok"
+      "monthlyCreditStatus": "ok",
+      "monthlyCreditDue": 18400
     },
     {
       "tenantId": "TEN-001",
@@ -1358,7 +1359,8 @@
       "monthlyCreditAvailable": 68000,
       "monthlyCreditPeriod": "2026-06",
       "monthlyCreditDueDate": "2026-06-30",
-      "monthlyCreditStatus": "ok"
+      "monthlyCreditStatus": "ok",
+      "monthlyCreditDue": 22000
     },
     {
       "tenantId": "TEN-001",
@@ -1387,7 +1389,8 @@
       "monthlyCreditAvailable": 0,
       "monthlyCreditPeriod": "2026-06",
       "monthlyCreditDueDate": "2026-06-30",
-      "monthlyCreditStatus": "ok"
+      "monthlyCreditStatus": "ok",
+      "monthlyCreditDue": 0
     },
     {
       "tenantId": "TEN-001",
@@ -1416,7 +1419,8 @@
       "monthlyCreditAvailable": 8800,
       "monthlyCreditPeriod": "2026-06",
       "monthlyCreditDueDate": "2026-06-20",
-      "monthlyCreditStatus": "attention"
+      "monthlyCreditStatus": "attention",
+      "monthlyCreditDue": 51200
     },
     {
       "tenantId": "TEN-001",
@@ -1445,7 +1449,8 @@
       "monthlyCreditAvailable": 0,
       "monthlyCreditPeriod": "2026-06",
       "monthlyCreditDueDate": "2026-06-15",
-      "monthlyCreditStatus": "overdue"
+      "monthlyCreditStatus": "overdue",
+      "monthlyCreditDue": 30000
     },
     {
       "tenantId": "TEN-001",
@@ -1474,7 +1479,8 @@
       "monthlyCreditAvailable": 61000,
       "monthlyCreditPeriod": "2026-06",
       "monthlyCreditDueDate": "2026-06-30",
-      "monthlyCreditStatus": "ok"
+      "monthlyCreditStatus": "ok",
+      "monthlyCreditDue": 14000
     },
     {
       "id": "CLI-007",
@@ -1506,7 +1512,8 @@
       "monthlyCreditAvailable": 24100,
       "monthlyCreditPeriod": "2026-06",
       "monthlyCreditDueDate": "2026-06-30",
-      "monthlyCreditStatus": "ok"
+      "monthlyCreditStatus": "ok",
+      "monthlyCreditDue": 900
     }
   ],
   "orders": [
@@ -4744,6 +4751,75 @@
       "source": "simulated",
       "timestamp": "2026-05-20T10:10:00Z",
       "visibleToBuyer": false
+    }
+  ],
+  "paymentMethods": [
+    {
+      "id": "PM-001",
+      "tenantId": "TEN-001",
+      "clientId": "CLI-001",
+      "type": "card",
+      "brand": "Visa",
+      "last4": "9904",
+      "holderName": "Elena Litano",
+      "label": "Primary purchasing card",
+      "walletType": null,
+      "isDefault": true,
+      "status": "active",
+      "createdAt": "2026-06-01T15:00:00Z"
+    },
+    {
+      "id": "PM-002",
+      "tenantId": "TEN-001",
+      "clientId": "CLI-001",
+      "type": "wallet",
+      "brand": "Yape",
+      "last4": "",
+      "holderName": "Elena Litano",
+      "label": "Yape business wallet",
+      "walletType": "Yape",
+      "isDefault": false,
+      "status": "active",
+      "createdAt": "2026-06-01T15:10:00Z"
+    },
+    {
+      "id": "PM-003",
+      "tenantId": "TEN-001",
+      "clientId": "CLI-001",
+      "type": "wallet",
+      "brand": "Plin",
+      "last4": "",
+      "holderName": "Elena Litano",
+      "label": "Plin business wallet",
+      "walletType": "Plin",
+      "isDefault": false,
+      "status": "active",
+      "createdAt": "2026-06-01T15:12:00Z"
+    }
+  ],
+  "creditRequests": [
+    {
+      "id": "CRQ-001",
+      "tenantId": "TEN-001",
+      "clientId": "CLI-001",
+      "requestedAmount": 150000,
+      "reason": "Seasonal imported dairy campaign requires a higher monthly purchasing line.",
+      "status": "in_review",
+      "assignedToRole": "sales",
+      "createdByUserId": "USR-003",
+      "createdAt": "2026-06-02T16:20:00Z"
+    }
+  ],
+  "creditPayments": [
+    {
+      "id": "CPY-001",
+      "tenantId": "TEN-001",
+      "clientId": "CLI-001",
+      "amount": 18400,
+      "period": "2026-06",
+      "methodId": "PM-001",
+      "status": "scheduled",
+      "createdAt": "2026-06-03T10:00:00Z"
     }
   ],
   "roles": [
