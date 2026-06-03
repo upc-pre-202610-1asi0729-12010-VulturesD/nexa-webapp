@@ -12,7 +12,7 @@ class IamApiService {
   }
 
   /**
-   * @summary Gets all demo user resources.
+   * @summary Gets all user resources.
    * @returns {Promise<Array>} User collection.
    */
   getUsers() {
