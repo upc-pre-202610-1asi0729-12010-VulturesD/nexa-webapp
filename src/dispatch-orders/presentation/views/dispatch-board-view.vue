@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import { useDataStore } from '@/app/application/stores/data.store';
-import { orderStatusLabel, orderStatusBadge, coldTypeLabel, coldTypeBadge } from '@/shared/status';
+import { orderStatusLabel, orderStatusBadge, coldTypeLabel, coldTypeBadge, displayCode } from '@/shared/status';
 import { creditSummary } from '@/shared/credit';
 
 const router = useRouter();
@@ -33,7 +33,7 @@ const filtered = computed(() => {
   if (search.value) {
     const q = search.value.toLowerCase();
     rows = rows.filter(dispatch =>
-      dispatch.id.toLowerCase().includes(q) ||
+      displayCode(dispatch).toLowerCase().includes(q) ||
       dispatch.orderId.toLowerCase().includes(q) ||
       ds.clientName(dispatch.clientId).toLowerCase().includes(q)
     );
@@ -62,7 +62,7 @@ function advance(dispatch) {
   if (dispatch.status === 'incident' || dispatch.status === 'delivered') return;
   const next = nextStatus(dispatch.status);
   ds.updateDispatchStatus(dispatch.id, next);
-  toast.add({ severity: next === 'delivered' ? 'success' : 'info', summary: orderStatusLabel(next), detail: dispatch.id, life: 3000 });
+  toast.add({ severity: next === 'delivered' ? 'success' : 'info', summary: orderStatusLabel(next), detail: displayCode(dispatch), life: 3000 });
 }
 </script>
 
@@ -70,7 +70,7 @@ function advance(dispatch) {
   <div class="page-header">
     <div>
       <div class="page-title">Dispatch Board</div>
-      <div class="page-subtitle">{{ D.dispatchOrders.length }} dispatch orders - S2 operational board with simulated data.</div>
+      <div class="page-subtitle">{{ D.dispatchOrders.length }} dispatch orders - S2 operational board for route execution.</div>
     </div>
     <button class="btn btn-secondary" @click="router.push('/ops/operations/proof-of-delivery')">
       <i class="pi pi-camera"></i> Proof of Delivery
@@ -107,7 +107,7 @@ function advance(dispatch) {
         @click="router.push('/ops/operations/dispatch-orders/' + dispatch.id)"
       >
         <div class="flow-row-between" style="margin-bottom:8px">
-          <span class="mono">{{ dispatch.id }}</span>
+          <span class="mono">{{ displayCode(dispatch) }}</span>
           <span :class="'badge-priority-' + (dispatch.priority === 'normal' ? 'medium' : dispatch.priority)">{{ dispatch.priority }}</span>
         </div>
         <div style="font-size:13px;font-weight:800;margin-bottom:3px">{{ ds.clientName(dispatch.clientId) }}</div>

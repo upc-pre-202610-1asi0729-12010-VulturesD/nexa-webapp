@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import { useDataStore } from '@/app/application/stores/data.store';
-import { orderStatusLabel, orderStatusBadge } from '@/shared/status';
+import { orderStatusLabel, orderStatusBadge, displayCode } from '@/shared/status';
 
 const router = useRouter();
 const toast = useToast();
@@ -23,7 +23,7 @@ const completedRows = computed(() => rows.value.filter(row => row.pod?.status ==
 function complete(dispatch) {
   ds.completePod(dispatch.id);
   ds.updateDispatchStatus(dispatch.id, 'delivered');
-  toast.add({ severity: 'success', summary: 'POD completed', detail: dispatch.id, life: 3000 });
+  toast.add({ severity: 'success', summary: 'POD completed', detail: displayCode(dispatch), life: 3000 });
 }
 </script>
 
@@ -31,9 +31,8 @@ function complete(dispatch) {
   <div class="page-header">
     <div>
       <div class="page-title">Proof of Delivery</div>
-      <div class="page-subtitle">Simulated photo and signature evidence for delivery closure. This is not a legal POD.</div>
+      <div class="page-subtitle">Photo and signature evidence for delivery closure and buyer tracking.</div>
     </div>
-    <span class="demo-label">POD mock</span>
   </div>
 
   <div class="grid-3" style="margin-bottom:18px">
@@ -66,11 +65,11 @@ function complete(dispatch) {
       <tbody>
         <tr v-for="row in rows" :key="row.dispatch.id">
           <td>
-            <div class="mono">{{ row.dispatch.id }}</div>
+            <div class="mono">{{ displayCode(row.dispatch) }}</div>
             <div class="flow-note">{{ row.dispatch.routeName }}</div>
           </td>
           <td>{{ ds.clientName(row.dispatch.clientId) }}</td>
-          <td><span class="mono">{{ row.dispatch.orderId }}</span></td>
+          <td><span class="mono">{{ displayCode(row.order) }}</span></td>
           <td><span :class="'badge ' + orderStatusBadge(row.dispatch.status)">{{ orderStatusLabel(row.dispatch.status) }}</span></td>
           <td>
             <span :class="'badge ' + (row.pod?.status === 'complete' ? 'badge-green' : 'badge-amber')">
