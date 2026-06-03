@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import { useDataStore } from '@/app/application/stores/data.store';
-import { orderStatusLabel, orderStatusBadge, coldTypeLabel, coldTypeBadge, documentStatusLabel, documentStatusBadge } from '@/shared/status';
+import { orderStatusLabel, orderStatusBadge, coldTypeLabel, coldTypeBadge, documentStatusLabel, documentStatusBadge, displayCode } from '@/shared/status';
 import { creditSummary } from '@/shared/credit';
 
 const route = useRoute();
@@ -33,7 +33,7 @@ const temperatureSummary = computed(() => {
 
 function setStatus(status) {
   ds.updateDispatchStatus(dispatch.value.id, status);
-  toast.add({ severity: status === 'delivered' ? 'success' : status === 'incident' ? 'warn' : 'info', summary: orderStatusLabel(status), detail: dispatch.value.id, life: 3000 });
+  toast.add({ severity: status === 'delivered' ? 'success' : status === 'incident' ? 'warn' : 'info', summary: orderStatusLabel(status), detail: displayCode(dispatch.value), life: 3000 });
 }
 </script>
 
@@ -49,7 +49,7 @@ function setStatus(status) {
       <div>
         <div class="flow-row" style="margin-bottom:5px">
           <button class="btn btn-ghost btn-sm" @click="router.push('/ops/operations/dispatch-orders')"><i class="pi pi-arrow-left"></i> Board</button>
-          <span class="page-title mono">{{ dispatch.id }}</span>
+          <span class="page-title mono">{{ displayCode(dispatch) }}</span>
           <span :class="'badge ' + orderStatusBadge(dispatch.status)">{{ orderStatusLabel(dispatch.status) }}</span>
           <span :class="coldTypeBadge(dispatch.coldType)">{{ coldTypeLabel(dispatch.coldType) }}</span>
         </div>
@@ -77,7 +77,7 @@ function setStatus(status) {
             <div style="font-size:13px;font-weight:700">{{ address?.label || client?.address || 'Registered address' }}</div>
             <div class="flow-note">{{ address?.address || client?.address }}</div>
           </div>
-          <div class="flow-row-between"><span>Purchase Order</span><strong class="mono">{{ dispatch.orderId }}</strong></div>
+          <div class="flow-row-between"><span>Purchase Order</span><strong class="mono">{{ displayCode(order) }}</strong></div>
           <div class="flow-row-between"><span>Driver</span><strong>{{ dispatch.driverName }}</strong></div>
           <div class="flow-row-between"><span>Owner</span><strong>{{ dispatch.responsible }}</strong></div>
           <div class="credit-summary-box">
@@ -118,7 +118,6 @@ function setStatus(status) {
       <section class="flow-panel span-6">
         <div class="flow-panel-head">
           <div class="flow-title">Business Documents before departure</div>
-          <span class="demo-label">Checklist</span>
         </div>
         <div class="flow-panel-pad">
           <div v-for="doc in docs" :key="doc.id" class="document-check">
@@ -134,7 +133,6 @@ function setStatus(status) {
       <section class="flow-panel span-6">
         <div class="flow-panel-head">
           <div class="flow-title">POD and temperature</div>
-          <span class="demo-label">Simulated temperature</span>
         </div>
         <div class="flow-panel-pad flow-stack">
           <div :class="temperatureSummary.alerts ? 'banner banner-warning' : 'banner banner-success'" style="margin-bottom:0">
@@ -145,13 +143,13 @@ function setStatus(status) {
           </div>
           <div :class="pod?.status === 'complete' ? 'banner banner-success' : 'banner banner-warning'" style="margin-bottom:0">
             <i :class="pod?.status === 'complete' ? 'pi pi-check-circle' : 'pi pi-camera'"></i>
-            <div>{{ pod?.status === 'complete' ? 'Simulated POD completed with photo/signature.' : 'POD pending: register reference photo and signature.' }}</div>
+            <div>{{ pod?.status === 'complete' ? 'POD completed with photo and signature reference.' : 'POD pending: register reference photo and signature.' }}</div>
           </div>
           <div v-for="log in temps" :key="log.id" class="flow-row-between">
             <span>{{ new Date(log.timestamp).toLocaleTimeString('en-US') }}</span>
             <strong :style="{ color: log.status === 'ok' ? '#15803D' : '#B45309' }">{{ log.temperatureC }} C - {{ log.status }}</strong>
           </div>
-          <button class="btn btn-primary" @click="setStatus('delivered')"><i class="pi pi-check"></i> Complete POD mock</button>
+          <button class="btn btn-primary" @click="setStatus('delivered')"><i class="pi pi-check"></i> Complete POD</button>
         </div>
       </section>
 
