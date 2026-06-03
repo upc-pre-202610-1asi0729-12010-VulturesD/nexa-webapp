@@ -36,6 +36,9 @@ const endpoints = {
   proofOfDelivery: '/api/v1/proof-of-delivery',
   chatThreads: '/api/v1/chat-threads',
   messages: '/api/v1/messages',
+  paymentMethods: '/api/v1/payment-methods',
+  creditRequests: '/api/v1/credit-requests',
+  creditPayments: '/api/v1/credit-payments',
   notifications: '/api/v1/notifications',
   temperatureLogs: '/api/v1/temperature-logs',
   alerts: '/api/v1/alerts',
@@ -88,6 +91,9 @@ export const useDataStore = defineStore('data', () => {
     proofOfDelivery: [],
     chatThreads: [],
     messages: [],
+    paymentMethods: [],
+    creditRequests: [],
+    creditPayments: [],
     notifications: [],
     temperatureLogs: [],
     alerts:    [],
@@ -124,6 +130,9 @@ export const useDataStore = defineStore('data', () => {
     );
   }
   function messagesForOrder(orderId) { return D.value.messages.filter(message => message.orderId === orderId); }
+  function paymentMethodsForClient(clientId) { return D.value.paymentMethods.filter(method => method.clientId === clientId); }
+  function creditRequestsForClient(clientId) { return D.value.creditRequests.filter(request => request.clientId === clientId); }
+  function creditPaymentsForClient(clientId) { return D.value.creditPayments.filter(payment => payment.clientId === clientId); }
   function temperatureForOrder(orderId) { return D.value.temperatureLogs.filter(log => log.orderId === orderId); }
   function promotionsForProduct(productId) {
     return D.value.promotions.filter(promo =>
@@ -260,7 +269,8 @@ export const useDataStore = defineStore('data', () => {
     const request = purchaseRequestById(requestId);
     if (!request) return null;
     request.status = status;
-    patchResource('purchaseRequests', request.id, { status });
+    request.updatedAt = new Date().toISOString();
+    patchResource('purchaseRequests', request.id, { status, updatedAt: request.updatedAt });
     addActivity(`${request.id} updated to ${status}`, status === 'approved' ? 'success' : 'warning');
     return request;
   }
@@ -269,6 +279,8 @@ export const useDataStore = defineStore('data', () => {
     requestId = null,
     purchaseRequestId = null,
     orderId = null,
+    clientId = null,
+    title = null,
     senderRole = 'commercial',
     senderName = 'Valeria Sanchez',
     body,
@@ -285,6 +297,7 @@ export const useDataStore = defineStore('data', () => {
       requestId: normalizedRequestId,
       purchaseRequestId: normalizedRequestId,
       orderId,
+      clientId,
       senderRole,
       senderName,
       body,
@@ -298,8 +311,8 @@ export const useDataStore = defineStore('data', () => {
         requestId: normalizedRequestId,
         purchaseRequestId: normalizedRequestId,
         orderId,
-        clientId: normalizedRequestId ? purchaseRequestById(normalizedRequestId)?.clientId : purchaseOrderById(orderId)?.clientId,
-        title: normalizedRequestId || orderId,
+        clientId: clientId || (normalizedRequestId ? purchaseRequestById(normalizedRequestId)?.clientId : purchaseOrderById(orderId)?.clientId),
+        title: title || normalizedRequestId || orderId || 'Client message',
         status: 'open',
       };
       D.value.chatThreads.push(newThread);
@@ -308,6 +321,96 @@ export const useDataStore = defineStore('data', () => {
     D.value.messages.push(message);
     createResource('messages', message);
     return message;
+  }
+
+  function addPaymentMethod(payload) {
+    const method = {
+      id: nextCode('PM', D.value.paymentMethods, 3),
+      tenantId: D.value.company.id || 'TEN-001',
+      clientId: payload.clientId,
+      type: payload.type || 'card',
+      brand: payload.brand || payload.walletType || 'Card',
+      last4: payload.last4 || '',
+      holderName: payload.holderName || payload.name || '',
+      label: payload.label || '',
+      walletType: payload.walletType || null,
+      isDefault: Boolean(payload.isDefault),
+      status: 'active',
+      createdAt: new Date().toISOString(),
+    };
+    if (method.isDefault) {
+      D.value.paymentMethods = D.value.paymentMethods.map(item =>
+        item.clientId === method.clientId ? { ...item, isDefault: false } : item
+      );
+    }
+    D.value.paymentMethods.unshift(method);
+    createResource('paymentMethods', method);
+    return method;
+  }
+
+  function setDefaultPaymentMethod(methodId) {
+    const method = D.value.paymentMethods.find(item => item.id === methodId);
+    if (!method) return null;
+    D.value.paymentMethods = D.value.paymentMethods.map(item => {
+      if (item.clientId !== method.clientId) return item;
+      const next = { ...item, isDefault: item.id === methodId };
+      patchResource('paymentMethods', item.id, { isDefault: next.isDefault });
+      return next;
+    });
+    return D.value.paymentMethods.find(item => item.id === methodId);
+  }
+
+  function removePaymentMethod(methodId) {
+    const method = D.value.paymentMethods.find(item => item.id === methodId);
+    if (!method) return null;
+    D.value.paymentMethods = D.value.paymentMethods.filter(item => item.id !== methodId);
+    api.paymentMethods?.delete(methodId).catch(() => {});
+    return method;
+  }
+
+  function addCreditRequest({ clientId, requestedAmount, reason, createdByUserId }) {
+    const client = clientById(clientId);
+    const request = {
+      id: nextCode('CRQ', D.value.creditRequests, 3),
+      tenantId: D.value.company.id || 'TEN-001',
+      clientId,
+      requestedAmount: Number(requestedAmount || 0),
+      reason: reason || 'Monthly credit limit increase requested from buyer portal.',
+      status: 'submitted',
+      assignedToRole: 'sales',
+      createdByUserId: createdByUserId || null,
+      createdAt: new Date().toISOString(),
+    };
+    D.value.creditRequests.unshift(request);
+    createResource('creditRequests', request);
+    addMessage({
+      clientId,
+      title: request.id,
+      senderRole: 'buyer',
+      senderName: contactByClientId(clientId)?.name || client?.contact || 'B2B Buyer',
+      body: `Credit increase requested for ${clientName(clientId)}. Requested amount: S/ ${request.requestedAmount.toLocaleString()}. Reason: ${request.reason}`,
+      visibleToCommercial: true,
+      visibleToBuyer: true,
+    });
+    addActivity(`${request.id} credit increase requested - ${clientName(clientId)}`, 'warning');
+    return request;
+  }
+
+  function addCreditPayment({ clientId, amount, period, methodId }) {
+    const payment = {
+      id: nextCode('CPY', D.value.creditPayments, 3),
+      tenantId: D.value.company.id || 'TEN-001',
+      clientId,
+      amount: Number(amount || 0),
+      period: period || clientById(clientId)?.monthlyCreditPeriod || '2026-06',
+      methodId: methodId || null,
+      status: 'scheduled',
+      createdAt: new Date().toISOString(),
+    };
+    D.value.creditPayments.unshift(payment);
+    createResource('creditPayments', payment);
+    addActivity(`${payment.id} monthly credit payment scheduled - ${clientName(clientId)}`, 'success');
+    return payment;
   }
 
   function convertRequestToOrder(requestId) {
@@ -351,9 +454,10 @@ export const useDataStore = defineStore('data', () => {
     };
     request.status = 'converted_to_order';
     request.convertedOrderId = orderId;
+    request.updatedAt = order.createdAt;
     D.value.purchaseOrders.unshift(order);
     D.value.orderItems.unshift(...orderItems);
-    patchResource('purchaseRequests', request.id, { status: request.status, convertedOrderId: orderId });
+    patchResource('purchaseRequests', request.id, { status: request.status, convertedOrderId: orderId, updatedAt: request.updatedAt });
     createResource('purchaseOrders', order);
     orderItems.forEach(item => createResource('orderItems', item));
     createDispatchForOrder(order);
@@ -385,6 +489,7 @@ export const useDataStore = defineStore('data', () => {
       monthlyCreditLimit: limit,
       monthlyCreditUsed: used,
       monthlyCreditAvailable: available,
+      monthlyCreditDue: used,
       monthlyCreditStatus: status,
     });
     patchResource('clients', client.id, {
@@ -392,6 +497,7 @@ export const useDataStore = defineStore('data', () => {
       creditStatus: status,
       monthlyCreditUsed: used,
       monthlyCreditAvailable: available,
+      monthlyCreditDue: used,
       monthlyCreditStatus: status,
     });
     return client;
@@ -621,6 +727,9 @@ export const useDataStore = defineStore('data', () => {
     timelineForOrder,
     messagesForRequest,
     messagesForOrder,
+    paymentMethodsForClient,
+    creditRequestsForClient,
+    creditPaymentsForClient,
     temperatureForOrder,
     promotionsForProduct,
     nextOrderId,
@@ -629,6 +738,11 @@ export const useDataStore = defineStore('data', () => {
     addPurchaseRequest,
     updateRequestStatus,
     addMessage,
+    addPaymentMethod,
+    setDefaultPaymentMethod,
+    removePaymentMethod,
+    addCreditRequest,
+    addCreditPayment,
     convertRequestToOrder,
     updateOrderStatus,
     updateDispatchStatus,
