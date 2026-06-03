@@ -111,7 +111,7 @@ function endSession() {
         <div class="flow-panel-head">
           <div>
             <div class="flow-title">Personal Information</div>
-            <div class="flow-subtitle">Basic account fields for this demo user.</div>
+            <div class="flow-subtitle">Basic account fields for this workspace profile.</div>
           </div>
         </div>
         <div class="flow-panel-pad form-grid">
@@ -135,7 +135,7 @@ function endSession() {
         <div class="flow-panel-head">
           <div>
             <div class="flow-title">{{ isLogistics ? 'Operations Preferences' : 'Notification Preferences' }}</div>
-            <div class="flow-subtitle">Demo alerts only. No production notification service is connected.</div>
+            <div class="flow-subtitle">Choose which operational alerts should be prioritized in your workspace.</div>
           </div>
         </div>
         <div v-if="isLogistics" class="flow-panel-pad toggle-list">
@@ -153,20 +153,20 @@ function endSession() {
       </section>
 
       <section class="flow-panel span-6">
-        <div class="flow-panel-head"><div><div class="flow-title">{{ isCommercial ? 'Commercial Scope' : isLogistics ? 'Operations Scope' : 'Demo Supervisor Scope' }}</div><div class="flow-subtitle">Visual permission summary for academic demo.</div></div></div>
+        <div class="flow-panel-head"><div><div class="flow-title">{{ isCommercial ? 'Commercial Scope' : isLogistics ? 'Operations Scope' : 'Supervisor Scope' }}</div><div class="flow-subtitle">Permission summary for the selected operational profile.</div></div></div>
         <div class="flow-panel-pad permission-grid">
           <div v-for="permission in permissions" :key="permission" class="permission-chip"><i class="pi pi-check-circle"></i>{{ permission }}</div>
         </div>
       </section>
 
       <section class="flow-panel span-12">
-        <div class="flow-panel-head"><div><div class="flow-title">Security / Demo Access</div><div class="flow-subtitle">Authentication is simulated for v1. Password update is a visual placeholder.</div></div></div>
+        <div class="flow-panel-head"><div><div class="flow-title">Security Access</div><div class="flow-subtitle">Review access preferences and session controls for this profile.</div></div></div>
         <div class="flow-panel-pad form-grid">
           <label class="field"><span class="field-label">Current password</span><input class="plain-input" type="password" placeholder="••••••••" /></label>
-          <label class="field"><span class="field-label">New password</span><input class="plain-input" type="password" placeholder="Demo only" /></label>
+          <label class="field"><span class="field-label">New password</span><input class="plain-input" type="password" placeholder="Enter new password" /></label>
           <div class="banner banner-info span-full" style="margin:0">
             <i class="pi pi-info-circle"></i>
-            <div>No production authentication, password recovery or user management is connected in this frontend v1 demo.</div>
+            <div>Password changes should follow company access policy and be coordinated with the account administrator.</div>
           </div>
           <div class="span-full profile-account-actions">
             <button class="btn btn-secondary" @click="endSession"><i class="pi pi-users"></i> Switch Account</button>

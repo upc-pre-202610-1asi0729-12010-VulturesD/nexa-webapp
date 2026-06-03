@@ -4,6 +4,7 @@ import { useToast } from 'primevue/usetoast';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/iam/application/iam.store';
 import { useDataStore } from '@/app/application/stores/data.store';
+import { creditSummary } from '@/shared/credit';
 
 const toast = useToast();
 const router = useRouter();
@@ -14,8 +15,13 @@ const client = computed(() => ds.clientById(auth.user?.clientId) || {});
 const savedProfile = JSON.parse(localStorage.getItem(`nexa.buyerProfile.${auth.user?.id}`) || '{}');
 const avatarPreview = ref(savedProfile.avatarPreview || '');
 const paymentStorage = computed(() => JSON.parse(localStorage.getItem(`nexa.paymentMethods.${auth.user?.id || 'buyer'}`) || '{}'));
-const paymentMethodsCount = computed(() => paymentStorage.value.methods?.length || 0);
-const defaultPayment = computed(() => paymentStorage.value.methods?.find(method => method.isDefault) || paymentStorage.value.methods?.[0]);
+const paymentMethods = computed(() => {
+  const apiMethods = client.value?.id ? ds.paymentMethodsForClient(client.value.id) : [];
+  return apiMethods.length ? apiMethods : paymentStorage.value.methods || [];
+});
+const paymentMethodsCount = computed(() => paymentMethods.value.length);
+const defaultPayment = computed(() => paymentMethods.value.find(method => method.isDefault) || paymentMethods.value[0]);
+const credit = computed(() => creditSummary(client.value));
 
 const form = reactive({
   fullName: savedProfile.fullName || auth.user?.name || '',
@@ -87,7 +93,7 @@ function endSession() {
       <div class="profile-hero-copy">
         <div class="demo-label">{{ planLabel }} plan</div>
         <h1>{{ form.fullName }}</h1>
-        <p>{{ form.companyName }} · {{ form.buyerType === 'company' ? 'Company buyer' : 'Individual buyer' }} · Active demo account</p>
+        <p>{{ form.companyName }} · {{ form.buyerType === 'company' ? 'Company buyer' : 'Individual buyer' }} · Active account</p>
       </div>
       <div class="profile-hero-actions">
         <label class="btn btn-secondary">
@@ -96,7 +102,7 @@ function endSession() {
         </label>
         <button class="btn btn-primary" @click="saveProfile"><i class="pi pi-check"></i> Save changes</button>
         <button class="btn btn-secondary" @click="endSession"><i class="pi pi-users"></i> Switch Account</button>
-        <button class="btn btn-ghost" @click="endSession"><i class="pi pi-sign-out"></i> Log Out</button>
+        <button class="btn btn-logout-contrast" @click="endSession"><i class="pi pi-sign-out"></i> Log Out</button>
       </div>
     </section>
 
@@ -129,7 +135,7 @@ function endSession() {
               dispatchTracking: 'Dispatch tracking updates',
               documentUpdates: 'Business document updates',
               promotionAlerts: 'Promotion alerts',
-              temperatureAlerts: 'Temperature/cold-chain alerts (Premium preview)',
+              temperatureAlerts: 'Temperature/cold-chain alerts (Premium)',
             }[key] }}</span>
             <input type="checkbox" v-model="notifications[key]" />
           </label>
@@ -160,8 +166,27 @@ function endSession() {
       <section class="flow-panel span-12">
         <div class="flow-panel-head">
           <div>
+            <div class="flow-title">Monthly Credit</div>
+            <div class="flow-subtitle">Available purchasing line for commercial validation and dispatch coordination.</div>
+          </div>
+          <span :class="'badge ' + credit.badgeClass">{{ credit.statusLabel }}</span>
+        </div>
+        <div class="flow-panel-pad payment-summary-panel">
+          <div class="flow-kpi-icon" style="background:#F0FDF4;color:#15803D"><i class="pi pi-wallet"></i></div>
+          <div>
+            <div style="font-weight:800;color:#0F172A">S/ {{ credit.available.toLocaleString() }} available of S/ {{ credit.limit.toLocaleString() }}</div>
+            <div class="flow-note">Used S/ {{ credit.used.toLocaleString() }} · Monthly quota S/ {{ credit.due.toLocaleString() }} · Due {{ credit.dueDate }}</div>
+            <div class="credit-bar-wrap" style="margin-top:8px"><div class="credit-bar" :style="{ width: credit.percent + '%', background: credit.barColor }"></div></div>
+          </div>
+          <button class="btn btn-primary" @click="router.push('/portal/payment-methods')"><i class="pi pi-arrow-right"></i> Manage credit</button>
+        </div>
+      </section>
+
+      <section class="flow-panel span-12">
+        <div class="flow-panel-head">
+          <div>
             <div class="flow-title">Payment Methods</div>
-            <div class="flow-subtitle">Payment references are managed in their own screen for checkout and invoicing preview.</div>
+            <div class="flow-subtitle">Payment references are managed in their own screen for checkout and invoicing coordination.</div>
           </div>
         </div>
         <div class="flow-panel-pad payment-summary-panel">
@@ -175,7 +200,7 @@ function endSession() {
                 Default: {{ defaultPayment.brand }} {{ defaultPayment.last4 ? `ending in ${defaultPayment.last4}` : defaultPayment.label }}
               </template>
               <template v-else>
-                Add a card or wallet reference before previewing checkout payment selection.
+                Add a card or wallet reference before checkout payment selection.
               </template>
             </div>
           </div>
@@ -187,12 +212,12 @@ function endSession() {
         <div class="flow-panel-head">
           <div>
             <div class="flow-title">Account Access</div>
-            <div class="flow-subtitle">Demo account actions only. No production authentication service is connected.</div>
+            <div class="flow-subtitle">Manage session access for this buyer account.</div>
           </div>
         </div>
         <div class="flow-panel-pad profile-account-actions">
           <button class="btn btn-secondary" @click="endSession"><i class="pi pi-users"></i> Switch Account</button>
-          <button class="btn btn-ghost" @click="endSession"><i class="pi pi-sign-out"></i> Log Out</button>
+          <button class="btn btn-danger" @click="endSession"><i class="pi pi-sign-out"></i> Log Out</button>
         </div>
       </section>
     </div>
