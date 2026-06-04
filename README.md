@@ -2,23 +2,32 @@
 
 <br/>
 
-<img src="https://raw.githubusercontent.com/upc-pre-202610-1asi0730-12242-king/nexa-website/main/nexa.svg" alt="Nexa Logo" width="160"/>
-<h2>Nexa B2B Cold-Chain Logistics Platform</h2>
-<p><strong>Real-Time Visibility, Cold-Storage Traceability, Routing & B2B Billing</strong></p>
+<img src="./docs/assets/nexa-logo.svg" alt="Nexa" width="200"/>
 
-<div>
+<br/><br/>
 
-[![Vue 3](https://img.shields.io/badge/Vue%203-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)](https://vuejs.org)
-[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
-[![PrimeVue](https://img.shields.io/badge/PrimeVue-Theme--Sleek-10B981?style=for-the-badge&logo=primevue&logoColor=white)](https://primevue.org)
-[![Pinia](https://img.shields.io/badge/Pinia-Store--DDD-FFD43B?style=for-the-badge&logo=vue.js&logoColor=black)](https://pinia.vuejs.org)
-[![JSON Server](https://img.shields.io/badge/JSON%20Server-mock%20api-64748B?style=for-the-badge)](https://github.com/typicode/json-server)
+# nexa-webapp
 
-</div>
+**Web application for the Nexa B2B cold-chain distribution platform**
 
 <br/>
 
-🌐 **[Open Live Website →](https://upc-pre-202610-1asi0730-12242-king.github.io/nexa-website/)**
+![Vue.js](https://img.shields.io/badge/Vue.js-4FC08D?style=flat-square&logo=vue.js&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)
+![PrimeVue](https://img.shields.io/badge/PrimeVue-4-10B981?style=flat-square)
+![Pinia](https://img.shields.io/badge/Pinia-2-FFD43B?style=flat-square&logo=vue.js&logoColor=black)
+
+<br/>
+
+![Course](https://img.shields.io/badge/Course-1ASI0730%20Aplicaciones%20Web-0a2540?style=flat-square)
+![Cycle](https://img.shields.io/badge/Cycle-2026--10-0a2540?style=flat-square)
+![University](https://img.shields.io/badge/University-UPC-0a2540?style=flat-square)
+![Team](https://img.shields.io/badge/Team-King-2a67d9?style=flat-square)
+![Status](https://img.shields.io/badge/Status-AV2%20Active-22c55e?style=flat-square)
+
+<br/>
+
+🌐 **[View Live Site →](https://upc-pre-202610-1asi0730-12242-king.github.io/nexa-website/)**
 
 <br/>
 
@@ -26,73 +35,156 @@
 
 ---
 
-## 📐 WebApp Bounded Contexts & Directory Layout
+## Overview
 
-The application architecture follows Domain-Driven Design (DDD) tactical principles, separating the frontend into bounded contexts:
-
-### 1. Bounded Context Modules
-- `iam/`: Identity & Access Management (session handling, login layout, blocked and forbidden pages).
-- `product-catalog/`: Product Catalog Management context (bilingual grid layout, catalog views, product-cold-card.vue).
-- `purchase-orders/`: Sales Bounded Context (B2B order creations, client catalogs, pinia store configurations).
-- `purchase-requests/`: Logistics request sub-domain context (request inbox, request-summary-card.vue).
-- `dispatch-orders/`: Logistics shipment dispatch Bounded Context (real-time temperature checks, operational-dashboard-view.vue, dispatch-board-view.vue, shipment logs).
-- `inventory-control/`: Warehouse inventory control Bounded Context (cold-storage monitoring, FEFO logic check value objects, warehouse.entity.js).
-- `business-documents/`: Invoicing B2B business documents context (business-documents-center-view.vue).
-- `shared/`: Shared infrastructure (base Axios API client config, cold-chain monitoring metrics cards, metric-card.vue, Repository interfaces).
-
-### 2. Mock API Layer
-- `server/db.json`: Local JSON database representing the state of cold storage and B2B orders.
-- `server/routes.json`: Dynamic endpoints mimicking B2B REST behaviors.
+The `nexa-webapp` repository contains the single page application (SPA) that manages order validation, cold-storage inventory traceability, logistics routing, and invoicing documentation. It provides secure web interfaces for both internal operators and external B2B clients.
 
 ---
 
-## 👥 The King Team & Domain Ownership
+## Repository Map
 
-Consistent with professional academic collaboration, each B2B sub-domain context is assigned to primary engineering owners:
-
-| Team Member | GitHub Identity | Primary Responsibility | Email |
-| :--- | :--- | :--- | :--- |
-| **Joaquín Verde** | [JoaquinVerde115](https://github.com/JoaquinVerde115) | Warehouse & Cold-Storage Monitoring Bounded Context | `u20241a054@upc.edu.pe` |
-| **Gino Torrejón** | [R0obxdnt-bit](https://github.com/R0obxdnt-bit) | Product Catalog & Customer Portals Bounded Context | `u202416289@upc.edu.pe` |
-| **César Marín** | [Cmarin2802](https://github.com/Cmarin2802) | Logistics, Routing & Shipment Dispatch Bounded Context | `cesarmarin2802@gmail.com` |
-| **Gerard Rojas** | [GerardRojasMancilla](https://github.com/GerardRojasMancilla) | Invoicing Business Documents Bounded Context | `u202413142@upc.edu.pe` |
-| **Diego Sandoval** | [DiegoS284](https://github.com/DiegoS284) | Sales, Purchase Orders & Report Coordination | `diego64g284@gmail.com` |
+<table>
+  <tr>
+    <td width="50%">
+      <p><a href="https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-website">nexa-website</a></p>
+      <p>Public landing website and central product entry point.</p>
+      <p><a href="https://upc-pre-202610-1asi0730-12242-king.github.io/nexa-website/">Open Live Website</a></p>
+      <p>
+        <img alt="HTML5" src="https://img.shields.io/badge/HTML5-static-E34F26?style=flat-square&logo=html5&logoColor=white" />
+        <img alt="CSS3" src="https://img.shields.io/badge/CSS3-responsive-1572B6?style=flat-square&logo=css3&logoColor=white" />
+        <img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-vanilla-F7DF1E?style=flat-square&logo=javascript&logoColor=black" />
+      </p>
+    </td>
+    <td width="50%">
+      <p><a href="https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-webapp">nexa-webapp</a> (This Repository)</p>
+      <p>Main web application for operational workflows and buyer-facing coordination.</p>
+      <p><a href="https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-webapp/wiki">Open Engineering Wiki</a></p>
+      <p>
+        <img alt="Vue 3" src="https://img.shields.io/badge/Vue%203-35495E?style=flat-square&logo=vue.js&logoColor=4FC08D" />
+        <img alt="Vite" src="https://img.shields.io/badge/Vite-0F172A?style=flat-square&logo=vite&logoColor=FFD62E" />
+        <img alt="PrimeVue" src="https://img.shields.io/badge/PrimeVue-0EA5E9?style=flat-square" />
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <p><a href="https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-platform">nexa-platform</a></p>
+      <p>Platform and backend work area for API, domain, and infrastructure concerns.</p>
+      <p>
+        <img alt="Platform" src="https://img.shields.io/badge/Platform-backend%20workspace-512BD4?style=flat-square" />
+        <img alt="API" src="https://img.shields.io/badge/API-domain%20services-0EA5E9?style=flat-square" />
+      </p>
+    </td>
+    <td width="50%">
+      <p><a href="https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-report.">nexa-report</a></p>
+      <p>Academic report, product research, backlog, architecture documentation, and project evidence.</p>
+      <p><a href="https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-report.">Open Report Repository</a></p>
+      <p>
+        <img alt="Documentation" src="https://img.shields.io/badge/Documentation-report-0F172A?style=flat-square" />
+        <img alt="UPC" src="https://img.shields.io/badge/UPC-course%20evidence-0EA5E9?style=flat-square" />
+      </p>
+    </td>
+  </tr>
+</table>
 
 ---
 
-## 🎨 Nexa Visual Identity Color System
+## Application Areas
 
-| Token | Hex Code | Visual Preview | Usage |
-| :--- | :---: | :---: | :--- |
-| **Nexa Blue** | `#2563EB` | <img src="https://via.placeholder.com/15/2563EB/000000?text=+" alt="#2563EB" /> | Primary actions, headings, and key UI markers. |
-| **Ice Blue** | `#38BDF8` | <img src="https://via.placeholder.com/15/38BDF8/000000?text=+" alt="#38BDF8" /> | Primary highlights, accent bars, and cold markers. |
-| **Navy Contrast** | `#0F172A` | <img src="https://via.placeholder.com/15/0F172A/000000?text=+" alt="#0F172A" /> | Sleek dark backgrounds, sidebar menus, and solid text. |
-| **Slate Gray** | `#64748B` | <img src="https://via.placeholder.com/15/64748B/000000?text=+" alt="#64748B" /> | Secondary descriptions and meta indicators. |
-| **Ice White** | `#FFFFFF` | <img src="https://via.placeholder.com/15/FFFFFF/000000?text=+" alt="#FFFFFF" /> | Surface card layouts and high contrast text. |
+| Area | User Value | Key Aggregates |
+|---|---|---|
+| **Sales** | Order registration and commercial workflow coordination. | `Orders`, `Buyers` |
+| **Warehouse** | Stock visibility and cold-storage movement tracking. | `InventoryLots`, `Warehouses` |
+| **Logistics** | Dispatch planning and delivery route monitoring. | `Routes`, `Dispatches` |
+| **Invoicing** | Invoice-ready evidence and business document support. | `InvoiceRecords`, `Documents` |
+| **Catalog** | Product availability and pricing visibility. | `Products`, `PriceLists` |
 
 ---
 
-## 🚀 Getting Started Locally
+## Tech Stack
 
-### 1. Install dependencies:
-```bash
-npm install
+| Layer | Technology |
+|---|---|
+| **Core Framework** | Vue 3 (Composition API) & Vite |
+| **Component Suite** | PrimeVue 4, PrimeFlex, & PrimeIcons |
+| **State Management** | Pinia |
+| **Routing & Client** | Vue Router 4 & Axios |
+| **Localization** | Vue I18n |
+| **Development mock** | json-server (runs on port 3000) |
+
+---
+
+## Getting Started
+
+### Local Setup
+
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+2. **Run both WebApp & Mock API concurrently**:
+   ```bash
+   npm run dev:all
+   ```
+   *The Vite application runs on `http://localhost:5173/` and the local Mock API runs on `http://localhost:3000`.*
+
+---
+
+## Available Scripts
+
+| Command | Action |
+|---|---|
+| `npm run dev` | Starts the Vite dev server locally. |
+| `npm run build` | Builds the production package (`dist/`). |
+| `npm run preview` | Previews the production build locally. |
+| `npm run mock:api` | Starts only the local JSON mock API. |
+| `npm run dev:all` | Runs mock API and Vite dev server together. |
+
+---
+
+## Project Structure
+
+```text
+src/
+├── app/                    # Global shell, custom layouts, and main routing
+├── iam/                    # Authentication context & session security
+├── product-catalog/        # Catalog management context
+├── purchase-orders/        # Sales context (order logs & coordination)
+├── purchase-requests/      # Purchase request forms
+├── dispatch-orders/        # Logistics context (routes & shipment dispatches)
+├── inventory-control/      # Warehouse context (cold-storage monitoring & lots)
+├── business-documents/     # Invoicing documents context
+├── buyer-portal/           # Customer portal views
+├── shared/                 # Infrastructure helpers and custom styles
+└── assets/                 # Shared UI assets and configurations
 ```
 
-### 2. Run both WebApp & Mock API concurrently:
-```bash
-npm run dev:all
-```
-*The Vite application runs on `http://localhost:5173/` and the local Mock API runs on `http://localhost:3000`.*
+---
+
+## Team & Domain Ownership
+
+To keep development organized, specific contexts are assigned to primary owners:
+
+| Context | Owner | Support |
+|---|---|---|
+| **Sales** | DiegoS284 | Cmarin2802, R0obxdnt-bit |
+| **Logistics** | Cmarin2802 | DiegoS284, GerardRojasMancilla |
+| **Warehouse** | JoaquinVerde115 | R0obxdnt-bit, DiegoS284 |
+| **Invoicing** | GerardRojasMancilla | Cmarin2802, DiegoS284 |
+| **Catalog** | R0obxdnt-bit | JoaquinVerde115, DiegoS284 |
 
 ---
 
-## 🔗 Nexa Repository Navigation Matrix
+## Documentation
 
-Below is the repository mapping for the Nexa platform, tracking purpose, versions, and deployment statuses:
+Full frontend specs, architecture guides, and developer workflows are maintained in:
+- 🔗 **[Nexa Engineering Wiki Index](https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-webapp/wiki)**
+- [Frontend Architecture Specs](docs/frontend-architecture.md)
+- [Validation Evidence Log](docs/validation-evidence.md)
 
-| Repository | Purpose | Status / Version | Links |
-| :--- | :--- | :---: | :--- |
-| 📘 **Nexa Report** | Academic report, product research, requirements elicitation, UML and database models, and project evidence. | `v2.0.0` Stable | [Repo](https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-report-v1) \| [PDF Build Actions](https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-report-v1/actions) |
-| 🌐 **Nexa Website** | Public B2B landing website and product value entry point. | `v2.2.0` Stable | [Repo](https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-website) \| [Live Deployment](https://upc-pre-202610-1asi0730-12242-king.github.io/nexa-website/) |
-| 💻 **Nexa WebApp** | Core single-page operational frontend managing cold-storage inventory, dispatches, orders, catalog and invoicing. | `v1.2.0` Stable | [Repo](https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-webapp) \| [Live Deployment](https://upc-pre-202610-1asi0730-12242-king.github.io/nexa-webapp/) |
+---
+
+<p align="center">
+  <strong>Nexa WebApp</strong> · Universidad Peruana de Ciencias Aplicadas · 2026-10
+</p>
