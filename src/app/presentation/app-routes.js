@@ -2,7 +2,7 @@ import { analyticsRoutes } from '@/analytics/presentation/analytics-routes';
 import { salesRoutes, salesPortalRoutes } from '@/sales/presentation/sales.routes';
 import { logisticsRoutes } from '@/logistics/presentation/logistics.routes';
 import { businessDocumentsRoutes } from '@/business-documents/presentation/business-documents-routes';
-import { inventoryControlRoutes } from '@/inventory-control/presentation/inventory-control-routes';
+import { warehouseRoutes } from '@/warehouse/presentation/warehouse.routes';
 import { catalogManagementRoutes, catalogManagementPortalRoutes } from '@/catalog-management/presentation/catalog-management.routes';
 import { subscriptionsRoutes } from '@/subscriptions/presentation/subscriptions-routes';
 
@@ -27,7 +27,7 @@ export const opsRoutes = {
     ...salesRoutes,
     ...businessDocumentsRoutes,
     ...catalogManagementRoutes,
-    ...inventoryControlRoutes,
+    ...warehouseRoutes,
     ...logisticsRoutes,
     ...analyticsRoutes,
     ...subscriptionsRoutes,

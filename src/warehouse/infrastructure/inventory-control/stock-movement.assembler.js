@@ -1,4 +1,4 @@
-import { StockMovement } from '../domain/model/entities/stock-movement.entity';
+import { StockMovement } from '../../domain/model/entities/stock-movement.entity';
 import { StockMovementResource } from './stock-movement.resource';
 
 export const StockMovementAssembler = {

@@ -1,5 +1,5 @@
-import { inventoryApiService } from '../infrastructure/inventory-api';
-import { InventoryLotAssembler } from '../infrastructure/inventory-lot.assembler';
+import { inventoryApiService } from '../../infrastructure/inventory-control/inventory-api';
+import { InventoryLotAssembler } from '../../infrastructure/inventory-control/inventory-lot.assembler';
 
 const mapLotResource = (lot) => InventoryLotAssembler.toResource(InventoryLotAssembler.toEntity(lot));
 
