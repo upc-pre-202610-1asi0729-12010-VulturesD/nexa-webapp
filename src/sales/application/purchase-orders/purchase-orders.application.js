@@ -1,5 +1,5 @@
-import { purchaseOrdersApiService } from '../infrastructure/purchase-orders-api';
-import { OrderAssembler } from '../infrastructure/purchase-order.assembler';
+import { purchaseOrdersApiService } from '../../infrastructure/purchase-orders/purchase-orders-api';
+import { OrderAssembler } from '../../infrastructure/purchase-orders/purchase-order.assembler';
 
 const mapOrderResource = (order) => OrderAssembler.toResource(OrderAssembler.toEntity(order));
 

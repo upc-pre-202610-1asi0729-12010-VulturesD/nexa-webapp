@@ -1,4 +1,4 @@
-import { Client } from '../domain/model/client.entity';
+import { Client } from '../../domain/model/client.entity';
 import { ClientResource } from './client.resource';
 
 export const ClientAssembler = {

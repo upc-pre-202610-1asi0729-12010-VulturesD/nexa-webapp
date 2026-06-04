@@ -1,5 +1,5 @@
-import { clientsApiService } from '../infrastructure/clients-api';
-import { ClientAssembler } from '../infrastructure/client.assembler';
+import { clientsApiService } from '../../infrastructure/clients/clients-api';
+import { ClientAssembler } from '../../infrastructure/clients/client.assembler';
 
 const mapClientResource = (client) => ClientAssembler.toResource(ClientAssembler.toEntity(client));
 

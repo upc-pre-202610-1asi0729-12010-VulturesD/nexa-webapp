@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { purchaseOrdersApplication } from '@/purchase-orders/application/purchase-orders.application';
+import { purchaseOrdersApplication } from '@/sales/application/purchase-orders/purchase-orders.application';
 import { BaseEndpoint } from '@/shared/infrastructure/base-endpoint';
 
 const endpoints = {
