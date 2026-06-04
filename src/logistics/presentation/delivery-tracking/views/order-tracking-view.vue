@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useDataStore } from '@/app/application/stores/data.store';
-import OrderTimeline from '@/delivery-tracking/presentation/components/order-timeline.vue';
+import OrderTimeline from '@/logistics/presentation/delivery-tracking/components/order-timeline.vue';
 
 const route = useRoute();
 const ds = useDataStore();

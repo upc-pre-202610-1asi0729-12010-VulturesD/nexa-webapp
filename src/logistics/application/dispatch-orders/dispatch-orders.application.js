@@ -1,5 +1,5 @@
-import { dispatchOrdersApiService } from '../infrastructure/dispatch-orders-api';
-import { DispatchAssembler } from '../infrastructure/dispatch-order.assembler';
+import { dispatchOrdersApiService } from '../../infrastructure/dispatch-orders/dispatch-orders-api';
+import { DispatchAssembler } from '../../infrastructure/dispatch-orders/dispatch-order.assembler';
 
 const mapDispatchOrderResource = (dispatchOrder) => DispatchAssembler.toResource(DispatchAssembler.toEntity(dispatchOrder));
 
