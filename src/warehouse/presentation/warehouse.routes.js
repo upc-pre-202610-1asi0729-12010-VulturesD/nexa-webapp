@@ -1,14 +1,14 @@
-export const inventoryControlRoutes = [
+export const warehouseRoutes = [
   {
     path: 'operations/inventory-control',
     name: 'operations-inventory-control',
-    component: () => import('@/inventory-control/presentation/views/inventory-view.vue'),
+    component: () => import('@/warehouse/presentation/inventory-control/views/inventory-view.vue'),
     meta: { roles: ['logistics'] },
   },
   {
     path: 'operations/inventory-lots',
     name: 'operations-inventory-lots',
-    component: () => import('@/inventory-control/presentation/views/inventory-view.vue'),
+    component: () => import('@/warehouse/presentation/inventory-control/views/inventory-view.vue'),
     meta: { roles: ['logistics'] },
   },
   {

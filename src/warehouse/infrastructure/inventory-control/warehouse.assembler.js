@@ -1,4 +1,4 @@
-import { Warehouse } from '../domain/model/entities/warehouse.entity';
+import { Warehouse } from '../../domain/model/entities/warehouse.entity';
 import { WarehouseResource } from './warehouse.resource';
 
 export const WarehouseAssembler = {
