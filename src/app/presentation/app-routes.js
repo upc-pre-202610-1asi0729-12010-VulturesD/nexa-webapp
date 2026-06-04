@@ -1,14 +1,10 @@
 import { analyticsRoutes } from '@/analytics/presentation/analytics-routes';
-import { buyerPortalRoutes } from '@/buyer-portal/presentation/buyer-portal-routes';
-import { clientsRoutes } from '@/clients/presentation/clients-routes';
-import { commercialValidationRoutes } from '@/commercial-validation/presentation/commercial-validation-routes';
+import { salesRoutes, salesPortalRoutes } from '@/sales/presentation/sales.routes';
 import { customerPortalsRoutes } from '@/customer-portals/presentation/customer-portals-routes';
 import { dispatchOrdersRoutes } from '@/dispatch-orders/presentation/dispatch-orders-routes';
 import { businessDocumentsRoutes } from '@/business-documents/presentation/business-documents-routes';
 import { inventoryControlRoutes } from '@/inventory-control/presentation/inventory-control-routes';
 import { catalogManagementRoutes, catalogManagementPortalRoutes } from '@/catalog-management/presentation/catalog-management.routes';
-import { purchaseOrdersRoutes } from '@/purchase-orders/presentation/purchase-orders-routes';
-import { purchaseRequestsRoutes } from '@/purchase-requests/presentation/purchase-requests-routes';
 import { subscriptionsRoutes } from '@/subscriptions/presentation/subscriptions-routes';
 
 export const opsRoutes = {
@@ -29,15 +25,12 @@ export const opsRoutes = {
     { path: 'commercial/orders', redirect: '/ops/commercial/purchase-orders' },
     { path: 'commercial/orders/create', redirect: '/ops/commercial/manual-order-entry' },
     { path: 'commercial/orders/:id', redirect: to => `/ops/commercial/purchase-orders/${to.params.id}` },
-    ...commercialValidationRoutes,
-    ...purchaseRequestsRoutes,
+    ...salesRoutes,
     ...businessDocumentsRoutes,
     ...customerPortalsRoutes,
     ...catalogManagementRoutes,
     ...inventoryControlRoutes,
-    ...purchaseOrdersRoutes,
     ...dispatchOrdersRoutes,
-    ...clientsRoutes,
     ...analyticsRoutes,
     ...subscriptionsRoutes,
     {
@@ -54,7 +47,7 @@ export const portalRoutes = {
   meta: { requiresAuth: true, scope: 'portal' },
   children: [
     { path: '', redirect: '/portal/home' },
-    ...buyerPortalRoutes,
+    ...salesPortalRoutes,
     ...catalogManagementPortalRoutes,
   ],
 };
