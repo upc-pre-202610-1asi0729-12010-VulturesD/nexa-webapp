@@ -6,8 +6,7 @@ import { customerPortalsRoutes } from '@/customer-portals/presentation/customer-
 import { dispatchOrdersRoutes } from '@/dispatch-orders/presentation/dispatch-orders-routes';
 import { businessDocumentsRoutes } from '@/business-documents/presentation/business-documents-routes';
 import { inventoryControlRoutes } from '@/inventory-control/presentation/inventory-control-routes';
-import { productCatalogRoutes, productCatalogPortalRoutes } from '@/product-catalog/presentation/product-catalog-routes';
-import { promotionsRoutes } from '@/promotions/presentation/promotions-routes';
+import { catalogManagementRoutes, catalogManagementPortalRoutes } from '@/catalog-management/presentation/catalog-management.routes';
 import { purchaseOrdersRoutes } from '@/purchase-orders/presentation/purchase-orders-routes';
 import { purchaseRequestsRoutes } from '@/purchase-requests/presentation/purchase-requests-routes';
 import { subscriptionsRoutes } from '@/subscriptions/presentation/subscriptions-routes';
@@ -33,9 +32,8 @@ export const opsRoutes = {
     ...commercialValidationRoutes,
     ...purchaseRequestsRoutes,
     ...businessDocumentsRoutes,
-    ...promotionsRoutes,
     ...customerPortalsRoutes,
-    ...productCatalogRoutes,
+    ...catalogManagementRoutes,
     ...inventoryControlRoutes,
     ...purchaseOrdersRoutes,
     ...dispatchOrdersRoutes,
@@ -57,6 +55,6 @@ export const portalRoutes = {
   children: [
     { path: '', redirect: '/portal/home' },
     ...buyerPortalRoutes,
-    ...productCatalogPortalRoutes,
+    ...catalogManagementPortalRoutes,
   ],
 };

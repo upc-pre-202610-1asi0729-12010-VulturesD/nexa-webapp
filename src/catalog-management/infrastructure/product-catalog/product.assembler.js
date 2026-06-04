@@ -1,4 +1,4 @@
-import { Product } from '@/product-catalog/domain/model/entities/product.entity';
+import { Product } from '@/catalog-management/domain/model/entities/product.entity';
 import { ProductResource } from './product.resource';
 
 export const ProductAssembler = {

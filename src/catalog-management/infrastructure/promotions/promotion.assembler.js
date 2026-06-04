@@ -1,4 +1,4 @@
-import { Promotion } from '@/promotions/domain/model/promotion.entity';
+import { Promotion } from '@/catalog-management/domain/model/promotion.entity';
 
 export class PromotionAssembler {
   static toEntity(resource = {}) {
