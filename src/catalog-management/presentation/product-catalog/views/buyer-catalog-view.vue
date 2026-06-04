@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router';
 import { useDataStore } from '@/app/application/stores/data.store';
 import { useCartStore } from '@/app/application/stores/cart.store';
 import { coldTypeLabel, coldTypeBadge } from '@/shared/status';
-import { CATALOG_BRANDS, brandForProduct } from '@/product-catalog/application/product-brand';
+import { CATALOG_BRANDS, brandForProduct } from '@/catalog-management/application/product-catalog/product-brand';
 
 const router = useRouter();
 const ds = useDataStore();
