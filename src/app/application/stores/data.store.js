@@ -36,6 +36,9 @@ const endpoints = {
   proofOfDelivery: '/api/v1/proof-of-delivery',
   chatThreads: '/api/v1/chat-threads',
   messages: '/api/v1/messages',
+  paymentMethods: '/api/v1/payment-methods',
+  creditRequests: '/api/v1/credit-requests',
+  creditPayments: '/api/v1/credit-payments',
   notifications: '/api/v1/notifications',
   temperatureLogs: '/api/v1/temperature-logs',
   alerts: '/api/v1/alerts',
@@ -88,6 +91,9 @@ export const useDataStore = defineStore('data', () => {
     proofOfDelivery: [],
     chatThreads: [],
     messages: [],
+    paymentMethods: [],
+    creditRequests: [],
+    creditPayments: [],
     notifications: [],
     temperatureLogs: [],
     alerts:    [],
@@ -124,6 +130,9 @@ export const useDataStore = defineStore('data', () => {
     );
   }
   function messagesForOrder(orderId) { return D.value.messages.filter(message => message.orderId === orderId); }
+  function paymentMethodsForClient(clientId) { return D.value.paymentMethods.filter(method => method.clientId === clientId); }
+  function creditRequestsForClient(clientId) { return D.value.creditRequests.filter(request => request.clientId === clientId); }
+  function creditPaymentsForClient(clientId) { return D.value.creditPayments.filter(payment => payment.clientId === clientId); }
   function temperatureForOrder(orderId) { return D.value.temperatureLogs.filter(log => log.orderId === orderId); }
   function promotionsForProduct(productId) {
     return D.value.promotions.filter(promo =>
@@ -205,6 +214,22 @@ export const useDataStore = defineStore('data', () => {
     createResource('activityLog', entry);
   }
 
+  function addUser(payload) {
+    const user = {
+      id: nextCode('USR', D.value.users, 3),
+      tenantId: D.value.company.id || 'TEN-001',
+      status: 'active',
+      planAccess: D.value.company.subscriptionPlan || 'standard',
+      password: 'demo1234',
+      lastLogin: null,
+      ...payload,
+    };
+    D.value.users.unshift(user);
+    createResource('users', user);
+    addActivity(`User created: ${user.email}`, 'success');
+    return user;
+  }
+
   function addPurchaseRequest({ clientId, buyerUserId, deliveryAddressId, requestedDeliveryDate, comments, items = [] }) {
     const id = nextCode('REQ-2026', D.value.purchaseRequests, 4);
     const request = {
@@ -244,7 +269,8 @@ export const useDataStore = defineStore('data', () => {
     const request = purchaseRequestById(requestId);
     if (!request) return null;
     request.status = status;
-    patchResource('purchaseRequests', request.id, { status });
+    request.updatedAt = new Date().toISOString();
+    patchResource('purchaseRequests', request.id, { status, updatedAt: request.updatedAt });
     addActivity(`${request.id} updated to ${status}`, status === 'approved' ? 'success' : 'warning');
     return request;
   }
@@ -253,6 +279,8 @@ export const useDataStore = defineStore('data', () => {
     requestId = null,
     purchaseRequestId = null,
     orderId = null,
+    clientId = null,
+    title = null,
     senderRole = 'commercial',
     senderName = 'Valeria Sanchez',
     body,
@@ -269,6 +297,7 @@ export const useDataStore = defineStore('data', () => {
       requestId: normalizedRequestId,
       purchaseRequestId: normalizedRequestId,
       orderId,
+      clientId,
       senderRole,
       senderName,
       body,
@@ -282,8 +311,8 @@ export const useDataStore = defineStore('data', () => {
         requestId: normalizedRequestId,
         purchaseRequestId: normalizedRequestId,
         orderId,
-        clientId: normalizedRequestId ? purchaseRequestById(normalizedRequestId)?.clientId : purchaseOrderById(orderId)?.clientId,
-        title: normalizedRequestId || orderId,
+        clientId: clientId || (normalizedRequestId ? purchaseRequestById(normalizedRequestId)?.clientId : purchaseOrderById(orderId)?.clientId),
+        title: title || normalizedRequestId || orderId || 'Client message',
         status: 'open',
       };
       D.value.chatThreads.push(newThread);
@@ -292,6 +321,96 @@ export const useDataStore = defineStore('data', () => {
     D.value.messages.push(message);
     createResource('messages', message);
     return message;
+  }
+
+  function addPaymentMethod(payload) {
+    const method = {
+      id: nextCode('PM', D.value.paymentMethods, 3),
+      tenantId: D.value.company.id || 'TEN-001',
+      clientId: payload.clientId,
+      type: payload.type || 'card',
+      brand: payload.brand || payload.walletType || 'Card',
+      last4: payload.last4 || '',
+      holderName: payload.holderName || payload.name || '',
+      label: payload.label || '',
+      walletType: payload.walletType || null,
+      isDefault: Boolean(payload.isDefault),
+      status: 'active',
+      createdAt: new Date().toISOString(),
+    };
+    if (method.isDefault) {
+      D.value.paymentMethods = D.value.paymentMethods.map(item =>
+        item.clientId === method.clientId ? { ...item, isDefault: false } : item
+      );
+    }
+    D.value.paymentMethods.unshift(method);
+    createResource('paymentMethods', method);
+    return method;
+  }
+
+  function setDefaultPaymentMethod(methodId) {
+    const method = D.value.paymentMethods.find(item => item.id === methodId);
+    if (!method) return null;
+    D.value.paymentMethods = D.value.paymentMethods.map(item => {
+      if (item.clientId !== method.clientId) return item;
+      const next = { ...item, isDefault: item.id === methodId };
+      patchResource('paymentMethods', item.id, { isDefault: next.isDefault });
+      return next;
+    });
+    return D.value.paymentMethods.find(item => item.id === methodId);
+  }
+
+  function removePaymentMethod(methodId) {
+    const method = D.value.paymentMethods.find(item => item.id === methodId);
+    if (!method) return null;
+    D.value.paymentMethods = D.value.paymentMethods.filter(item => item.id !== methodId);
+    api.paymentMethods?.delete(methodId).catch(() => {});
+    return method;
+  }
+
+  function addCreditRequest({ clientId, requestedAmount, reason, createdByUserId }) {
+    const client = clientById(clientId);
+    const request = {
+      id: nextCode('CRQ', D.value.creditRequests, 3),
+      tenantId: D.value.company.id || 'TEN-001',
+      clientId,
+      requestedAmount: Number(requestedAmount || 0),
+      reason: reason || 'Monthly credit limit increase requested from buyer portal.',
+      status: 'submitted',
+      assignedToRole: 'sales',
+      createdByUserId: createdByUserId || null,
+      createdAt: new Date().toISOString(),
+    };
+    D.value.creditRequests.unshift(request);
+    createResource('creditRequests', request);
+    addMessage({
+      clientId,
+      title: request.id,
+      senderRole: 'buyer',
+      senderName: contactByClientId(clientId)?.name || client?.contact || 'B2B Buyer',
+      body: `Credit increase requested for ${clientName(clientId)}. Requested amount: S/ ${request.requestedAmount.toLocaleString()}. Reason: ${request.reason}`,
+      visibleToCommercial: true,
+      visibleToBuyer: true,
+    });
+    addActivity(`${request.id} credit increase requested - ${clientName(clientId)}`, 'warning');
+    return request;
+  }
+
+  function addCreditPayment({ clientId, amount, period, methodId }) {
+    const payment = {
+      id: nextCode('CPY', D.value.creditPayments, 3),
+      tenantId: D.value.company.id || 'TEN-001',
+      clientId,
+      amount: Number(amount || 0),
+      period: period || clientById(clientId)?.monthlyCreditPeriod || '2026-06',
+      methodId: methodId || null,
+      status: 'scheduled',
+      createdAt: new Date().toISOString(),
+    };
+    D.value.creditPayments.unshift(payment);
+    createResource('creditPayments', payment);
+    addActivity(`${payment.id} monthly credit payment scheduled - ${clientName(clientId)}`, 'success');
+    return payment;
   }
 
   function convertRequestToOrder(requestId) {
@@ -335,16 +454,53 @@ export const useDataStore = defineStore('data', () => {
     };
     request.status = 'converted_to_order';
     request.convertedOrderId = orderId;
+    request.updatedAt = order.createdAt;
     D.value.purchaseOrders.unshift(order);
     D.value.orderItems.unshift(...orderItems);
-    patchResource('purchaseRequests', request.id, { status: request.status, convertedOrderId: orderId });
+    patchResource('purchaseRequests', request.id, { status: request.status, convertedOrderId: orderId, updatedAt: request.updatedAt });
     createResource('purchaseOrders', order);
     orderItems.forEach(item => createResource('orderItems', item));
     createDispatchForOrder(order);
     createDocumentChecklistForOrder(order);
-    addTimelineEvent(orderId, 'confirmed', 'Purchase order confirmed and sent to operations', true);
+    applyMonthlyCreditUsage(order.clientId, total);
+    const base = new Date(order.createdAt);
+    const minutesBefore = (minutes) => new Date(base.getTime() - minutes * 60000).toISOString();
+    addTimelineEvent(orderId, 'submitted', 'Request received from Buyer Portal', true, request.createdAt || minutesBefore(4));
+    addTimelineEvent(orderId, 'validating', 'Commercial validation completed by S1', true, minutesBefore(3));
+    addTimelineEvent(orderId, 'confirmed', 'Purchase order confirmed and sent to operations', true, minutesBefore(2));
+    addTimelineEvent(orderId, 'document_pending', 'Business documents pending preparation', true, minutesBefore(1));
+    addTimelineEvent(orderId, 'ready_for_dispatch', 'Ready for operations', true, order.createdAt);
     addActivity(`${request.id} converted to ${orderId}`, 'success');
     return order;
+  }
+
+  function applyMonthlyCreditUsage(clientId, amount) {
+    const client = clientById(clientId);
+    if (!client) return null;
+    const limit = Number(client.monthlyCreditLimit ?? client.creditLimit ?? 0);
+    if (!limit) return client;
+    const used = Number(client.monthlyCreditUsed ?? client.creditUsed ?? 0) + Number(amount || 0);
+    const available = Math.max(0, limit - used);
+    const status = used >= limit ? 'blocked' : used / limit >= 0.85 ? 'attention' : 'ok';
+    Object.assign(client, {
+      creditLimit: limit,
+      creditUsed: used,
+      creditStatus: status,
+      monthlyCreditLimit: limit,
+      monthlyCreditUsed: used,
+      monthlyCreditAvailable: available,
+      monthlyCreditDue: used,
+      monthlyCreditStatus: status,
+    });
+    patchResource('clients', client.id, {
+      creditUsed: used,
+      creditStatus: status,
+      monthlyCreditUsed: used,
+      monthlyCreditAvailable: available,
+      monthlyCreditDue: used,
+      monthlyCreditStatus: status,
+    });
+    return client;
   }
 
   function createDocumentChecklistForOrder(order) {
@@ -401,13 +557,13 @@ export const useDataStore = defineStore('data', () => {
     return dispatch;
   }
 
-  function addTimelineEvent(orderId, status, label, visibleToBuyer = true) {
+  function addTimelineEvent(orderId, status, label, visibleToBuyer = true, timestamp = new Date().toISOString()) {
     const event = {
       id: nextCode('OTE', D.value.orderTimelineEvents, 3),
       orderId,
       status,
       label,
-      timestamp: new Date().toISOString(),
+      timestamp,
       visibleToBuyer,
     };
     D.value.orderTimelineEvents.push(event);
@@ -458,11 +614,11 @@ export const useDataStore = defineStore('data', () => {
     const existing = D.value.proofOfDelivery.find(pod => pod.dispatchOrderId === dispatch.id);
     const payload = {
       status: dispatch.status === 'delayed' ? 'observed' : 'complete',
-      photoMock: true,
-      signatureMock: true,
+      photoReference: true,
+      signatureReference: true,
       receivedBy: contactByClientId(dispatch.clientId)?.name || 'Client',
       completedAt: new Date().toISOString(),
-      notes: dispatch.status === 'delayed' ? 'Simulated POD observed due to delayed delivery state.' : 'Simulated POD completed for demo.',
+      notes: dispatch.status === 'delayed' ? 'POD observed due to delayed delivery state.' : 'POD completed with delivery references.',
     };
     if (existing) {
       Object.assign(existing, payload);
@@ -571,13 +727,22 @@ export const useDataStore = defineStore('data', () => {
     timelineForOrder,
     messagesForRequest,
     messagesForOrder,
+    paymentMethodsForClient,
+    creditRequestsForClient,
+    creditPaymentsForClient,
     temperatureForOrder,
     promotionsForProduct,
     nextOrderId,
+    addUser,
     addOrder,
     addPurchaseRequest,
     updateRequestStatus,
     addMessage,
+    addPaymentMethod,
+    setDefaultPaymentMethod,
+    removePaymentMethod,
+    addCreditRequest,
+    addCreditPayment,
     convertRequestToOrder,
     updateOrderStatus,
     updateDispatchStatus,

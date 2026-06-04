@@ -3,7 +3,8 @@ import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import { useDataStore } from '@/app/application/stores/data.store';
-import { requestStatusLabel, requestStatusBadge, coldTypeLabel, coldTypeBadge, documentStatusLabel, documentStatusBadge } from '@/shared/status';
+import { requestStatusLabel, requestStatusBadge, coldTypeLabel, coldTypeBadge, documentStatusLabel, documentStatusBadge, displayCode } from '@/shared/status';
+import { creditSummary } from '@/shared/credit';
 
 const route = useRoute();
 const router = useRouter();
@@ -19,6 +20,7 @@ const portal = computed(() => client.value ? ds.portalForClient(client.value.id)
 const requirements = computed(() => client.value ? ds.portalRequirementsForClient(client.value.id)?.requiredDocumentTypes || [] : []);
 const messages = computed(() => request.value ? ds.messagesForRequest(request.value.id) : []);
 const convertedOrder = computed(() => request.value?.convertedOrderId ? ds.purchaseOrderById(request.value.convertedOrderId) : null);
+const credit = computed(() => creditSummary(client.value || {}));
 
 const availabilityRows = computed(() => items.value.map((item) => {
   const product = ds.productById(item.productId) || {};
@@ -32,11 +34,15 @@ const availabilityRows = computed(() => items.value.map((item) => {
 }));
 
 const hasStockIssues = computed(() => availabilityRows.value.some(row => !row.ok));
-const isCreditBlocked = computed(() => client.value?.creditStatus === 'blocked' || (client.value?.creditLimit && client.value.creditUsed >= client.value.creditLimit));
+const requestTotal = computed(() => availabilityRows.value.reduce((sum, row) => sum + Number(row.product.price || 0) * Number(row.item.quantity || 0), 0));
+const isCreditBlocked = computed(() =>
+  ['blocked', 'overdue'].includes(credit.value.status) ||
+  (credit.value.limit > 0 && credit.value.available < requestTotal.value)
+);
 
 function approve() {
   ds.updateRequestStatus(request.value.id, 'approved');
-  toast.add({ severity: 'success', summary: 'Request approved', detail: request.value.id, life: 3000 });
+  toast.add({ severity: 'success', summary: 'Request approved', detail: displayCode(request.value), life: 3000 });
 }
 
 function requestChanges() {
@@ -48,12 +54,12 @@ function requestChanges() {
     body: comment.value || 'Please adjust quantities or confirm the requested delivery conditions before validation.',
   });
   comment.value = '';
-  toast.add({ severity: 'warn', summary: 'Adjustment requested', detail: request.value.id, life: 3000 });
+  toast.add({ severity: 'warn', summary: 'Adjustment requested', detail: displayCode(request.value), life: 3000 });
 }
 
 function reject() {
   ds.updateRequestStatus(request.value.id, 'rejected');
-  toast.add({ severity: 'warn', summary: 'Request rejected', detail: request.value.id, life: 3000 });
+  toast.add({ severity: 'warn', summary: 'Request rejected', detail: displayCode(request.value), life: 3000 });
 }
 
 function convert() {
@@ -63,7 +69,7 @@ function convert() {
   }
   if (!['approved', 'converted_to_order'].includes(request.value.status)) approve();
   const order = ds.convertRequestToOrder(request.value.id);
-  toast.add({ severity: 'success', summary: 'Purchase order created', detail: order.id, life: 3500 });
+  toast.add({ severity: 'success', summary: 'Purchase order created', detail: displayCode(order), life: 3500 });
   router.push('/ops/commercial/purchase-orders/' + order.id);
 }
 
@@ -92,7 +98,7 @@ function docTypeLabel(type) {
       <div>
         <div class="flow-row" style="margin-bottom:5px">
           <button class="btn btn-ghost btn-sm" @click="router.push('/ops/commercial/purchase-requests')"><i class="pi pi-arrow-left"></i> Inbox</button>
-          <span class="page-title mono">{{ request.id }}</span>
+          <span class="page-title mono">{{ displayCode(request) }}</span>
           <span :class="'badge ' + requestStatusBadge(request.status)">{{ requestStatusLabel(request.status) }}</span>
         </div>
         <div class="page-subtitle">{{ ds.clientName(request.clientId) }} - requested delivery {{ request.requestedDeliveryDate }}</div>
@@ -106,7 +112,7 @@ function docTypeLabel(type) {
 
     <div v-if="convertedOrder" class="banner banner-success">
       <i class="pi pi-check-circle"></i>
-      <div>Request converted into <strong>{{ convertedOrder.id }}</strong>. A dispatch order card already exists for S2.</div>
+      <div>Request converted into <strong>{{ displayCode(convertedOrder) }}</strong>. A dispatch order card already exists for S2.</div>
     </div>
     <div v-else-if="isCreditBlocked" class="banner banner-danger">
       <i class="pi pi-ban"></i>
@@ -136,9 +142,17 @@ function docTypeLabel(type) {
           </div>
           <div class="flow-row-between">
             <span>Credit Status</span>
-            <span :class="'badge ' + (isCreditBlocked ? 'badge-red' : client.creditStatus === 'attention' ? 'badge-amber' : 'badge-green')">
-              {{ isCreditBlocked ? 'Blocked' : client.creditStatus || 'ok' }}
+            <span :class="'badge ' + (isCreditBlocked ? 'badge-red' : credit.badgeClass)">
+              {{ isCreditBlocked ? 'Blocked' : credit.statusLabel }}
             </span>
+          </div>
+          <div v-if="credit.limit" class="credit-summary-box">
+            <div class="flow-row-between"><span>Monthly used</span><strong>S/ {{ credit.used.toLocaleString() }}</strong></div>
+            <div class="flow-row-between"><span>Available</span><strong>S/ {{ credit.available.toLocaleString() }}</strong></div>
+            <div class="credit-bar-wrap" role="progressbar" :aria-valuenow="credit.percent" aria-valuemin="0" aria-valuemax="100">
+              <div class="credit-bar" :style="{ width: credit.percent + '%', background: credit.barColor }"></div>
+            </div>
+            <div class="flow-note">Period {{ credit.period }} - due {{ credit.dueDate }} - request total S/ {{ requestTotal.toLocaleString() }}</div>
           </div>
           <div v-if="portal">
             <div class="flow-eyebrow">External Portal</div>

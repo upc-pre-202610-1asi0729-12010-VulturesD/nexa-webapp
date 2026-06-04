@@ -16,23 +16,23 @@ const toast  = useToast();
 const cart   = useCartStore();
 const auth   = useAuthStore();
 const ds     = useDataStore();
-const WEBSITE_BASE = 'https://upc-pre-202610-1asi0730-12242-king.github.io/nexa-website';
-
-const footerLinks = {
-  terms: `${WEBSITE_BASE}/terms.html`,
-  privacy: `${WEBSITE_BASE}/privacy.html`,
-  support: `${WEBSITE_BASE}/about.html#team`,
-};
 
 const navItems = [
-  { to: '/portal/home', label: 'Home', icon: 'pi-home' },
-  { to: '/portal/product-catalog', label: 'Product Catalog', icon: 'pi-box' },
-  { to: '/portal/request-builder', label: 'Request Builder', icon: 'pi-shopping-cart' },
-  { to: '/portal/purchase-requests', label: 'My Requests', icon: 'pi-inbox' },
-  { to: '/portal/purchase-orders', label: 'My Orders', icon: 'pi-truck' },
-  { to: '/portal/business-documents', label: 'Business Documents', icon: 'pi-file-check' },
-  { to: '/portal/premium', label: 'Premium', icon: 'pi-sparkles' },
-  { to: '/portal/profile', label: 'Profile', icon: 'pi-user-edit' },
+  { to: '/portal/home', labelKey: 'portal.nav.home', icon: 'pi-home' },
+  { to: '/portal/product-catalog', labelKey: 'portal.nav.catalog', icon: 'pi-box' },
+  { to: '/portal/request-builder', labelKey: 'portal.nav.requestBuilder', icon: 'pi-shopping-cart' },
+  { to: '/portal/purchase-requests', labelKey: 'portal.nav.requests', icon: 'pi-inbox' },
+  { to: '/portal/purchase-orders', labelKey: 'portal.nav.orders', icon: 'pi-truck' },
+  { to: '/portal/business-documents', labelKey: 'portal.nav.documents', icon: 'pi-file-check' },
+  { to: '/portal/payment-methods', labelKey: 'portal.nav.payments', icon: 'pi-credit-card' },
+  { to: '/portal/premium', labelKey: 'portal.nav.premium', icon: 'pi-sparkles' },
+  { to: '/portal/profile', labelKey: 'portal.nav.profile', icon: 'pi-user-edit' },
+];
+
+const footerLinks = [
+  { to: '/portal/legal/terms', label: t('footer.terms') },
+  { to: '/portal/legal/privacy', label: t('footer.privacy') },
+  { to: '/portal/support', label: t('footer.support') },
 ];
 
 function setLang(l) {
@@ -66,7 +66,7 @@ function goRequestBuilder() {
           :aria-current="route.path.startsWith(n.to) ? 'page' : undefined"
           @click="router.push(n.to)"
         >
-          {{ n.label }}
+          {{ t(n.labelKey) }}
         </button>
       </nav>
       <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
@@ -90,11 +90,17 @@ function goRequestBuilder() {
     <!-- Terms footer -->
     <footer class="portal-footer" role="contentinfo">
       <span>{{ t('footer.rights') }}</span>
-      <div class="portal-footer-links">
-        <a :href="footerLinks.terms" target="_blank" rel="noopener">{{ t('footer.terms') }}</a>
-        <a :href="footerLinks.privacy" target="_blank" rel="noopener">{{ t('footer.privacy') }}</a>
-        <a :href="footerLinks.support" target="_blank" rel="noopener">{{ t('footer.support') }}</a>
-      </div>
+      <nav class="portal-footer-links" aria-label="Portal legal links">
+        <button
+          v-for="link in footerLinks"
+          :key="link.to"
+          type="button"
+          class="portal-footer-link"
+          @click="router.push(link.to)"
+        >
+          {{ link.label }}
+        </button>
+      </nav>
     </footer>
 
     <nav class="portal-bottom-nav" role="navigation" :aria-label="t('common.mobileNav')">
@@ -110,7 +116,7 @@ function goRequestBuilder() {
           :class="['pi', n.icon]"
           aria-hidden="true"
         ></i>
-        <span>{{ n.label }}</span>
+        <span>{{ t(n.labelKey) }}</span>
       </button>
     </nav>
 

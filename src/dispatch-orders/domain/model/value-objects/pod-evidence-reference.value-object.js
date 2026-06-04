@@ -1,6 +1,6 @@
 import { ValueObject } from '@/shared/domain/model/value-object';
 
-export class PodEvidenceMock extends ValueObject {
+export class PodEvidenceReference extends ValueObject {
   constructor({ tempArrival = null, notes = '', photoName = '', signatureName = '' } = {}) {
     super({ tempArrival, notes, photoName, signatureName });
   }

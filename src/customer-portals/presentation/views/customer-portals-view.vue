@@ -35,13 +35,13 @@ function docTypeLabel(type) {
     <div class="page-header">
       <div>
         <h1 class="page-title">External Customer Portals</h1>
-        <p class="page-subtitle">Operational checklist for external customer portals. No real integrations in v1.</p>
+        <p class="page-subtitle">Operational checklist for external customer portal requirements and manual upload tasks.</p>
       </div>
     </div>
 
     <div class="banner banner-info">
       <i class="pi pi-info-circle" aria-hidden="true"></i>
-      <div>Simulated data. Nexa records requirements and manual upload tasks; it does not automate external customer portals in v1.</div>
+      <div>Nexa records portal requirements and manual upload tasks so documents can be completed before customer deadlines.</div>
     </div>
 
     <div class="customer-portals-grid">

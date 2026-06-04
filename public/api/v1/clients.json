@@ -10,8 +10,16 @@
     "type": "HORECA",
     "address": "Av. La Mar 1240, Miraflores, Lima",
     "lastOrder": "2026-04-25",
-    "creditLimit": 15000,
-    "creditUsed": 8400
+    "creditLimit": 120000,
+    "creditUsed": 18400,
+    "creditStatus": "ok",
+    "monthlyCreditLimit": 120000,
+    "monthlyCreditUsed": 18400,
+    "monthlyCreditAvailable": 101600,
+    "monthlyCreditPeriod": "2026-06",
+    "monthlyCreditDueDate": "2026-06-30",
+    "monthlyCreditStatus": "ok",
+    "monthlyCreditDue": 18400
   },
   {
     "id": "CLI-002",
@@ -24,8 +32,16 @@
     "type": "Hotel",
     "address": "Vía Expresa 1451, San Isidro, Lima",
     "lastOrder": "2026-04-27",
-    "creditLimit": 30000,
-    "creditUsed": 12000
+    "creditLimit": 90000,
+    "creditUsed": 22000,
+    "creditStatus": "ok",
+    "monthlyCreditLimit": 90000,
+    "monthlyCreditUsed": 22000,
+    "monthlyCreditAvailable": 68000,
+    "monthlyCreditPeriod": "2026-06",
+    "monthlyCreditDueDate": "2026-06-30",
+    "monthlyCreditStatus": "ok",
+    "monthlyCreditDue": 22000
   },
   {
     "id": "CLI-003",
@@ -39,7 +55,15 @@
     "address": "Av. Universitaria 840, Comas, Lima",
     "lastOrder": "2026-04-30",
     "creditLimit": 0,
-    "creditUsed": 0
+    "creditUsed": 0,
+    "creditStatus": "ok",
+    "monthlyCreditLimit": 0,
+    "monthlyCreditUsed": 0,
+    "monthlyCreditAvailable": 0,
+    "monthlyCreditPeriod": "2026-06",
+    "monthlyCreditDueDate": "2026-06-30",
+    "monthlyCreditStatus": "ok",
+    "monthlyCreditDue": 0
   },
   {
     "id": "CLI-004",
@@ -52,8 +76,16 @@
     "type": "Catering",
     "address": "Jr. Los Nogales 380, San Luis, Lima",
     "lastOrder": "2026-04-23",
-    "creditLimit": 20000,
-    "creditUsed": 19200
+    "creditLimit": 60000,
+    "creditUsed": 51200,
+    "creditStatus": "attention",
+    "monthlyCreditLimit": 60000,
+    "monthlyCreditUsed": 51200,
+    "monthlyCreditAvailable": 8800,
+    "monthlyCreditPeriod": "2026-06",
+    "monthlyCreditDueDate": "2026-06-20",
+    "monthlyCreditStatus": "attention",
+    "monthlyCreditDue": 51200
   },
   {
     "id": "CLI-005",
@@ -66,8 +98,16 @@
     "type": "Minorista",
     "address": "Av. Túpac Amaru 2800, Independencia, Lima",
     "lastOrder": "2026-04-04",
-    "creditLimit": 10000,
-    "creditUsed": 10000
+    "creditLimit": 30000,
+    "creditUsed": 30000,
+    "creditStatus": "blocked",
+    "monthlyCreditLimit": 30000,
+    "monthlyCreditUsed": 30000,
+    "monthlyCreditAvailable": 0,
+    "monthlyCreditPeriod": "2026-06",
+    "monthlyCreditDueDate": "2026-06-15",
+    "monthlyCreditStatus": "overdue",
+    "monthlyCreditDue": 30000
   },
   {
     "id": "CLI-006",
@@ -80,7 +120,15 @@
     "type": "Distribuidor",
     "address": "Jr. San Martín 680, Trujillo, La Libertad",
     "lastOrder": "2026-04-20",
-    "creditLimit": 25000,
-    "creditUsed": 8000
+    "creditLimit": 75000,
+    "creditUsed": 14000,
+    "creditStatus": "ok",
+    "monthlyCreditLimit": 75000,
+    "monthlyCreditUsed": 14000,
+    "monthlyCreditAvailable": 61000,
+    "monthlyCreditPeriod": "2026-06",
+    "monthlyCreditDueDate": "2026-06-30",
+    "monthlyCreditStatus": "ok",
+    "monthlyCreditDue": 14000
   }
 ]

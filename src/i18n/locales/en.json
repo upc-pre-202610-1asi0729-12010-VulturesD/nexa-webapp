@@ -1,7 +1,7 @@
 {
   "auth": {
     "welcome": "Welcome back",
-    "subtitle": "Choose a demo user or sign in with credentials.",
+    "subtitle": "Choose your workspace profile or sign in with credentials.",
     "email": "Email address",
     "password": "Password",
     "signIn": "Sign in",
@@ -26,7 +26,7 @@
     "pillDelivery": "Delivery documented",
     "backToSite": "← Back to website",
     "rights": "© 2026 Nexa · All rights reserved",
-    "noUsers": "Demo users unavailable. Check API configuration."
+    "noUsers": "Workspace profiles unavailable. Check API configuration."
   },
   "nav": {
     "main": "Main",
@@ -57,7 +57,7 @@
     "myRequests": "My requests",
     "myOrders": "My orders",
     "tracking": "Tracking",
-    "premium": "Premium preview",
+    "premium": "Premium",
     "settings": "Settings",
     "profile": "My Profile",
     "companyAdministration": "Company Administration"
@@ -279,6 +279,17 @@
     "avatarHint": "Auto initials"
   },
   "portal": {
+    "nav": {
+      "home": "Home",
+      "catalog": "Product Catalog",
+      "requestBuilder": "Request Builder",
+      "requests": "My Requests",
+      "orders": "My Orders",
+      "documents": "Business Documents",
+      "payments": "Payments",
+      "premium": "Premium",
+      "profile": "Profile"
+    },
     "home": "Home",
     "catalog": "Catalog",
     "myOrders": "My orders",
@@ -329,7 +340,7 @@
     "noExpiring": "No critical lots",
     "allStockNormal": "All stock at normal levels",
     "noSalesData": "No sales data",
-    "demoBanner": "Data shown comes from the current demonstration period. Integration with the nexa-platform API will enable historical analytics and export.",
+    "demoBanner": "Operational data reflects the current business period. Backend integration will enable historical analytics, exports and automated alerts.",
     "activeOrders": "Active orders",
     "ofPeriod": "of {total} in the period",
     "completedDeliveries": "Completed deliveries",

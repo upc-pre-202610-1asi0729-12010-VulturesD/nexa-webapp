@@ -8,7 +8,7 @@ import { UserAssembler } from '../infrastructure/user.assembler';
  */
 export const iamApplication = {
   /**
-   * @summary Returns all demo users from the Fake API.
+   * @summary Returns all users from the API contract.
    * @returns {Promise<Array>}
    */
   getUsers() {

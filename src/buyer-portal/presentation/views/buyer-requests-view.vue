@@ -3,13 +3,15 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/iam/application/iam.store';
 import { useDataStore } from '@/app/application/stores/data.store';
-import { requestStatusLabel, requestStatusBadge } from '@/shared/status';
+import { requestStatusLabel, requestStatusBadge, displayCode, recordTimestamp } from '@/shared/status';
 
 const router = useRouter();
 const auth = useAuthStore();
 const ds = useDataStore();
 
-const requests = computed(() => ds.D.purchaseRequests.filter(request => request.clientId === auth.user?.clientId));
+const requests = computed(() => ds.D.purchaseRequests
+  .filter(request => request.clientId === auth.user?.clientId)
+  .sort((a, b) => recordTimestamp(b) - recordTimestamp(a)));
 </script>
 
 <template>
@@ -32,7 +34,7 @@ const requests = computed(() => ds.D.purchaseRequests.filter(request => request.
       <div class="flow-row-between" style="align-items:flex-start">
         <div>
           <div class="flow-row" style="margin-bottom:5px">
-            <span class="mono" style="font-weight:800;color:#1D4ED8">{{ request.id }}</span>
+            <span class="mono" style="font-weight:800;color:#1D4ED8">{{ displayCode(request) }}</span>
             <span :class="'badge ' + requestStatusBadge(request.status)">{{ requestStatusLabel(request.status) }}</span>
           </div>
           <div class="flow-note">{{ request.createdAt?.slice(0, 10) }} - requested delivery {{ request.requestedDeliveryDate }}</div>

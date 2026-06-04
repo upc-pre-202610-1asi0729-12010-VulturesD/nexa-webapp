@@ -2,7 +2,8 @@
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useDataStore } from '@/app/application/stores/data.store';
-import { coldTypeLabel, coldTypeBadge, orderStatusLabel, orderStatusBadge, daysUntil } from '@/shared/status';
+import { coldTypeLabel, coldTypeBadge, orderStatusLabel, orderStatusBadge, daysUntil, displayCode } from '@/shared/status';
+import { creditSummary } from '@/shared/credit';
 
 const router = useRouter();
 const ds = useDataStore();
@@ -13,6 +14,7 @@ const expiringLots = computed(() => D.inventoryLots.filter(lot => daysUntil(lot.
 const dispatchOrdersToday = computed(() => D.dispatchOrders.filter(dispatchOrder => !['delivered'].includes(dispatchOrder.status)));
 const pendingPod = computed(() => D.dispatchOrders.filter(dispatch => dispatch.requiresPOD && !D.proofOfDelivery.some(pod => pod.dispatchOrderId === dispatch.id && pod.status === 'complete')));
 const incidents = computed(() => D.dispatchOrders.filter(dispatch => dispatch.status === 'incident'));
+const creditFor = (dispatch) => creditSummary(ds.clientById(dispatch.clientId) || {});
 </script>
 
 <template>
@@ -71,12 +73,13 @@ const incidents = computed(() => D.dispatchOrders.filter(dispatch => dispatch.st
         <div v-for="dispatch in D.dispatchOrders.slice(0, 5)" :key="dispatch.id" class="flow-list-item">
           <div>
             <div class="flow-row" style="margin-bottom:5px">
-              <span class="mono">{{ dispatch.id }}</span>
+              <span class="mono">{{ displayCode(dispatch) }}</span>
               <span :class="'badge ' + orderStatusBadge(dispatch.status)">{{ orderStatusLabel(dispatch.status) }}</span>
               <span :class="coldTypeBadge(dispatch.coldType)">{{ coldTypeLabel(dispatch.coldType) }}</span>
+              <span :class="'badge ' + creditFor(dispatch).badgeClass">{{ creditFor(dispatch).statusLabel }}</span>
             </div>
             <div style="font-size:13px;font-weight:800">{{ ds.clientName(dispatch.clientId) }}</div>
-            <div class="flow-note">{{ dispatch.routeName }} - ETA {{ new Date(dispatch.eta).toLocaleString('en-US') }}</div>
+            <div class="flow-note">{{ dispatch.routeName }} - ETA {{ new Date(dispatch.eta).toLocaleString('en-US') }} - Credit available S/ {{ creditFor(dispatch).available.toLocaleString() }}</div>
           </div>
           <button class="btn btn-primary btn-sm" @click="router.push('/ops/operations/dispatch-orders/' + dispatch.id)">Open</button>
         </div>
@@ -103,9 +106,9 @@ const incidents = computed(() => D.dispatchOrders.filter(dispatch => dispatch.st
       </div>
     </section>
 
-    <section class="flow-panel span-5">
+    <section class="flow-panel span-12 operations-quick-actions">
       <div class="flow-panel-head"><div class="flow-title">Quick Actions</div></div>
-      <div class="flow-panel-pad flow-stack">
+      <div class="flow-panel-pad quick-action-grid">
         <button class="btn btn-secondary" @click="router.push('/ops/operations/inventory-control')"><i class="pi pi-database"></i> Inventory Control</button>
         <button class="btn btn-primary" @click="router.push('/ops/operations/dispatch-orders')"><i class="pi pi-send"></i> Dispatch Orders</button>
         <button class="btn btn-secondary" @click="router.push('/ops/operations/proof-of-delivery')"><i class="pi pi-camera"></i> Proof of Delivery</button>

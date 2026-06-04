@@ -1,6 +1,6 @@
 import { Entity } from '@/shared/domain/model/entity';
 import { DispatchStatus } from '../value-objects/dispatch-status.value-object';
-import { PodEvidenceMock } from '../value-objects/pod-evidence-mock.value-object';
+import { PodEvidenceReference } from '../value-objects/pod-evidence-reference.value-object';
 
 export class Dispatch extends Entity {
   constructor({
@@ -38,7 +38,7 @@ export class Dispatch extends Entity {
   }
 
   closeDelivery(evidence = {}) {
-    const podEvidence = evidence instanceof PodEvidenceMock ? evidence : new PodEvidenceMock(evidence);
+    const podEvidence = evidence instanceof PodEvidenceReference ? evidence : new PodEvidenceReference(evidence);
     if (this.evidenceRequired && !podEvidence.isComplete()) {
       throw new Error('POD evidence is required to close delivery');
     }

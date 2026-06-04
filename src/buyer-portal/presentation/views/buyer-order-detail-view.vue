@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '@/iam/application/iam.store';
 import { useDataStore } from '@/app/application/stores/data.store';
-import { orderStatusLabel, orderStatusBadge, orderStepState, documentStatusLabel, documentStatusBadge, coldTypeLabel, coldTypeBadge } from '@/shared/status';
+import { orderStatusLabel, orderStatusBadge, buildOrderTrackingSteps, documentStatusLabel, documentStatusBadge, coldTypeLabel, coldTypeBadge, displayCode } from '@/shared/status';
 
 const route = useRoute();
 const router = useRouter();
@@ -18,19 +18,9 @@ const dispatch = computed(() => order.value ? ds.dispatchForOrder(order.value.id
 const address = computed(() => order.value ? ds.deliveryAddressById(order.value.deliveryAddressId) : null);
 const docs = computed(() => order.value ? ds.documentsForOrder(order.value.id).filter(doc => doc.visibleToBuyer || doc.required) : []);
 const items = computed(() => order.value ? ds.orderItemsFor(order.value.id) : []);
-const events = computed(() => order.value ? ds.timelineForOrder(order.value.id).filter(event => event.visibleToBuyer) : []);
+const events = computed(() => order.value ? ds.timelineForOrder(order.value.id).filter(event => event.visibleToBuyer !== false).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)) : []);
 const temps = computed(() => order.value ? ds.temperatureForOrder(order.value.id).filter(log => log.visibleToBuyer) : []);
-
-const steps = [
-  ['submitted', 'Request received'],
-  ['validating', 'Commercial validation'],
-  ['confirmed', 'Purchase order confirmed'],
-  ['document_pending', 'Business documents prepared'],
-  ['ready_for_dispatch', 'Ready for operations'],
-  ['preparing', 'Preparing dispatch'],
-  ['in_route', 'On route'],
-  ['delivered', 'Delivered'],
-];
+const steps = computed(() => order.value ? buildOrderTrackingSteps(order.value, events.value) : []);
 </script>
 
 <template>
@@ -45,12 +35,11 @@ const steps = [
       <button class="btn btn-ghost btn-sm" @click="router.push('/portal/purchase-orders')"><i class="pi pi-arrow-left"></i> Purchase Orders</button>
       <div style="flex:1">
         <div class="flow-row">
-          <span class="page-title mono">{{ order.id }}</span>
+          <span class="page-title mono">{{ displayCode(order) }}</span>
           <span :class="'badge ' + orderStatusBadge(order.status)">{{ orderStatusLabel(order.status) }}</span>
         </div>
         <div class="page-subtitle">Delivery {{ order.requestedDeliveryDate }} - {{ dispatch?.routeName || 'Route not assigned yet' }}</div>
       </div>
-      <span class="demo-label">Simulated tracking</span>
     </div>
 
     <section class="buyer-shell-band" style="margin-bottom:18px">
@@ -68,9 +57,10 @@ const steps = [
         <div class="flow-panel-head"><div class="flow-title">Purchase Order Timeline</div></div>
         <div class="flow-panel-pad">
           <div class="flow-timeline-horizontal">
-            <div v-for="([key, label], index) in steps" :key="key" class="flow-track-step" :class="orderStepState(order.status, key)">
-              <div class="flow-track-index">{{ index + 1 }}</div>
-              <div class="flow-track-label">{{ label }}</div>
+            <div v-for="step in steps" :key="step.key" class="flow-track-step" :class="step.state">
+              <div class="flow-track-index">{{ step.index }}</div>
+              <div class="flow-track-label">{{ step.label }}</div>
+              <div class="flow-track-date">{{ step.dateLabel }}</div>
             </div>
           </div>
         </div>
@@ -136,7 +126,7 @@ const steps = [
         <div class="flow-panel-pad flow-stack">
           <div class="banner banner-info" style="margin-bottom:0">
             <i class="pi pi-map"></i>
-            <div>Map tracking and telemetry are simulated for the demo; real integration remains a future Premium capability.</div>
+            <div>Map tracking and telemetry are planned for Premium operations and will appear here when connected to live route data.</div>
           </div>
           <div v-for="log in temps" :key="log.id" class="flow-row-between">
             <span>{{ new Date(log.timestamp).toLocaleTimeString('en-US') }}</span>

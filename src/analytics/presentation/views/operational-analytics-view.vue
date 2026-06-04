@@ -3,9 +3,9 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useDataStore } from '@/app/application/stores/data.store';
 import { useAuthStore } from '@/iam/application/iam.store';
+import { daysUntil, orderStatusLabel, orderStatusBadge } from '@/shared/status';
 
 const { t } = useI18n();
-import { daysUntil, orderStatusLabel, orderStatusBadge } from '@/shared/status';
 
 const ds = useDataStore();
 const auth = useAuthStore();
@@ -93,20 +93,20 @@ const maxCatRevenue = computed(() => Math.max(...categoryRevenue.value.map(([, v
     </div>
   </div>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-bottom:20px">
+  <div class="analytics-grid-2">
 
     <!-- Orders by status -->
     <div class="card" style="overflow:hidden">
       <div class="card-header"><span class="card-title">{{ t('operationalAnalytics.byStatus') }}</span></div>
-      <table class="data-table">
+      <table class="data-table analytics-status-table">
         <thead><tr><th>{{ t('operationalAnalytics.table.status') }}</th><th>{{ t('operationalAnalytics.table.count') }}</th><th>{{ t('operationalAnalytics.table.pct') }}</th></tr></thead>
         <tbody>
           <tr v-for="[s, count] in statusCounts" :key="s">
             <td><span :class="'badge ' + orderStatusBadge(s)">{{ orderStatusLabel(s) }}</span></td>
             <td style="font-weight:600">{{ count }}</td>
             <td>
-              <div style="display:flex;align-items:center;gap:8px">
-                <div style="flex:1;height:6px;background:#F3F0EC;border-radius:9999px;overflow:hidden">
+              <div class="analytics-percent-cell">
+                <div class="analytics-percent-bar">
                   <div :style="{ width: Math.round(count / totalOrders * 100) + '%', height: '100%', background: '#2563EB', borderRadius: '9999px' }"></div>
                 </div>
                 <span style="font-size:11px;color:#6B7280;min-width:28px">{{ Math.round(count / totalOrders * 100) }}%</span>

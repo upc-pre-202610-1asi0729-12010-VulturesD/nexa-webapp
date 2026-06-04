@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import { useDataStore } from '@/app/application/stores/data.store';
 import { useAuthStore } from '@/iam/application/iam.store';
+import { creditSummary } from '@/shared/credit';
 
 const router = useRouter();
 const toast = useToast();
@@ -33,16 +34,17 @@ function proceedToProducts() {
   step.value = 2;
 }
 const isCreditBlocked = computed(() => {
-  const c = selectedClient.value;
-  return !!c?.creditLimit && c.creditUsed >= c.creditLimit;
+  const credit = creditSummary(selectedClient.value || {});
+  return ['blocked', 'overdue'].includes(credit.status) || (credit.limit > 0 && credit.available < total.value);
 });
+const selectedCredit = computed(() => creditSummary(selectedClient.value || {}));
 const selectedClientState = computed(() => {
   const c = selectedClient.value;
   if (!c) return { tone: 'neutral', label: 'No client selected', message: 'Select a client to validate commercial conditions.' };
   if (isCreditBlocked.value) {
     return { tone: 'danger', label: 'Blocked', message: 'Credit limit is exhausted. Order cannot continue.' };
   }
-  if (creditPercent(c) >= 80) {
+  if (selectedCredit.value.percent >= 80) {
     return { tone: 'warning', label: 'Review credit', message: 'Credit usage is high. Confirm condition before order entry.' };
   }
   if (c.status !== 'active') {
@@ -66,14 +68,6 @@ const filteredClients = computed(() => {
     ].filter(Boolean).some(value => String(value).toLowerCase().includes(q));
   });
 });
-function creditPercent(c) {
-  if (!c.creditLimit) return 0;
-  return Math.min(100, Math.round(c.creditUsed / c.creditLimit * 100));
-}
-function creditColor(c) {
-  const pct = creditPercent(c);
-  return pct >= 100 ? '#EF4444' : pct >= 80 ? '#F97316' : '#22C55E';
-}
 function addLine(p) {
   const max = Math.max(0, p.stock - p.reserved);
   if (!max) return;
@@ -220,23 +214,24 @@ function confirm() {
               <span style="font-weight:600">{{ selectedClient.type }}</span>
             </div>
 
-            <template v-if="selectedClient.creditLimit">
+            <template v-if="selectedCredit.limit">
               <div class="divider" style="margin:10px 0"></div>
-              <div style="font-size:10px;font-weight:600;color:#6B7280;text-transform:uppercase;margin-bottom:6px">Credit</div>
+              <div style="font-size:10px;font-weight:600;color:#6B7280;text-transform:uppercase;margin-bottom:6px">Monthly Credit</div>
               <div style="display:flex;justify-content:space-between;font-size:11px;color:#6B7280;margin-bottom:4px">
-                <span>Used: S/ {{ selectedClient.creditUsed.toLocaleString() }}</span>
-                <span>Limit: S/ {{ selectedClient.creditLimit.toLocaleString() }}</span>
+                <span>Used: S/ {{ selectedCredit.used.toLocaleString() }}</span>
+                <span>Available: S/ {{ selectedCredit.available.toLocaleString() }}</span>
               </div>
               <div class="credit-bar-wrap" style="margin-bottom:6px">
-                <div class="credit-bar" :style="{ width: creditPercent(selectedClient) + '%', background: creditColor(selectedClient) }"></div>
+                <div class="credit-bar" :style="{ width: selectedCredit.percent + '%', background: selectedCredit.barColor }"></div>
               </div>
-              <div v-if="selectedClient.creditUsed >= selectedClient.creditLimit" class="banner banner-danger" style="margin-top:8px">
+              <div class="flow-note">Period {{ selectedCredit.period }} - due {{ selectedCredit.dueDate }}</div>
+              <div v-if="isCreditBlocked" class="banner banner-danger" style="margin-top:8px">
                 <i class="pi pi-times-circle"></i>
-                <div>Credit exhausted. The purchase order will remain blocked until regularized.</div>
+                <div>Monthly credit is blocked, overdue or insufficient for this order.</div>
               </div>
-              <div v-else-if="creditPercent(selectedClient) >= 80" class="banner banner-warning" style="margin-top:8px">
+              <div v-else-if="selectedCredit.percent >= 80" class="banner banner-warning" style="margin-top:8px">
                 <i class="pi pi-exclamation-triangle"></i>
-                <div>Credit at {{ creditPercent(selectedClient) }}%. Verify before confirming.</div>
+                <div>Credit at {{ selectedCredit.percent }}%. Verify before confirming.</div>
               </div>
             </template>
             <template v-else>

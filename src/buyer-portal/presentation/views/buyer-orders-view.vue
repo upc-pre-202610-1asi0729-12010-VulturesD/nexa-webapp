@@ -3,23 +3,18 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/iam/application/iam.store';
 import { useDataStore } from '@/app/application/stores/data.store';
-import { orderStatusLabel, orderStatusBadge, orderStepState } from '@/shared/status';
+import { orderStatusLabel, orderStatusBadge, buildOrderTrackingSteps, displayCode, recordTimestamp } from '@/shared/status';
 
 const router = useRouter();
 const auth = useAuthStore();
 const ds = useDataStore();
 
-const orders = computed(() => ds.D.purchaseOrders.filter(order => order.clientId === auth.user?.clientId));
-const steps = [
-  ['submitted', 'Request received'],
-  ['validating', 'Validation'],
-  ['confirmed', 'Confirmed'],
-  ['document_pending', 'Business Documents'],
-  ['ready_for_dispatch', 'Ready'],
-  ['preparing', 'Preparing'],
-  ['in_route', 'On route'],
-  ['delivered', 'Delivered'],
-];
+const orders = computed(() =>
+  ds.D.purchaseOrders
+    .filter(order => order.clientId === auth.user?.clientId)
+    .sort((a, b) => recordTimestamp(b, ds.timelineForOrder(b.id)) - recordTimestamp(a, ds.timelineForOrder(a.id)))
+);
+const stepsFor = (order) => buildOrderTrackingSteps(order, ds.timelineForOrder(order.id));
 </script>
 
 <template>
@@ -42,7 +37,7 @@ const steps = [
       <div class="flow-row-between" style="align-items:flex-start;margin-bottom:14px">
         <div>
           <div class="flow-row" style="margin-bottom:5px">
-            <span class="mono" style="font-weight:800;color:#1D4ED8">{{ order.id }}</span>
+            <span class="mono" style="font-weight:800;color:#1D4ED8">{{ displayCode(order) }}</span>
             <span :class="'badge ' + orderStatusBadge(order.status)">{{ orderStatusLabel(order.status) }}</span>
           </div>
           <div class="flow-note">{{ order.createdAt?.slice(0, 10) }} - {{ ds.orderItemsFor(order.id).length }} item(s) - {{ order.totalEstimatedWeightKg }} kg</div>
@@ -55,13 +50,14 @@ const steps = [
 
       <div class="flow-timeline-horizontal">
         <div
-          v-for="([key, label], index) in steps"
-          :key="key"
+          v-for="step in stepsFor(order)"
+          :key="step.key"
           class="flow-track-step"
-          :class="orderStepState(order.status, key)"
+          :class="step.state"
         >
-          <div class="flow-track-index">{{ index + 1 }}</div>
-          <div class="flow-track-label">{{ label }}</div>
+          <div class="flow-track-index">{{ step.index }}</div>
+          <div class="flow-track-label">{{ step.label }}</div>
+          <div class="flow-track-date">{{ step.dateLabel }}</div>
         </div>
       </div>
     </article>
