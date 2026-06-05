@@ -51,7 +51,7 @@ const api = Object.fromEntries(
 
 /**
  * Central store for runtime data.
- * Loads business data from the configured Fake API, with local server fallback in shared infrastructure.
+ * Loads business data from the configured Mock API, with local server fallback in shared infrastructure.
  */
 export const useDataStore = defineStore('data', () => {
   const D = ref({
@@ -699,7 +699,7 @@ export const useDataStore = defineStore('data', () => {
       activity: data.activityLog || [],
     });
     if (!D.value.products.length) {
-      // Keep empty state if cloud and local Fake API are unavailable.
+      // Keep empty state if cloud and local Mock API are unavailable.
     }
   }
 

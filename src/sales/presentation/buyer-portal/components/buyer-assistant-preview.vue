@@ -1,89 +1,130 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/iam/application/iam.store';
 import { useDataStore } from '@/app/application/stores/data.store';
 import { orderStatusLabel, displayCode } from '@/shared/status';
+import { buyerAssistantApiService } from '@/sales/infrastructure/buyer-portal/buyer-assistant-api';
 
+const { t, locale } = useI18n();
 const auth = useAuthStore();
 const ds = useDataStore();
 
 const open = ref(false);
 const draft = ref('');
+const loading = ref(false);
 const messages = ref([
   {
     role: 'assistant',
-    body: 'Ask about your requests, orders, documents or delivery status. I can guide you to the right portal action.',
+    body: t('portal.assistant.welcome'),
   },
 ]);
+const backendAssistantEnabled = import.meta.env.VITE_BUYER_ASSISTANT_API === 'true';
 
 const clientId = computed(() => auth.user?.clientId);
+const client = computed(() => ds.clientById(clientId.value));
 const myOrders = computed(() => ds.D.purchaseOrders.filter(order => order.clientId === clientId.value));
 const myDocs = computed(() => ds.D.businessDocuments.filter(doc => doc.clientId === clientId.value && doc.visibleToBuyer));
 const myPromos = computed(() => ds.D.promotions.filter(promo => promo.status === 'active' && ['buyer_portal', 'client_specific'].includes(promo.visibility)));
 const latestOrder = computed(() => myOrders.value.find(order => !['delivered', 'cancelled', 'rejected'].includes(order.status)) || myOrders.value[0]);
 
-const chips = [
-  'Where is my order?',
-  'Which documents are available?',
-  'Can I change my delivery window?',
-  'What products are on promotion?',
-  'How do I create a request?',
-  'What does commercial validation mean?',
-];
+const chips = computed(() => [
+  t('portal.assistant.chips.order'),
+  t('portal.assistant.chips.documents'),
+  t('portal.assistant.chips.delivery'),
+  t('portal.assistant.chips.promotions'),
+  t('portal.assistant.chips.request'),
+  t('portal.assistant.chips.validation'),
+]);
+
+const assistantContext = computed(() => ({
+  clientId: clientId.value,
+  clientName: client.value?.commercialName || client.value?.name || null,
+  activeOrderId: latestOrder.value?.id || null,
+  orderCount: myOrders.value.length,
+  visibleDocumentCount: myDocs.value.length,
+  visiblePromotionCount: myPromos.value.length,
+}));
+
+watch(locale, () => {
+  if (messages.value.length === 1 && messages.value[0]?.role === 'assistant') {
+    messages.value = [{ role: 'assistant', body: t('portal.assistant.welcome') }];
+  }
+});
 
 function answer(question) {
   const q = question.toLowerCase();
-  if (q.includes('where') || q.includes('order')) {
-    if (!latestOrder.value) return 'No confirmed purchase order is active yet. Open My Requests to review commercial validation status.';
-    return `Your latest purchase order ${displayCode(latestOrder.value)} is ${orderStatusLabel(latestOrder.value.status)}. Open My Orders to review the tracking timeline.`;
+  if (q.includes('where') || q.includes('order') || q.includes('pedido') || q.includes('orden') || q.includes('donde') || q.includes('dónde')) {
+    if (!latestOrder.value) return t('portal.assistant.answers.noOrder');
+    return t('portal.assistant.answers.order', {
+      code: displayCode(latestOrder.value),
+      status: orderStatusLabel(latestOrder.value.status, locale.value),
+    });
   }
   if (q.includes('document')) {
-    return `${myDocs.value.length} buyer-visible business document(s) are available. Some files may remain pending until commercial validation is completed.`;
+    return t('portal.assistant.answers.documents', { count: myDocs.value.length });
   }
-  if (q.includes('delivery window') || q.includes('change')) {
-    return 'Send a message in the purchase request conversation. The commercial team will confirm whether the change is possible.';
+  if (q.includes('delivery window') || q.includes('change') || q.includes('entrega') || q.includes('cambiar')) {
+    return t('portal.assistant.answers.delivery');
   }
-  if (q.includes('promotion') || q.includes('offer')) {
+  if (q.includes('promotion') || q.includes('offer') || q.includes('promocion') || q.includes('promoción') || q.includes('oferta')) {
     return myPromos.value.length
-      ? `${myPromos.value.length} active promotion(s) are visible in your Buyer Portal. Offers remain subject to commercial validation.`
-      : 'No active buyer-visible promotion is available right now.';
+      ? t('portal.assistant.answers.promotions', { count: myPromos.value.length })
+      : t('portal.assistant.answers.noPromotions');
   }
-  if (q.includes('create') || q.includes('request')) {
-    return 'Open Product Catalog, add authorized products to your request, then review quantities and delivery details in Request Builder.';
+  if (q.includes('create') || q.includes('request') || q.includes('solicitud') || q.includes('crear')) {
+    return t('portal.assistant.answers.request');
   }
-  if (q.includes('validation')) {
-    return 'Commercial validation means the supplier reviews product availability, delivery conditions, business documents and buyer account status before confirming a purchase order.';
+  if (q.includes('validation') || q.includes('validacion') || q.includes('validación')) {
+    return t('portal.assistant.answers.validation');
   }
-  return 'I can guide you to Product Catalog, My Requests, My Orders and Business Documents.';
+  return t('portal.assistant.answers.fallback');
 }
 
-function ask(text) {
+async function ask(text) {
   const question = String(text || draft.value).trim();
   if (!question) return;
   messages.value.push({ role: 'buyer', body: question });
-  messages.value.push({ role: 'assistant', body: answer(question) });
   draft.value = '';
+  loading.value = true;
+
+  let body = '';
+  if (backendAssistantEnabled) {
+    try {
+      const response = await buyerAssistantApiService.send({
+        message: question,
+        locale: locale.value,
+        context: assistantContext.value,
+      });
+      body = response?.answer || response?.message || response?.body || '';
+    } catch (error) {
+      body = '';
+    }
+  }
+
+  messages.value.push({ role: 'assistant', body: body || answer(question) });
+  loading.value = false;
 }
 </script>
 
 <template>
   <div class="assistant-preview" :class="{ open }">
-    <button class="assistant-launcher" @click="open = !open" aria-label="Open Nexa Assistant">
+    <button class="assistant-launcher" @click="open = !open" :aria-label="t('portal.assistant.open')">
       <i class="pi pi-sparkles" aria-hidden="true"></i>
-      <span>Nexa Assistant</span>
+      <span>{{ t('portal.assistant.title') }}</span>
     </button>
 
-    <section v-if="open" class="assistant-panel" aria-label="Nexa Assistant">
+    <section v-if="open" class="assistant-panel" :aria-label="t('portal.assistant.title')">
       <div class="assistant-head">
         <div>
-          <div class="assistant-title">Nexa Assistant</div>
-          <div class="assistant-subtitle">Buyer Portal guidance</div>
+          <div class="assistant-title">{{ t('portal.assistant.title') }}</div>
+          <div class="assistant-subtitle">{{ t('portal.assistant.subtitle') }}</div>
         </div>
-        <button class="btn btn-ghost btn-sm" @click="open = false" aria-label="Close assistant"><i class="pi pi-times"></i></button>
+        <button class="btn btn-ghost btn-sm" @click="open = false" :aria-label="t('portal.assistant.close')"><i class="pi pi-times"></i></button>
       </div>
 
       <div class="assistant-disclaimer">
-        Guidance is based on your visible portal records and available actions.
+        {{ t('portal.assistant.disclaimer') }}
       </div>
 
       <div class="assistant-chips">
@@ -94,11 +135,14 @@ function ask(text) {
         <div v-for="(message, index) in messages" :key="index" class="assistant-message" :class="message.role">
           {{ message.body }}
         </div>
+        <div v-if="loading" class="assistant-message assistant">
+          {{ t('portal.assistant.thinking') }}
+        </div>
       </div>
 
       <form class="assistant-input" @submit.prevent="ask()">
-        <input v-model="draft" type="text" placeholder="Ask about an order, document or request..." aria-label="Ask Nexa Assistant" />
-        <button class="btn btn-primary btn-sm" type="submit" :disabled="!draft.trim()">Send</button>
+        <input v-model="draft" type="text" :placeholder="t('portal.assistant.placeholder')" :aria-label="t('portal.assistant.inputLabel')" />
+        <button class="btn btn-primary btn-sm" type="submit" :disabled="!draft.trim() || loading">{{ t('portal.assistant.send') }}</button>
       </form>
     </section>
   </div>

@@ -73,6 +73,8 @@ Pinia stores remain feature-sized instead of one store per context. Examples:
 
 Infrastructure APIs are also feature-sized so future backend endpoints can be introduced per resource without changing context boundaries.
 
+The Buyer Portal assistant is prepared as Sales infrastructure through `src/sales/infrastructure/buyer-portal/buyer-assistant-api.js`. It targets `/api/v1/buyer-assistant/messages` when `VITE_BUYER_ASSISTANT_API=true`; otherwise the UI keeps using local deterministic guidance so the app remains stable before backend delivery.
+
 ## Mock API Boundary
 
 `server/db.json` and json-server remain as a mock API fallback used only until backend endpoints are available. Frontend infrastructure should treat it as temporary validation data, not as the production backend contract.
@@ -87,3 +89,5 @@ Imports must use the bounded-context folder, not the former feature root. Exampl
 - Use `@/catalog-management/...`, not `@/product-catalog/...`.
 - Use `@/logistics/...`, not `@/dispatch-orders/...`.
 - Keep cross-cutting utilities under `@/shared/...`.
+- Keep filenames in kebab-case, including entity and repository files such as `product.entity.js`, `dispatch.entity.js`, and `repository.js`.
+- Avoid case-only filename differences because Linux CI and deployment hosts are case-sensitive.

@@ -325,7 +325,7 @@ function saveLocal(showToast = true) {
         <div class="flow-panel-head">
           <div>
             <div class="flow-title">Team Access</div>
-            <div class="flow-subtitle">Creates local Fake API user records for role simulation. Initial password is demo1234.</div>
+            <div class="flow-subtitle">Creates local Mock API user records for role simulation. Initial password is demo1234.</div>
           </div>
           <button class="btn btn-secondary" @click="createUser"><i class="pi pi-user-plus"></i> Create user</button>
         </div>

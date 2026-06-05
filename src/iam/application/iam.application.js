@@ -4,7 +4,7 @@ import { UserAssembler } from '../infrastructure/user.assembler';
 /**
  * IAM application use cases.
  *
- * @summary Handles authentication logic against the fake API.
+ * @summary Handles authentication logic against the mock API.
  */
 export const iamApplication = {
   /**
