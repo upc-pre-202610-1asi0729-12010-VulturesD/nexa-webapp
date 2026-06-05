@@ -1,4 +1,4 @@
-import { ValueObject } from '@/shared/domain/model/value-object';
+import { ValueObject } from '@/shared/domain/model/value-objects/value-object';
 
 const ORDER_STATUS_FLOW = ['validating', 'confirmed', 'preparing', 'dispatched', 'delivered'];
 const ALLOWED_STATUSES = [...ORDER_STATUS_FLOW, 'blocked', 'cancelled'];

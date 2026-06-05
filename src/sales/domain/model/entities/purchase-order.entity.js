@@ -1,4 +1,4 @@
-import { Entity } from '@/shared/domain/model/entity';
+import { Entity } from '@/shared/domain/model/entities/entity';
 import { roundMoney } from '@/shared/utils/number.utils';
 import { OrderItem } from './order-item.entity';
 import { OrderStatus } from '../value-objects/purchase-order-status.value-object';

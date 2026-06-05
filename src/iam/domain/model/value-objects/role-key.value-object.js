@@ -1,4 +1,4 @@
-import { ValueObject } from '@/shared/domain/model/value-object';
+import { ValueObject } from '@/shared/domain/model/value-objects/value-object';
 
 const VALID_ROLE_KEYS = ['admin', 'commercial', 'logistics', 'buyer'];
 
