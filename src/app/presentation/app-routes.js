@@ -1,10 +1,9 @@
 import { analyticsRoutes } from '@/analytics/presentation/analytics-routes';
 import { salesRoutes, salesPortalRoutes } from '@/sales/presentation/sales.routes';
 import { logisticsRoutes } from '@/logistics/presentation/logistics.routes';
-import { businessDocumentsRoutes } from '@/business-documents/presentation/business-documents-routes';
+import { invoicingRoutes } from '@/invoicing/presentation/invoicing.routes';
 import { warehouseRoutes } from '@/warehouse/presentation/warehouse.routes';
 import { catalogManagementRoutes, catalogManagementPortalRoutes } from '@/catalog-management/presentation/catalog-management.routes';
-import { subscriptionsRoutes } from '@/subscriptions/presentation/subscriptions-routes';
 
 export const opsRoutes = {
   path: '/ops',
@@ -25,12 +24,11 @@ export const opsRoutes = {
     { path: 'commercial/orders/create', redirect: '/ops/commercial/manual-order-entry' },
     { path: 'commercial/orders/:id', redirect: to => `/ops/commercial/purchase-orders/${to.params.id}` },
     ...salesRoutes,
-    ...businessDocumentsRoutes,
+    ...invoicingRoutes,
     ...catalogManagementRoutes,
     ...warehouseRoutes,
     ...logisticsRoutes,
     ...analyticsRoutes,
-    ...subscriptionsRoutes,
     {
       path: 'settings',
       redirect: '/ops/operations/company-administration',
