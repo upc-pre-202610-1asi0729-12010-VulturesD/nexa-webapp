@@ -1,7 +1,7 @@
 import { baseApi } from './base-api';
 
 /**
- * Small REST endpoint wrapper for Fake API resources.
+ * Mock API fallback used only until backend endpoints are available.
  * Returns response data to keep current application services unchanged.
  */
 export class BaseEndpoint {

@@ -1,6 +1,6 @@
 # server
 
-Fake REST API for Nexa TB1. Uses [json-server](https://github.com/typicode/json-server) to serve `db.json` as a set of REST endpoints.
+Mock REST API fallback for Nexa TB1. Uses [json-server](https://github.com/typicode/json-server) to serve `db.json` as a set of REST endpoints.
 
 This is not a real backend. It simulates the resource layer during TB1 so the frontend can demonstrate Axios integration without an actual server.
 
