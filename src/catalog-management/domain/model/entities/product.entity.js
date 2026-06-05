@@ -1,4 +1,4 @@
-import { Entity } from '@/shared/domain/model/entity';
+import { Entity } from '@/shared/domain/model/entities/entity';
 import { TemperatureRange } from '../value-objects/temperature-range.value-object';
 import { toNumber } from '@/shared/utils/number.utils';
 

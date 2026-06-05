@@ -1,4 +1,4 @@
-import { ValueObject } from '@/shared/domain/model/value-object';
+import { ValueObject } from '@/shared/domain/model/value-objects/value-object';
 
 export class TemperatureRange extends ValueObject {
   constructor(value = '') {

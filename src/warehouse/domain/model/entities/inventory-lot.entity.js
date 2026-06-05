@@ -1,4 +1,4 @@
-import { Entity } from '@/shared/domain/model/entity';
+import { Entity } from '@/shared/domain/model/entities/entity';
 import { daysBetween, isExpired, isWithinDays } from '@/shared/utils/date.utils';
 import { toNumber } from '@/shared/utils/number.utils';
 

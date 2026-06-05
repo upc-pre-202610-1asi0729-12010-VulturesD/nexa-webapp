@@ -6,7 +6,7 @@
 
 - Bounded context:
 - User-facing impact:
-- Fake API impact:
+- Mock API impact:
 
 ## Validation
 
