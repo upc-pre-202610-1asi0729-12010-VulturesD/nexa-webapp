@@ -1,4 +1,4 @@
-import { Entity } from '@/shared/domain/model/entity';
+import { Entity } from '@/shared/domain/model/entities/entity';
 import { DispatchStatus } from '../value-objects/dispatch-status.value-object';
 import { PodEvidenceReference } from '../value-objects/pod-evidence-reference.value-object';
 

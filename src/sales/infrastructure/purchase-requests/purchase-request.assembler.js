@@ -1,4 +1,4 @@
-import { PurchaseRequest } from '@/sales/domain/model/purchase-request.entity';
+import { PurchaseRequest } from '@/sales/domain/model/entities/purchase-request.entity';
 
 export class PurchaseRequestAssembler {
   static toEntity(resource = {}) {
