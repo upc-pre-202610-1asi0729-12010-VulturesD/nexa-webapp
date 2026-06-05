@@ -21,7 +21,7 @@ body:
         - Invoicing
         - Catalog Management
         - Shared UI
-        - Fake API
+        - Mock API
     validations:
       required: true
   - type: textarea
