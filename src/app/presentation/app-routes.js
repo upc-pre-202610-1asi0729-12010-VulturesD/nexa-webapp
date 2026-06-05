@@ -1,4 +1,4 @@
-import { analyticsRoutes } from '@/analytics/presentation/analytics-routes';
+import { sharedRoutes } from '@/shared/presentation/shared.routes';
 import { salesRoutes, salesPortalRoutes } from '@/sales/presentation/sales.routes';
 import { logisticsRoutes } from '@/logistics/presentation/logistics.routes';
 import { invoicingRoutes } from '@/invoicing/presentation/invoicing.routes';
@@ -28,7 +28,7 @@ export const opsRoutes = {
     ...catalogManagementRoutes,
     ...warehouseRoutes,
     ...logisticsRoutes,
-    ...analyticsRoutes,
+    ...sharedRoutes,
     {
       path: 'settings',
       redirect: '/ops/operations/company-administration',
