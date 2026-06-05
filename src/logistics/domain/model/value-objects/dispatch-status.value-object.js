@@ -1,4 +1,4 @@
-import { ValueObject } from '@/shared/domain/model/value-objects/value-object';
+import { ValueObject } from '@/shared/domain/model/value-object';
 
 const DISPATCH_STATUSES = ['ready', 'in_transit', 'delivered', 'cancelled'];
 

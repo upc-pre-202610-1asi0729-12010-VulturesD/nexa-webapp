@@ -1,4 +1,4 @@
-import { Entity } from '@/shared/domain/model/entities/entity';
+import { Entity } from '@/shared/domain/model/entity';
 
 export class AnalyticsSummary extends Entity {
   constructor({

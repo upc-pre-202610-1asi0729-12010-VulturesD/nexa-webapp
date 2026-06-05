@@ -1,4 +1,4 @@
-import { Entity } from '@/shared/domain/model/entities/entity';
+import { Entity } from '@/shared/domain/model/entity';
 import { roundMoney, toNumber } from '@/shared/utils/number.utils';
 
 export class OrderItem extends Entity {

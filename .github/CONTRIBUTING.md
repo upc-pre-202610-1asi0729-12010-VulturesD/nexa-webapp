@@ -29,6 +29,6 @@ Use Conventional Commits where practical:
 
 ```txt
 feat(sales): add order validation state
-fix(mock-api): align endpoint route names
+fix(fake-api): align endpoint route names
 docs(readme): add validation evidence
 ```

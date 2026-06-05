@@ -1,4 +1,4 @@
-import { Entity } from '@/shared/domain/model/entities/entity';
+import { Entity } from '@/shared/domain/model/entity';
 import { toNumber } from '@/shared/utils/number.utils';
 
 export class Client extends Entity {

@@ -1,4 +1,4 @@
-import { Entity } from '@/shared/domain/model/entities/entity';
+import { Entity } from '@/shared/domain/model/entity';
 import { RoleKey } from '../value-objects/role-key.value-object';
 
 export class User extends Entity {

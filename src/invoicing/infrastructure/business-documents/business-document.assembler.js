@@ -1,4 +1,4 @@
-import { BusinessDocument } from '@/invoicing/domain/model/entities/business-document.entity';
+import { BusinessDocument } from '@/invoicing/domain/model/business-document.entity';
 
 export class BusinessDocumentAssembler {
   static toEntity(resource = {}) {

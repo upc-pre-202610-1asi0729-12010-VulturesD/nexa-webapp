@@ -1,4 +1,4 @@
-import { Entity } from '@/shared/domain/model/entities/entity';
+import { Entity } from '@/shared/domain/model/entity';
 
 export class Warehouse extends Entity {
   constructor({ id, name, address, zones = [] } = {}) {
