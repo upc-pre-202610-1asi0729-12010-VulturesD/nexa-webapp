@@ -26,6 +26,12 @@ export class BaseEndpoint {
     return this.useCoreBackend && this.api.coreBackendEnabled ? this.coreHttp : this.http;
   }
 
+  primaryEndpointPath() {
+    return this.useCoreBackend && this.api.coreBackendEnabled
+      ? this.endpointPath
+      : this.fallbackEndpointPath;
+  }
+
   shouldUseFallback() {
     if (!this.api.mockFallbackEnabled) return false;
     if (this.useCoreBackend && this.api.coreBackendEnabled) return true;
@@ -34,7 +40,7 @@ export class BaseEndpoint {
 
   async request(operation, validate) {
     try {
-      const data = await operation(this.primaryHttp(), this.endpointPath);
+      const data = await operation(this.primaryHttp(), this.primaryEndpointPath());
       if (!validate || validate(data)) return data;
       throw new Error(`Invalid API payload for ${this.endpointPath}`);
     } catch (primaryError) {
