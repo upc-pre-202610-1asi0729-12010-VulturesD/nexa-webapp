@@ -1,11 +1,12 @@
 <script setup>
+import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useToast } from 'primevue/usetoast';
 import { useCartStore } from '@/app/application/stores/cart.store';
 import { useAuthStore } from '@/iam/application/iam.store';
 import { useDataStore } from '@/app/application/stores/data.store';
-import BuyerAssistantPreview from '@/buyer-portal/presentation/components/buyer-assistant-preview.vue';
+import BuyerAssistantPreview from '@/sales/presentation/buyer-portal/components/buyer-assistant-preview.vue';
 import i18n from '@/i18n';
 import logo from '@/assets/img/nexa.svg';
 
@@ -16,6 +17,7 @@ const toast  = useToast();
 const cart   = useCartStore();
 const auth   = useAuthStore();
 const ds     = useDataStore();
+const mobileMenuOpen = ref(false);
 
 const navItems = [
   { to: '/portal/home', labelKey: 'portal.nav.home', icon: 'pi-home' },
@@ -29,16 +31,23 @@ const navItems = [
   { to: '/portal/profile', labelKey: 'portal.nav.profile', icon: 'pi-user-edit' },
 ];
 
-const footerLinks = [
+const bottomNavItems = computed(() => navItems.slice(0, 4));
+const mobileMenuItems = computed(() => navItems.slice(4));
+const footerLinks = computed(() => [
   { to: '/portal/legal/terms', label: t('footer.terms') },
   { to: '/portal/legal/privacy', label: t('footer.privacy') },
   { to: '/portal/support', label: t('footer.support') },
-];
+]);
 
 function setLang(l) {
   locale.value = l;
   i18n.global.locale.value = l;
   localStorage.setItem('nexa.lang', l);
+}
+
+function goPortal(to) {
+  mobileMenuOpen.value = false;
+  router.push(to);
 }
 
 function goRequestBuilder() {
@@ -80,6 +89,15 @@ function goRequestBuilder() {
           {{ t('portal.cart') }}
           <span class="cart-count" v-if="cart.count" aria-live="polite">{{ cart.count }}</span>
         </button>
+        <button
+          class="portal-menu-btn"
+          type="button"
+          :aria-label="t('portal.nav.more')"
+          :aria-expanded="mobileMenuOpen"
+          @click="mobileMenuOpen = !mobileMenuOpen"
+        >
+          <i class="pi pi-bars" aria-hidden="true"></i>
+        </button>
       </div>
     </header>
 
@@ -96,27 +114,66 @@ function goRequestBuilder() {
           :key="link.to"
           type="button"
           class="portal-footer-link"
-          @click="router.push(link.to)"
+          @click="goPortal(link.to)"
         >
           {{ link.label }}
         </button>
       </nav>
     </footer>
 
+    <transition name="fade">
+      <div
+        v-if="mobileMenuOpen"
+        class="portal-mobile-menu-backdrop"
+        @click="mobileMenuOpen = false"
+        aria-hidden="true"
+      ></div>
+    </transition>
+
+    <nav
+      class="portal-mobile-menu"
+      :class="{ open: mobileMenuOpen }"
+      role="navigation"
+      :aria-label="t('portal.nav.more')"
+    >
+      <button
+        v-for="n in mobileMenuItems"
+        :key="n.to"
+        type="button"
+        class="portal-mobile-menu-item"
+        :class="{ active: route.path.startsWith(n.to) }"
+        :aria-current="route.path.startsWith(n.to) ? 'page' : undefined"
+        @click="goPortal(n.to)"
+      >
+        <i :class="['pi', n.icon]" aria-hidden="true"></i>
+        <span>{{ t(n.labelKey) }}</span>
+      </button>
+    </nav>
+
     <nav class="portal-bottom-nav" role="navigation" :aria-label="t('common.mobileNav')">
       <button
-        v-for="n in navItems"
+        v-for="n in bottomNavItems"
         :key="n.to"
         class="portal-bottom-nav-item"
         :class="{ active: route.path.startsWith(n.to) }"
         :aria-current="route.path.startsWith(n.to) ? 'page' : undefined"
-        @click="router.push(n.to)"
+        @click="goPortal(n.to)"
       >
         <i
           :class="['pi', n.icon]"
           aria-hidden="true"
         ></i>
         <span>{{ t(n.labelKey) }}</span>
+      </button>
+      <button
+        type="button"
+        class="portal-bottom-nav-item"
+        :class="{ active: mobileMenuItems.some(n => route.path.startsWith(n.to)) }"
+        :aria-expanded="mobileMenuOpen"
+        @click="mobileMenuOpen = !mobileMenuOpen"
+      >
+        <i class="pi pi-bars" aria-hidden="true"></i>
+        <span>{{ t('portal.nav.more') }}</span>
       </button>
     </nav>
 
@@ -127,7 +184,7 @@ function goRequestBuilder() {
     <aside v-if="cart.isOpen" class="drawer open" role="dialog" :aria-label="t('portal.cart')" aria-modal="true">
       <div class="drawer-header">
         <div class="drawer-title">{{ t('portal.cart') }} ({{ cart.count }})</div>
-        <button class="btn btn-ghost btn-sm" @click="cart.toggle()" :aria-label="'Close cart'"><i class="pi pi-times" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost btn-sm" @click="cart.toggle()" :aria-label="t('portal.cartClose')"><i class="pi pi-times" aria-hidden="true"></i></button>
       </div>
       <div class="drawer-body">
         <div v-if="!cart.items.length" class="empty-state">
@@ -143,10 +200,10 @@ function goRequestBuilder() {
             <div style="font-size:13px;font-weight:500">{{ i.name }}</div>
             <div style="font-size:11px;color:#9CA3AF">S/ {{ i.price.toFixed(2) }} / {{ i.unit }}</div>
             <div style="display:flex;gap:6px;align-items:center;margin-top:6px">
-              <button class="btn btn-ghost btn-sm" style="padding:2px 8px" @click="cart.setQty(i.productId, i.qty - 1)" :aria-label="`Decrease quantity of ${i.name}`">−</button>
-              <span style="font-size:13px;font-weight:600;min-width:24px;text-align:center" :aria-label="`Quantity: ${i.qty}`">{{ i.qty }}</span>
-              <button class="btn btn-ghost btn-sm" style="padding:2px 8px" @click="cart.setQty(i.productId, i.qty + 1)" :aria-label="`Increase quantity of ${i.name}`">+</button>
-              <button class="btn btn-ghost btn-sm" style="margin-left:auto" @click="cart.remove(i.productId)" :aria-label="`Remove ${i.name} from cart`"><i class="pi pi-trash" aria-hidden="true"></i></button>
+              <button class="btn btn-ghost btn-sm" style="padding:2px 8px" @click="cart.setQty(i.productId, i.qty - 1)" :aria-label="t('portal.cartDecrease', { name: i.name })">−</button>
+              <span style="font-size:13px;font-weight:600;min-width:24px;text-align:center" :aria-label="t('portal.cartQuantity', { qty: i.qty })">{{ i.qty }}</span>
+              <button class="btn btn-ghost btn-sm" style="padding:2px 8px" @click="cart.setQty(i.productId, i.qty + 1)" :aria-label="t('portal.cartIncrease', { name: i.name })">+</button>
+              <button class="btn btn-ghost btn-sm" style="margin-left:auto" @click="cart.remove(i.productId)" :aria-label="t('portal.cartRemove', { name: i.name })"><i class="pi pi-trash" aria-hidden="true"></i></button>
             </div>
           </div>
           <div style="font-weight:700;font-size:13px">S/ {{ (i.qty * i.price).toFixed(2) }}</div>
@@ -157,7 +214,7 @@ function goRequestBuilder() {
           <span>{{ t('portal.total') }}</span><span>S/ {{ cart.total.toFixed(2) }}</span>
         </div>
         <button class="btn btn-primary" style="justify-content:center" @click="goRequestBuilder">
-          <i class="pi pi-send" aria-hidden="true"></i> Submit Request
+          <i class="pi pi-send" aria-hidden="true"></i> {{ t('portal.submitRequest') }}
         </button>
       </div>
     </aside>

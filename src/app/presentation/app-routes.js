@@ -1,16 +1,9 @@
-import { analyticsRoutes } from '@/analytics/presentation/analytics-routes';
-import { buyerPortalRoutes } from '@/buyer-portal/presentation/buyer-portal-routes';
-import { clientsRoutes } from '@/clients/presentation/clients-routes';
-import { commercialValidationRoutes } from '@/commercial-validation/presentation/commercial-validation-routes';
-import { customerPortalsRoutes } from '@/customer-portals/presentation/customer-portals-routes';
-import { dispatchOrdersRoutes } from '@/dispatch-orders/presentation/dispatch-orders-routes';
-import { businessDocumentsRoutes } from '@/business-documents/presentation/business-documents-routes';
-import { inventoryControlRoutes } from '@/inventory-control/presentation/inventory-control-routes';
-import { productCatalogRoutes, productCatalogPortalRoutes } from '@/product-catalog/presentation/product-catalog-routes';
-import { promotionsRoutes } from '@/promotions/presentation/promotions-routes';
-import { purchaseOrdersRoutes } from '@/purchase-orders/presentation/purchase-orders-routes';
-import { purchaseRequestsRoutes } from '@/purchase-requests/presentation/purchase-requests-routes';
-import { subscriptionsRoutes } from '@/subscriptions/presentation/subscriptions-routes';
+import { sharedRoutes } from '@/shared/presentation/shared.routes';
+import { salesRoutes, salesPortalRoutes } from '@/sales/presentation/sales.routes';
+import { logisticsRoutes } from '@/logistics/presentation/logistics.routes';
+import { invoicingRoutes } from '@/invoicing/presentation/invoicing.routes';
+import { warehouseRoutes } from '@/warehouse/presentation/warehouse.routes';
+import { catalogManagementRoutes, catalogManagementPortalRoutes } from '@/catalog-management/presentation/catalog-management.routes';
 
 export const opsRoutes = {
   path: '/ops',
@@ -30,18 +23,12 @@ export const opsRoutes = {
     { path: 'commercial/orders', redirect: '/ops/commercial/purchase-orders' },
     { path: 'commercial/orders/create', redirect: '/ops/commercial/manual-order-entry' },
     { path: 'commercial/orders/:id', redirect: to => `/ops/commercial/purchase-orders/${to.params.id}` },
-    ...commercialValidationRoutes,
-    ...purchaseRequestsRoutes,
-    ...businessDocumentsRoutes,
-    ...promotionsRoutes,
-    ...customerPortalsRoutes,
-    ...productCatalogRoutes,
-    ...inventoryControlRoutes,
-    ...purchaseOrdersRoutes,
-    ...dispatchOrdersRoutes,
-    ...clientsRoutes,
-    ...analyticsRoutes,
-    ...subscriptionsRoutes,
+    ...salesRoutes,
+    ...invoicingRoutes,
+    ...catalogManagementRoutes,
+    ...warehouseRoutes,
+    ...logisticsRoutes,
+    ...sharedRoutes,
     {
       path: 'settings',
       redirect: '/ops/operations/company-administration',
@@ -56,7 +43,7 @@ export const portalRoutes = {
   meta: { requiresAuth: true, scope: 'portal' },
   children: [
     { path: '', redirect: '/portal/home' },
-    ...buyerPortalRoutes,
-    ...productCatalogPortalRoutes,
+    ...salesPortalRoutes,
+    ...catalogManagementPortalRoutes,
   ],
 };

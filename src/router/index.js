@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import { opsRoutes, portalRoutes } from '@/app/presentation/app-routes';
-import { iamRoutes } from '@/iam/presentation/iam-routes';
+import { iamRoutes } from '@/iam/presentation/iam.routes';
 import { useAuthStore } from '@/iam/application/iam.store';
 
 const routes = [

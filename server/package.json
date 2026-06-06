@@ -1,8 +1,8 @@
 {
-  "name": "nexa-fake-api",
+  "name": "nexa-mock-api",
   "version": "1.0.0",
   "private": true,
-  "description": "Nexa Fake API — json-server instance for TB1 demo. Deploy on Render as a Node Web Service.",
+  "description": "Nexa mock API fallback for TB1 demo. Deploy on Render as a Node Web Service.",
   "scripts": {
     "start": "json-server --watch db.json --routes routes.json --host 0.0.0.0 --port $PORT"
   },

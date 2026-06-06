@@ -97,7 +97,7 @@ The `nexa-webapp` repository contains the single page application (SPA) that man
 | **Warehouse** | Stock visibility and cold-storage movement tracking. | `InventoryLots`, `Warehouses` |
 | **Logistics** | Dispatch planning and delivery route monitoring. | `Routes`, `Dispatches` |
 | **Invoicing** | Invoice-ready evidence and business document support. | `InvoiceRecords`, `Documents` |
-| **Catalog** | Product availability and pricing visibility. | `Products`, `PriceLists` |
+| **Catalog Management** | Product availability and pricing visibility. | `Products`, `Promotions` |
 
 ---
 
@@ -148,16 +148,17 @@ The `nexa-webapp` repository contains the single page application (SPA) that man
 ```text
 src/
 ├── app/                    # Global shell, custom layouts, and main routing
+├── catalog-management/     # Product catalog and promotions context
+├── sales/                  # Orders, requests, validation, clients, and buyer portal
+├── logistics/              # Dispatch, delivery tracking, cold-chain operations, portals
+├── warehouse/              # Inventory lots, stock movements, and warehouse zones
+├── invoicing/              # Business documents, subscriptions, and billing views
 ├── iam/                    # Authentication context & session security
-├── product-catalog/        # Catalog management context
-├── purchase-orders/        # Sales context (order logs & coordination)
-├── purchase-requests/      # Purchase request forms
-├── dispatch-orders/        # Logistics context (routes & shipment dispatches)
-├── inventory-control/      # Warehouse context (cold-storage monitoring & lots)
-├── business-documents/     # Invoicing documents context
-├── buyer-portal/           # Customer portal views
 ├── shared/                 # Infrastructure helpers and custom styles
-└── assets/                 # Shared UI assets and configurations
+├── assets/                 # Shared UI assets and configurations
+├── i18n/                   # Global localization
+├── router/                 # Global router and guards
+└── main.js                 # Application bootstrap
 ```
 
 ---
@@ -172,7 +173,7 @@ To keep development organized, specific contexts are assigned to primary owners:
 | **Logistics** | Cmarin2802 | DiegoS284, GerardRojasMancilla |
 | **Warehouse** | JoaquinVerde115 | R0obxdnt-bit, DiegoS284 |
 | **Invoicing** | GerardRojasMancilla | Cmarin2802, DiegoS284 |
-| **Catalog** | R0obxdnt-bit | JoaquinVerde115, DiegoS284 |
+| **Catalog Management** | R0obxdnt-bit | JoaquinVerde115, DiegoS284 |
 
 ---
 

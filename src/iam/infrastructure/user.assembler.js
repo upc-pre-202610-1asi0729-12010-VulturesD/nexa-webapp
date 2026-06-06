@@ -1,4 +1,4 @@
-import { User } from '@/iam/domain/model/entities/User.entity';
+import { User } from '@/iam/domain/model/entities/user.entity';
 import { UserResource } from './user.resource';
 
 export const UserAssembler = {

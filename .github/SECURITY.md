@@ -18,7 +18,7 @@ Current security expectations cover:
 
 - Avoiding committed secrets.
 - Avoiding generated dependency folders.
-- Keeping Fake API data clearly marked as simulation.
+- Keeping Mock API data clearly marked as simulation.
 - Running `npm ci` and `npm run build` before merging.
 
 This WebApp does not claim production authentication, production telemetry, or production backend security.
