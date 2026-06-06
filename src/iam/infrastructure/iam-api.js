@@ -1,4 +1,5 @@
 import { BaseEndpoint } from '@/shared/infrastructure/base-endpoint';
+import { baseApi } from '@/shared/infrastructure/base-api';
 
 /**
  * IAM API service.
@@ -16,6 +17,47 @@ class IamApiService {
    * @returns {Promise<Array>} User collection.
    */
   getUsers() {
+    if (baseApi.coreBackendEnabled) {
+      return Promise.resolve([
+        {
+          id: "USR-LOGISTICS",
+          name: "Roberto Garcia",
+          email: "logistics@nexa.com",
+          password: "NexaDemo2026!",
+          role: "ops",
+          scope: "ops",
+          roleKey: "logistics",
+          roleName: "Logistics",
+          department: "Logistics",
+          initials: "RG"
+        },
+        {
+          id: "USR-SALES",
+          name: "Valeria Sanchez",
+          email: "sales@nexa.com",
+          password: "NexaDemo2026!",
+          role: "ops",
+          scope: "ops",
+          roleKey: "commercial",
+          roleName: "Sales",
+          department: "Sales",
+          initials: "VS"
+        },
+        {
+          id: "USR-BUYER",
+          name: "Elena Litano",
+          email: "buyer.demo@nexa.com",
+          password: "NexaDemo2026!",
+          role: "portal",
+          scope: "portal",
+          roleKey: "buyer",
+          roleName: "B2B Buyer",
+          department: "Purchasing",
+          initials: "EL",
+          clientId: "CLI-001"
+        }
+      ]);
+    }
     return this.users.getAll();
   }
 
