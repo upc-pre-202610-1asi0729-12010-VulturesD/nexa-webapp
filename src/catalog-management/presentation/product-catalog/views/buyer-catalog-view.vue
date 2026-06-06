@@ -100,7 +100,8 @@ const isInCart = (id) => cart.items.some(item => item.productId === id);
     <div class="grid-4 catalog-product-grid">
       <article v-for="product in filtered" :key="product.id" class="buyer-card">
       <div class="buyer-product-visual" :class="'cat-' + product.cat" @click="router.push('/portal/product-catalog/' + product.id)" style="cursor:pointer">
-        <i class="pi pi-box"></i>
+        <img v-if="product.imageUrl" class="buyer-product-image" :src="product.imageUrl" :alt="product.name" loading="lazy" />
+        <i v-else class="pi pi-box"></i>
         <span v-if="ds.promotionsForProduct(product.id).length" class="flow-pill flow-pill-amber" style="position:absolute;left:12px;top:12px">
           {{ t('catalog.offer') }}
         </span>

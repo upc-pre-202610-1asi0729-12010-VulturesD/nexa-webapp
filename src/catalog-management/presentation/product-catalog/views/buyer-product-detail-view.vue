@@ -35,7 +35,8 @@ const related = computed(() => product.value ? ds.D.products.filter(item => item
     <div class="flow-grid-12">
       <section class="buyer-card span-5">
         <div class="buyer-product-visual" :class="'cat-' + product.cat" style="height:300px">
-          <i class="pi pi-box" style="font-size:74px"></i>
+          <img v-if="product.imageUrl" class="buyer-product-image buyer-product-image-large" :src="product.imageUrl" :alt="product.name" />
+          <i v-else class="pi pi-box" style="font-size:74px"></i>
           <span v-if="promos.length" class="flow-pill flow-pill-amber" style="position:absolute;left:16px;top:16px">Active offer</span>
         </div>
       </section>

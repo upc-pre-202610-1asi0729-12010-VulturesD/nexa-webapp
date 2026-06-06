@@ -103,14 +103,23 @@ input, select, textarea { font-family: inherit; }
 /* ── Product Image Placeholder ── */
 .product-placeholder { height: 128px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; border-radius: 10px 10px 0 0; position: relative; overflow: hidden; }
 .product-placeholder::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(0,0,0,0.055) 1px, transparent 1px); background-size: 14px 14px; }
+.product-placeholder:has(.catalog-product-image)::before { display: none; }
 .product-placeholder .pp-icon { font-size: 28px; color: rgba(0,0,0,0.18); position: relative; z-index: 1; }
 .product-placeholder .pp-cat { font-size: 10px; font-weight: 600; color: rgba(0,0,0,0.32); text-transform: uppercase; letter-spacing: 0.07em; position: relative; z-index: 1; }
 .product-placeholder .pp-hint { font-size: 9px; color: rgba(0,0,0,0.22); letter-spacing: 0.04em; border: 1px dashed rgba(0,0,0,0.18); padding: 2px 7px; border-radius: 3px; position: relative; z-index: 1; }
+.catalog-product-image,
+.buyer-product-image { width: 100%; height: 100%; object-fit: cover; display: block; }
+.buyer-product-image { position: absolute; inset: 0; }
+.buyer-product-image-large { object-fit: contain; padding: 16px; background: #fff; }
 .cat-seafood    { background: linear-gradient(145deg, #EFF6FF, #DBEAFE); }
 .cat-poultry    { background: linear-gradient(145deg, #FFFBEB, #FEF3C7); }
 .cat-dairy      { background: linear-gradient(145deg, #F0FDF4, #DCFCE7); }
 .cat-coldcuts   { background: linear-gradient(145deg, #FFF1F2, #FFE4E6); }
 .cat-vegetables { background: linear-gradient(145deg, #F0FDF4, #DCFCE7); }
+.cat-cheese     { background: linear-gradient(145deg, #F0FDF4, #DCFCE7); }
+.cat-charcuterie { background: linear-gradient(145deg, #FFF1F2, #FFE4E6); }
+.cat-butter     { background: linear-gradient(145deg, #FEFCE8, #FEF3C7); }
+.cat-dessert    { background: linear-gradient(145deg, #FDF2F8, #FCE7F3); }
 .cat-default    { background: linear-gradient(145deg, #F9F7F4, #F3F0EC); }
 
 /* ── KPI Card ── */
