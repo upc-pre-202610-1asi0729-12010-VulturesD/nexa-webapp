@@ -1,4 +1,5 @@
 import { BaseEndpoint } from '@/shared/infrastructure/base-endpoint';
+import { baseApi } from '@/shared/infrastructure/base-api';
 
 /**
  * Inventory API service.
@@ -8,7 +9,10 @@ import { BaseEndpoint } from '@/shared/infrastructure/base-endpoint';
  */
 class InventoryApiService {
   constructor() {
-    this.lots = new BaseEndpoint('/api/v1/inventory-lots');
+    this.lots = new BaseEndpoint('/api/v1/inventory-items', baseApi, {
+      useCoreBackend: true,
+      fallbackEndpointPath: '/api/v1/inventory-lots',
+    });
     this.movements = new BaseEndpoint('/api/v1/stock-movements');
     this.warehouses = new BaseEndpoint('/api/v1/warehouses');
   }
