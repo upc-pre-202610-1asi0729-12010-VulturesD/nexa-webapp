@@ -76,9 +76,9 @@ The `nexa-webapp` repository contains the single page application (SPA) that man
       </p>
     </td>
     <td width="50%">
-      <p><a href="https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-report.">nexa-report</a></p>
+      <p><a href="https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-ecosystem-report">nexa-ecosystem-report</a></p>
       <p>Academic report, product research, backlog, architecture documentation, and project evidence.</p>
-      <p><a href="https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-report.">Open Report Repository</a></p>
+      <p><a href="https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-ecosystem-report">Open Report Repository</a></p>
       <p>
         <img alt="Documentation" src="https://img.shields.io/badge/Documentation-report-0F172A?style=flat-square" />
         <img alt="UPC" src="https://img.shields.io/badge/UPC-course%20evidence-0EA5E9?style=flat-square" />
