@@ -23,7 +23,7 @@ const navAll = computed(() => [
   { to: dashboardTo.value, icon: 'pi-th-large', label: () => t('nav.dashboard'), section: 'main', roles: ['commercial', 'logistics'] },
   { to: '/ops/product-catalog', icon: 'pi-box', label: () => t('nav.catalog'), section: 'main', roles: ['commercial'] },
   { to: '/ops/commercial/purchase-requests', icon: 'pi-inbox', label: () => t('nav.requests'), section: 'commercial', roles: ['commercial'], badge: () => ds.D.purchaseRequests.filter(r => ['submitted', 'in_review', 'needs_adjustment'].includes(r.status)).length },
-  { to: '/ops/commercial/purchase-orders', icon: 'pi-file-edit', label: () => t('nav.orders'), section: 'commercial', roles: ['commercial'], badge: () => ds.D.purchaseOrders.filter(o => ['validating', 'blocked', 'document_pending'].includes(o.status)).length },
+  { to: '/ops/commercial/purchase-orders', icon: 'pi-file-edit', label: () => t('nav.orders'), section: 'commercial', roles: ['commercial'], badge: () => ds.D.purchaseOrders.filter(o => ['pending', 'validating', 'blocked', 'document_pending'].includes(o.status)).length },
   { to: '/ops/commercial/manual-order-entry', icon: 'pi-plus-circle', label: () => t('nav.createOrder'), section: 'commercial', roles: ['commercial'] },
   { to: '/ops/commercial/client-accounts', icon: 'pi-users', label: () => t('nav.clients'), section: 'commercial', roles: ['commercial'] },
   { to: '/ops/commercial/business-documents', icon: 'pi-file-check', label: () => t('nav.documents'), section: 'commercial', roles: ['commercial'], badge: () => ds.D.businessDocuments.filter(d => d.required && ['pending', 'observed', 'rejected'].includes(d.status)).length },
@@ -54,7 +54,7 @@ const sections = computed(() => {
 });
 
 const mobileItems = computed(() => {
-  const pendingOrders = ds.D.purchaseOrders.filter(o => ['validating', 'blocked', 'document_pending'].includes(o.status)).length;
+  const pendingOrders = ds.D.purchaseOrders.filter(o => ['pending', 'validating', 'blocked', 'document_pending'].includes(o.status)).length;
   const openDispatches = ds.D.dispatchOrders.filter(d => !['delivered'].includes(d.status)).length;
   if (roleKey.value === 'logistics') {
     return [

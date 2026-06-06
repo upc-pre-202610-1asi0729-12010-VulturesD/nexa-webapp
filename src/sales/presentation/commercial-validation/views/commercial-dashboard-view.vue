@@ -12,7 +12,7 @@ const D = ds.D;
 
 const newRequests = computed(() => D.purchaseRequests.filter(r => ['submitted', 'in_review', 'needs_adjustment'].includes(r.status)));
 const blockedOrders = computed(() => D.purchaseOrders.filter(o => ['blocked', 'incident'].includes(o.status)));
-const validatingOrders = computed(() => D.purchaseOrders.filter(o => ['validating', 'document_pending'].includes(o.status)));
+const validatingOrders = computed(() => D.purchaseOrders.filter(o => ['pending', 'validating', 'document_pending'].includes(o.status)));
 const pendingDocs = computed(() => D.businessDocuments.filter(doc => doc.required && ['pending', 'observed', 'rejected'].includes(doc.status)));
 const pendingPortalTasks = computed(() => D.portalUploadTasks.filter(task => ['pending', 'blocked'].includes(task.status)));
 const pendingCreditRequests = computed(() => D.creditRequests.filter(request => ['submitted', 'in_review'].includes(request.status)));

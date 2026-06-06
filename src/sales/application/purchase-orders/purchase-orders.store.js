@@ -5,7 +5,7 @@ import { useDataStore } from '@/app/application/stores/data.store';
 export const usePurchaseOrdersStore = defineStore('purchaseOrders', () => {
   const dataStore = useDataStore();
   const orders = computed(() => dataStore.D.purchaseOrders);
-  const blockedOrders = computed(() => orders.value.filter(order => ['blocked', 'document_pending', 'validating'].includes(order.status)));
+  const blockedOrders = computed(() => orders.value.filter(order => ['pending', 'blocked', 'document_pending', 'validating'].includes(order.status)));
 
   function findById(id) {
     return dataStore.purchaseOrderById(id);
