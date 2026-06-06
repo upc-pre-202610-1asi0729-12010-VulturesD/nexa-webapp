@@ -1,4 +1,5 @@
 import { BaseEndpoint } from '@/shared/infrastructure/base-endpoint';
+import { baseApi } from '@/shared/infrastructure/base-api';
 
 /**
  * Purchase orders API service.
@@ -8,7 +9,10 @@ import { BaseEndpoint } from '@/shared/infrastructure/base-endpoint';
  */
 class PurchaseOrdersApiService {
   constructor() {
-    this.orders = new BaseEndpoint('/api/v1/orders');
+    this.orders = new BaseEndpoint('/api/v1/orders', baseApi, {
+      useCoreBackend: true,
+      fallbackEndpointPath: '/api/v1/purchase-orders',
+    });
   }
 
   /**

@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { catalogApplication } from '@/catalog-management/application/product-catalog/catalog.application';
 import { purchaseOrdersApplication } from '@/sales/application/purchase-orders/purchase-orders.application';
+import { inventoryApplication } from '@/warehouse/application/inventory-control/inventory.application';
 import { BaseEndpoint } from '@/shared/infrastructure/base-endpoint';
 
 const endpoints = {
@@ -11,20 +13,15 @@ const endpoints = {
   clients: '/api/v1/clients',
   clientContacts: '/api/v1/client-contacts',
   deliveryAddresses: '/api/v1/delivery-addresses',
-  orders: '/api/v1/orders',
-  products: '/api/v1/products',
   categories: '/api/v1/categories',
   productImages: '/api/v1/product-images',
   priceLists: '/api/v1/price-lists',
   promotions: '/api/v1/promotions',
   warehouses: '/api/v1/warehouses',
-  inventoryLots: '/api/v1/inventory-lots',
   stockMovements: '/api/v1/stock-movements',
   availabilitySnapshots: '/api/v1/availability-snapshots',
   purchaseRequests: '/api/v1/purchase-requests',
   requestItems: '/api/v1/request-items',
-  purchaseOrders: '/api/v1/purchase-orders',
-  orderItems: '/api/v1/order-items',
   orderTimelineEvents: '/api/v1/order-timeline-events',
   businessDocuments: '/api/v1/business-documents',
   customerPortals: '/api/v1/customer-portals',
@@ -671,6 +668,55 @@ export const useDataStore = defineStore('data', () => {
     return promotion;
   }
 
+  async function readCoreCollection(loader) {
+    try {
+      const rows = await loader();
+      return Array.isArray(rows) ? rows : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function orderItemsFromCoreOrders(orders = [], products = D.value.products) {
+    return orders.flatMap(order => (order.items || []).map((item, index) => {
+      const product = products.find(row => row.id === item.productId) || productById(item.productId) || {};
+      const quantity = Number(item.quantity ?? item.qty ?? 0);
+      const price = Number(item.price ?? item.unitPriceAmount ?? 0);
+
+      return {
+        id: item.id || `${order.id}-ITEM-${String(index + 1).padStart(2, '0')}`,
+        orderId: order.id,
+        productId: item.productId,
+        catalogItemId: item.catalogItemId,
+        itemName: item.itemName || product.name,
+        quantity,
+        unit: product.unit || 'UN',
+        price,
+        estimatedWeightKg: Number(product.weightKg || 1) * quantity,
+        stockOk: item.stockOk !== false,
+      };
+    }));
+  }
+
+  async function loadCoreCollections() {
+    const [products, lots, orders] = await Promise.all([
+      readCoreCollection(() => catalogApplication.getProducts()),
+      readCoreCollection(() => inventoryApplication.getLots()),
+      readCoreCollection(() => purchaseOrdersApplication.getOrders()),
+    ]);
+
+    if (products.length) D.value.products = products;
+    if (lots.length) {
+      D.value.inventoryLots = lots;
+      D.value.lots = lots;
+    }
+    if (orders.length) {
+      D.value.orders = orders;
+      D.value.purchaseOrders = orders;
+      D.value.orderItems = orderItemsFromCoreOrders(orders, products.length ? products : D.value.products);
+    }
+  }
+
   async function init() {
     const entries = await Promise.all(
       Object.keys(api).map(async (key) => {
@@ -698,6 +744,7 @@ export const useDataStore = defineStore('data', () => {
       movements: data.stockMovements || [],
       activity: data.activityLog || [],
     });
+    await loadCoreCollections();
     if (!D.value.products.length) {
       // Keep empty state if cloud and local Mock API are unavailable.
     }

@@ -16,7 +16,7 @@ const alertsOpen = ref(true);
 const roleKey = computed(() => auth.user?.roleKey || 'commercial');
 const isLogistics = computed(() => roleKey.value === 'logistics');
 
-const pendingOrders = computed(() => D.orders.filter(o => ['validating', 'blocked'].includes(o.status)));
+const pendingOrders = computed(() => D.orders.filter(o => ['pending', 'validating', 'blocked'].includes(o.status)));
 
 const todayLabel = computed(() => {
   return new Date().toLocaleDateString(locale.value === 'es' ? 'es-PE' : 'en-US', {

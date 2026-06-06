@@ -1,4 +1,5 @@
 import { BaseEndpoint } from '@/shared/infrastructure/base-endpoint';
+import { baseApi } from '@/shared/infrastructure/base-api';
 
 /**
  * Catalog API service.
@@ -8,7 +9,10 @@ import { BaseEndpoint } from '@/shared/infrastructure/base-endpoint';
  */
 class CatalogApiService {
   constructor() {
-    this.products = new BaseEndpoint('/api/v1/products');
+    this.products = new BaseEndpoint('/api/v1/catalog-items', baseApi, {
+      useCoreBackend: true,
+      fallbackEndpointPath: '/api/v1/products',
+    });
     this.categories = new BaseEndpoint('/api/v1/categories');
   }
 

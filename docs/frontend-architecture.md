@@ -79,7 +79,9 @@ The Buyer Portal assistant is prepared as Sales infrastructure through `src/sale
 
 `server/db.json` and json-server remain as a mock API fallback used only until backend endpoints are available. Frontend infrastructure should treat it as temporary validation data, not as the production backend contract.
 
-Expected future backend groups include `/api/v1/products`, `/api/v1/promotions`, `/api/v1/orders`, `/api/v1/purchase-requests`, `/api/v1/clients`, `/api/v1/dispatch-orders`, `/api/v1/deliveries`, `/api/v1/cold-chain-events`, `/api/v1/inventory-items`, `/api/v1/business-documents`, `/api/v1/subscriptions`, `/api/v1/invoices`, `/api/v1/authentication`, and `/api/v1/users`.
+Catalog, inventory, and purchase orders now use Nexa Platform first through `/api/v1/catalog-items`, `/api/v1/inventory-items`, and `/api/v1/orders`. See `docs/core-backend-integration.md` for local environment variables, fallback behavior, and catalog image serving.
+
+Expected future backend groups include `/api/v1/promotions`, `/api/v1/purchase-requests`, `/api/v1/clients`, `/api/v1/dispatch-orders`, `/api/v1/deliveries`, `/api/v1/cold-chain-events`, `/api/v1/business-documents`, `/api/v1/subscriptions`, `/api/v1/invoices`, `/api/v1/authentication`, and `/api/v1/users`.
 
 ## Import Rules
 

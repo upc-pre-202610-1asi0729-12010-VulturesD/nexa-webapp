@@ -6,22 +6,38 @@ import { OrderStatus } from '../value-objects/purchase-order-status.value-object
 export class Order extends Entity {
   constructor({
     id,
+    backendId,
+    code,
     clientId,
+    customerName,
     status = 'validating',
     priority = 'medium',
     date,
+    currency = 'PEN',
     items = [],
     total = 0,
     notes = '',
+    paymentConfirmation,
+    inventoryReservation,
+    rejectionReason,
+    confirmedAt,
   } = {}) {
     super({ id });
+    this.backendId = backendId;
+    this.code = code || id;
     this.clientId = clientId;
+    this.customerName = customerName;
     this.status = new OrderStatus(status);
     this.priority = priority;
     this.date = date;
+    this.currency = currency;
     this.items = items.map(item => item instanceof OrderItem ? item : new OrderItem(item));
     this.total = total || this.calculateTotal();
     this.notes = notes;
+    this.paymentConfirmation = paymentConfirmation;
+    this.inventoryReservation = inventoryReservation;
+    this.rejectionReason = rejectionReason;
+    this.confirmedAt = confirmedAt;
   }
 
   calculateTotal() {

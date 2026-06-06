@@ -13,6 +13,9 @@ export class InventoryLot extends Entity {
     status = 'ok',
     warehouse,
     zone,
+    catalogItemId,
+    minimumTemperature,
+    maximumTemperature,
   } = {}) {
     super({ id });
     this.productId = productId;
@@ -23,6 +26,9 @@ export class InventoryLot extends Entity {
     this.status = status;
     this.warehouse = warehouse;
     this.zone = zone;
+    this.catalogItemId = catalogItemId;
+    this.minimumTemperature = toNumber(minimumTemperature);
+    this.maximumTemperature = toNumber(maximumTemperature);
   }
 
   availableQty() {

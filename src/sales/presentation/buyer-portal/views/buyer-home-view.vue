@@ -193,7 +193,10 @@ const formatMoney = (value) => Number(value || 0).toLocaleString();
         </div>
         <div class="grid-4 flow-panel-pad">
           <article v-for="product in featured" :key="product.id" class="buyer-card">
-            <div class="buyer-product-visual" :class="'cat-' + product.cat"><i class="pi pi-box"></i></div>
+            <div class="buyer-product-visual" :class="'cat-' + product.cat">
+              <img v-if="product.imageUrl" class="buyer-product-image" :src="product.imageUrl" :alt="product.name" loading="lazy" />
+              <i v-else class="pi pi-box"></i>
+            </div>
             <div style="padding:14px">
               <div style="font-weight:800;font-size:13px">{{ product.name }}</div>
               <div class="flow-note">{{ product.category }} - {{ product.temperatureRange }}</div>

@@ -41,7 +41,9 @@ export const purchaseOrdersApplication = {
    * @returns {Promise<Object>}
    */
   createOrder(order) {
-    return purchaseOrdersApiService.createOrder(order);
+    return purchaseOrdersApiService
+      .createOrder(OrderAssembler.toCreateResource(order))
+      .then(mapOrderResource);
   },
 
   /**

@@ -194,7 +194,8 @@ function goRequestBuilder() {
         </div>
         <div v-for="i in cart.items" :key="i.productId" style="display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #F3F0EC">
           <div :class="'product-placeholder cat-' + i.cat" style="width:60px;height:60px;border-radius:8px;flex-shrink:0">
-            <div class="pp-icon" style="font-size:20px"><i class="pi pi-box" aria-hidden="true"></i></div>
+            <img v-if="i.imageUrl" class="catalog-product-image" :src="i.imageUrl" :alt="i.name" loading="lazy" />
+            <div v-else class="pp-icon" style="font-size:20px"><i class="pi pi-box" aria-hidden="true"></i></div>
           </div>
           <div style="flex:1;min-width:0">
             <div style="font-size:13px;font-weight:500">{{ i.name }}</div>

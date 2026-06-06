@@ -113,9 +113,12 @@ function editGuardLabel(product) {
       @keydown.space.prevent="openDetail(p)"
     >
       <div class="product-placeholder" :class="'cat-' + p.cat" style="position:relative" :aria-label="p.name">
-        <div class="pp-icon"><i class="pi pi-box" aria-hidden="true"></i></div>
-        <div class="pp-cat">{{ p.category }}</div>
-        <div class="pp-hint">{{ t('catalog.productImage') }}</div>
+        <img v-if="p.imageUrl" class="catalog-product-image" :src="p.imageUrl" :alt="p.name" loading="lazy" />
+        <template v-else>
+          <div class="pp-icon"><i class="pi pi-box" aria-hidden="true"></i></div>
+          <div class="pp-cat">{{ p.category }}</div>
+          <div class="pp-hint">{{ t('catalog.productImage') }}</div>
+        </template>
         <div v-if="p.status === 'out'" style="position:absolute;inset:0;background:rgba(249,247,244,0.7);display:flex;align-items:center;justify-content:center">
           <span class="badge badge-red">{{ t('catalog.outOfStock') }}</span>
         </div>
@@ -163,8 +166,11 @@ function editGuardLabel(product) {
     >
       <div class="card" style="max-width:540px;width:100%;overflow:hidden">
         <div :class="'product-placeholder cat-' + detail.cat" style="height:160px;border-radius:0">
-          <div class="pp-icon" style="font-size:40px"><i class="pi pi-box" aria-hidden="true"></i></div>
-          <div class="pp-cat">{{ detail.category }}</div>
+          <img v-if="detail.imageUrl" class="catalog-product-image" :src="detail.imageUrl" :alt="detail.name" />
+          <template v-else>
+            <div class="pp-icon" style="font-size:40px"><i class="pi pi-box" aria-hidden="true"></i></div>
+            <div class="pp-cat">{{ detail.category }}</div>
+          </template>
         </div>
         <div style="padding:20px">
           <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px">

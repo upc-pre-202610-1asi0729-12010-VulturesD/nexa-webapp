@@ -1,5 +1,18 @@
 export class InventoryLotResource {
-  constructor({ id, productId, qty, reserved, expiry, entryDate, status, warehouse, zone } = {}) {
+  constructor({
+    id,
+    productId,
+    qty,
+    reserved,
+    expiry,
+    entryDate,
+    status,
+    warehouse,
+    zone,
+    catalogItemId,
+    minimumTemperature,
+    maximumTemperature,
+  } = {}) {
     this.id = id;
     this.productId = productId;
     this.qty = qty;
@@ -9,5 +22,8 @@ export class InventoryLotResource {
     this.status = status;
     this.warehouse = warehouse;
     this.zone = zone;
+    this.catalogItemId = catalogItemId;
+    this.minimumTemperature = minimumTemperature;
+    this.maximumTemperature = maximumTemperature;
   }
 }

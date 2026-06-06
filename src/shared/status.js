@@ -1,4 +1,4 @@
-export const ORDER_STATUS_FLOW = ['submitted', 'validating', 'confirmed', 'document_pending', 'ready_for_dispatch', 'ready_for_route', 'preparing', 'in_route', 'delivered'];
+export const ORDER_STATUS_FLOW = ['pending', 'submitted', 'validating', 'confirmed', 'document_pending', 'ready_for_dispatch', 'ready_for_route', 'preparing', 'in_route', 'delivered'];
 export const ORDER_TRACKING_STEPS = [
   ['submitted', 'Request received'],
   ['validating', 'Commercial validation'],
@@ -10,11 +10,12 @@ export const ORDER_TRACKING_STEPS = [
   ['in_route', 'On route'],
   ['delivered', 'Delivered'],
 ];
-export const ORDER_STATUS_FILTERS = ['validating', 'document_pending', 'confirmed', 'ready_for_dispatch', 'ready_for_route', 'preparing', 'in_route', 'dispatched', 'delivered', 'incident', 'blocked'];
+export const ORDER_STATUS_FILTERS = ['pending', 'validating', 'document_pending', 'confirmed', 'ready_for_dispatch', 'ready_for_route', 'preparing', 'in_route', 'dispatched', 'delivered', 'incident', 'blocked', 'rejected', 'cancelled'];
 
 const statusLabels = {
   en: {
     draft: 'Draft',
+    pending: 'Pending',
     submitted: 'Submitted',
     in_review: 'In review',
     needs_adjustment: 'Needs adjustment',
@@ -39,6 +40,7 @@ const statusLabels = {
   },
   es: {
     draft: 'Borrador',
+    pending: 'Pendiente',
     submitted: 'Enviada',
     in_review: 'En revisión',
     needs_adjustment: 'Requiere ajuste',
@@ -145,7 +147,7 @@ export const latestByActivity = (records = [], eventsForRecord = () => []) => [.
 export const orderStatusLabel = (s, locale) => labelFrom(statusLabels, s, locale);
 
 export const orderStatusBadge = (s) => 'badge-' + ({
-  draft: 'gray', submitted: 'blue', in_review: 'amber',
+  draft: 'gray', pending: 'amber', submitted: 'blue', in_review: 'amber',
   needs_adjustment: 'orange', approved: 'green', converted_to_order: 'purple',
   validating: 'orange', document_pending: 'amber', confirmed: 'blue',
   ready_for_dispatch: 'blue', ready_for_operations: 'blue',

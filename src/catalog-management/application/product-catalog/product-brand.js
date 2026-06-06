@@ -22,6 +22,7 @@ const brandMatchers = [
 
 export function brandForProduct(product = {}) {
   if (product.brand) return product.brand;
+  if (product.brandName) return product.brandName;
   if (product.manufacturer) return product.manufacturer;
   const haystack = [
     product.name,

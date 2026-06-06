@@ -18,6 +18,19 @@ export class Product extends Entity {
     warehouse,
     zone,
     status = 'ok',
+    imageUrl,
+    brand,
+    brandName,
+    description = '',
+    coldType,
+    commercialAvailability = 'Available',
+    isVisibleToBuyer = true,
+    visibleToBuyer = true,
+    catalogItemId,
+    productId,
+    currency = 'PEN',
+    weightKg = 1,
+    knowledge = '',
   } = {}) {
     super({ id });
     this.name = name;
@@ -33,6 +46,19 @@ export class Product extends Entity {
     this.warehouse = warehouse;
     this.zone = zone;
     this.status = status;
+    this.imageUrl = imageUrl;
+    this.brand = brand;
+    this.brandName = brandName;
+    this.description = description;
+    this.coldType = coldType;
+    this.commercialAvailability = commercialAvailability;
+    this.isVisibleToBuyer = isVisibleToBuyer;
+    this.visibleToBuyer = visibleToBuyer;
+    this.catalogItemId = catalogItemId;
+    this.productId = productId;
+    this.currency = currency;
+    this.weightKg = toNumber(weightKg || 1);
+    this.knowledge = knowledge || description;
   }
 
   availableStock() {
