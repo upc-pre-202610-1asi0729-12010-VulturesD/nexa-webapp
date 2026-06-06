@@ -11,6 +11,7 @@ export class UserResource {
     department,
     initials,
     clientId,
+    accessToken = null,
   } = {}) {
     this.id = id;
     this.name = name;
@@ -23,5 +24,6 @@ export class UserResource {
     this.department = department;
     this.initials = initials;
     this.clientId = clientId;
+    this.accessToken = accessToken;
   }
 }
