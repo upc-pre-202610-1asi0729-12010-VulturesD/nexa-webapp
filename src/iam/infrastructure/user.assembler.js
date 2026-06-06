@@ -21,6 +21,7 @@ export const UserAssembler = {
       department: entity.department,
       initials: entity.initials,
       clientId: entity.clientId,
+      accessToken: source.accessToken || null,
     });
   },
 };
