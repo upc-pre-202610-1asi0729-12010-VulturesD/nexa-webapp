@@ -32,6 +32,9 @@ export const useAuthStore = defineStore('auth', () => {
       id:         found.id,
       name:       found.name,
       email:      found.email,
+      username:   found.username || found.email,
+      role:       found.role || found.scope || 'ops',
+      scope:      found.scope || found.role || 'ops',
       initials:   found.initials,
       clientId:   found.clientId || null,
       roleKey:    found.roleKey || 'commercial',
@@ -41,11 +44,12 @@ export const useAuthStore = defineStore('auth', () => {
       preferredLanguage: found.preferredLanguage || found.locale || 'en',
       planAccess: found.planAccess || 'standard',
       notificationPreferences: found.notificationPreferences || {},
+      accessToken: found.accessToken || null,
     };
 
     scope.value = found.scope || found.role || 'ops';
     user.value  = sessionUser;
-    token.value = 'demo.' + btoa(email).slice(0, 12);
+    token.value = found.accessToken || ('demo.' + btoa(email).slice(0, 12));
     localStorage.setItem('nexa.user',  JSON.stringify(sessionUser));
     localStorage.setItem('nexa.token', token.value);
     localStorage.setItem('nexa.scope', scope.value);
