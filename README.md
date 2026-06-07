@@ -129,6 +129,19 @@ The `nexa-webapp` repository contains the single page application (SPA) that man
    ```
    *The Vite application runs on `http://localhost:5173/` and the local Mock API runs on `http://localhost:3000`.*
 
+3. **Run WebApp connected to the real C# Backend (`nexa-platform`)**:
+   - Ensure the backend project is running at `http://localhost:5068`.
+   - Ensure `.env.development` is configured with:
+     ```env
+     VITE_CORE_BACKEND_ENABLED=true
+     VITE_CORE_BACKEND_URL=http://localhost:5068/api/v1
+     ```
+   - Start the Vite development server:
+     ```bash
+     npm run dev
+     ```
+     *This will route Catalog, Inventory, Orders, and IAM requests to the C# server, using local in-memory fallbacks for other non-core modules.*
+
 ---
 
 ## Available Scripts
