@@ -7,7 +7,7 @@ The GitHub Wiki contains concise academic and technical documentation for:
 - GitFlow strategy.
 - Release timeline.
 - Frontend architecture.
-- Mock API structure.
+- Backend integration status.
 - Local development setup.
 - Validation evidence.
 

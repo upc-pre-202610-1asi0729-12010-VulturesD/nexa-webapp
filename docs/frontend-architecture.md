@@ -1,6 +1,6 @@
 # Frontend Architecture
 
-Nexa WebApp follows a bounded-context frontend layout over Vue 3, Vite, Pinia, Vue Router, PrimeVue, and a temporary json-server mock fallback.
+Nexa WebApp follows a bounded-context frontend layout over Vue 3, Vite, Pinia, Vue Router, PrimeVue, and the Nexa Platform REST API.
 
 ## Official Contexts
 
@@ -43,7 +43,7 @@ Nexa WebApp follows a bounded-context frontend layout over Vue 3, Vite, Pinia, V
 src/<context>/
 ├── application/       Pinia stores and application orchestration
 ├── domain/            Entities, value objects, events, and repository contracts
-├── infrastructure/    API clients, assemblers, resource DTOs, and mock adapters
+├── infrastructure/    API clients, assemblers, resource DTOs, and adapters
 └── presentation/      Context route module, views, and UI components
 ```
 
@@ -73,15 +73,15 @@ Pinia stores remain feature-sized instead of one store per context. Examples:
 
 Infrastructure APIs are also feature-sized so future backend endpoints can be introduced per resource without changing context boundaries.
 
-The Buyer Portal assistant is prepared as Sales infrastructure through `src/sales/infrastructure/buyer-portal/buyer-assistant-api.js`. It targets `/api/v1/buyer-assistant/messages` when `VITE_BUYER_ASSISTANT_API=true`; otherwise the UI keeps using local deterministic guidance so the app remains stable before backend delivery.
+Buyer Portal support flows remain constrained by available backend contracts. Advanced guided support should be enabled only after an official endpoint is exposed.
 
-## Mock API Boundary
+## Backend Boundary
 
-`server/db.json` and json-server remain as a mock API fallback used only until backend endpoints are available. Frontend infrastructure should treat it as temporary validation data, not as the production backend contract.
+Supported modules consume Nexa Platform through `VITE_NEXA_API_BASE_URL`. Unsupported modules must not invent replacement data; they should show pending backend support or read-only summaries derived from authenticated session and real collections.
 
-Catalog, inventory, and purchase orders now use Nexa Platform first through `/api/v1/catalog-items`, `/api/v1/inventory-items`, and `/api/v1/orders`. See `docs/core-backend-integration.md` for local environment variables, fallback behavior, and catalog image serving.
+Catalog, inventory, warehouses, purchase orders, shipments, invoices, payments, categories, brands, and authentication consume Nexa Platform endpoints. See `docs/core-backend-integration.md` for local environment variables and catalog image serving.
 
-Expected future backend groups include `/api/v1/promotions`, `/api/v1/purchase-requests`, `/api/v1/clients`, `/api/v1/dispatch-orders`, `/api/v1/deliveries`, `/api/v1/cold-chain-events`, `/api/v1/business-documents`, `/api/v1/subscriptions`, `/api/v1/invoices`, `/api/v1/authentication`, and `/api/v1/users`.
+Expected future backend groups include `/api/v1/promotions`, `/api/v1/purchase-requests`, `/api/v1/clients`, `/api/v1/deliveries`, `/api/v1/cold-chain-events`, `/api/v1/subscriptions`, `/api/v1/payment-methods`, and profile administration endpoints.
 
 ## Import Rules
 

@@ -1,36 +1,36 @@
-# Core Backend Integration
+# Backend Integration
 
-This webapp can use the local Nexa Platform backend for the AV2 core flows while keeping json-server as fallback for modules that are not migrated yet.
+This webapp consumes the local Nexa Platform backend for supported AV2 flows. Modules without an exposed backend endpoint stay in a pending-support state instead of using local replacement data.
 
 ## Local Environment
 
 Use these values for local development:
 
 ```env
-VITE_NEXA_API_BASE_URL=https://localhost:7001/api/v1
-VITE_ENABLE_MOCK_API_FALLBACK=true
+VITE_NEXA_API_BASE_URL=http://localhost:5068/api/v1
+VITE_ENABLE_MOCK_API_FALLBACK=false
 VITE_CORE_BACKEND_ENABLED=true
 ```
 
-If the local HTTPS certificate is not trusted, use the backend HTTP profile and set:
-
-```env
-VITE_NEXA_API_BASE_URL=http://localhost:5000/api/v1
-```
-
-`VITE_CORE_BACKEND_ENABLED=false` keeps the old mock paths for validation sessions that do not run the backend.
+Swagger is available at `http://localhost:5068/swagger` when the backend is running locally.
 
 ## Core Endpoints
 
-The following resources now use Nexa Platform first:
+The following resources consume Nexa Platform endpoints:
 
-| Frontend flow | Backend endpoint | Mock fallback |
-|---|---|---|
-| Catalog products | `/catalog-items` | `/products` |
-| Inventory lots view | `/inventory-items` | `/inventory-lots` |
-| Purchase orders | `/orders` | `/purchase-orders` |
+| Frontend flow | Backend endpoint |
+|---|---|
+| Catalog products | `/catalog-items` |
+| Product categories | `/categories` |
+| Product brands | `/brands` |
+| Inventory lots view | `/inventory-items` |
+| Warehouses | `/warehouses` |
+| Purchase orders | `/orders` |
+| Dispatch orders | `/shipments` |
+| Business documents | `/invoices`, `/payments` |
+| Authentication | `/authentication/sign-in` |
 
-The central `data.store` no longer loads `products`, `inventoryLots`, `orders`, `purchaseOrders`, or `orderItems` through the generic mock endpoint map. Those collections are loaded through their bounded-context application services.
+The central `data.store` loads supported collections through bounded-context application services and infrastructure adapters.
 
 ## Catalog Images
 
@@ -50,6 +50,6 @@ Vite serves those files directly from the public directory during local developm
 
 ## Current Boundary
 
-Mock data remains enabled for non-core modules such as clients, promotions, documents, dispatch, payments, notifications, alerts, and portal support flows.
+Backend support is still pending for clients, promotions, purchase request workflow, customer portals, advanced analytics, account administration, editable buyer profiles, payment method management, proof-of-delivery upload, and order/dispatch status mutations.
 
-Render deployment is intentionally not configured in this release. The integration target is local validation against Nexa Platform plus mock fallback.
+The integration target is local validation against Nexa Platform. Unsupported modules should show a professional pending state until their backend contracts are available.
