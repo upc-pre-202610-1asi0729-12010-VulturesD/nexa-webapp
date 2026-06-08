@@ -86,7 +86,9 @@
     "mobileNav": "Mobile navigation",
     "pending": "pending",
     "noClientAccount": "No client account",
-    "noClientAccountDesc": "Sign in with a B2B account linked to a client."
+    "noClientAccountDesc": "Sign in with a B2B account linked to a client.",
+    "pendingBackendTitle": "Backend support pending",
+    "pendingBackendDesc": "This module is pending backend support and will be enabled in a future integration cycle."
   },
   "dashboard": {
     "greeting": "Good morning",
@@ -389,37 +391,6 @@
       "nextDocuments": "Check business documents",
       "nextPayments": "Review payment methods"
     },
-    "assistant": {
-      "title": "Nexa Assistant",
-      "subtitle": "Buyer Portal guidance",
-      "open": "Open Nexa Assistant",
-      "close": "Close assistant",
-      "disclaimer": "Guidance is based on your visible portal records and available actions.",
-      "placeholder": "Ask about an order, document or request...",
-      "inputLabel": "Ask Nexa Assistant",
-      "send": "Send",
-      "thinking": "Checking...",
-      "welcome": "Ask about your requests, orders, documents or delivery status. I can guide you to the right portal action.",
-      "chips": {
-        "order": "Where is my order?",
-        "documents": "Which documents are available?",
-        "delivery": "Can I change my delivery window?",
-        "promotions": "What products are on promotion?",
-        "request": "How do I create a request?",
-        "validation": "What does commercial validation mean?"
-      },
-      "answers": {
-        "noOrder": "No confirmed purchase order is active yet. Open My Requests to review commercial validation status.",
-        "order": "Your latest purchase order {code} is {status}. Open My Orders to review the tracking timeline.",
-        "documents": "{count} buyer-visible business document(s) are available. Some files may remain pending until commercial validation is completed.",
-        "delivery": "Send a message in the purchase request conversation. The commercial team will confirm whether the change is possible.",
-        "promotions": "{count} active promotion(s) are visible in your Buyer Portal. Offers remain subject to commercial validation.",
-        "noPromotions": "No active buyer-visible promotion is available right now.",
-        "request": "Open Product Catalog, add authorized products to your request, then review quantities and delivery details in Request Builder.",
-        "validation": "Commercial validation means the supplier reviews product availability, delivery conditions, business documents and buyer account status before confirming a purchase order.",
-        "fallback": "I can guide you to Product Catalog, My Requests, My Orders and Business Documents."
-      }
-    },
     "table": {
       "order": "Order",
       "date": "Date",
@@ -473,7 +444,7 @@
     "noExpiring": "No critical lots",
     "allStockNormal": "All stock at normal levels",
     "noSalesData": "No sales data",
-    "demoBanner": "Operational data reflects the current business period. Backend integration will enable historical analytics, exports and automated alerts.",
+    "dataBanner": "Operational data reflects the current business period. Historical analytics, exports and automated alerts are pending backend support.",
     "activeOrders": "Active orders",
     "ofPeriod": "of {total} in the period",
     "completedDeliveries": "Completed deliveries",
