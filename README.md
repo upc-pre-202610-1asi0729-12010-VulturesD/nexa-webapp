@@ -110,7 +110,7 @@ The `nexa-webapp` repository contains the single page application (SPA) that man
 | **State Management** | Pinia |
 | **Routing & Client** | Vue Router 4 & Axios |
 | **Localization** | Vue I18n |
-| **Development mock** | json-server (runs on port 3000) |
+| **Backend Integration** | Nexa Platform REST API (`http://localhost:5068/api/v1`) |
 
 ---
 
@@ -123,24 +123,19 @@ The `nexa-webapp` repository contains the single page application (SPA) that man
    npm install
    ```
 
-2. **Run both WebApp & Mock API concurrently**:
-   ```bash
-   npm run dev:all
-   ```
-   *The Vite application runs on `http://localhost:5173/` and the local Mock API runs on `http://localhost:3000`.*
-
-3. **Run WebApp connected to the real C# Backend (`nexa-platform`)**:
+2. **Run WebApp connected to the Nexa Platform backend**:
    - Ensure the backend project is running at `http://localhost:5068`.
    - Ensure `.env.development` is configured with:
      ```env
      VITE_CORE_BACKEND_ENABLED=true
-     VITE_CORE_BACKEND_URL=http://localhost:5068/api/v1
+     VITE_NEXA_API_BASE_URL=http://localhost:5068/api/v1
+     VITE_ENABLE_MOCK_API_FALLBACK=false
      ```
    - Start the Vite development server:
      ```bash
      npm run dev
      ```
-     *This will route Catalog, Inventory, Orders, and IAM requests to the C# server, using local in-memory fallbacks for other non-core modules.*
+     *The Vite application runs on `http://localhost:5173/` and supported modules consume the local REST API.*
 
 ---
 
@@ -151,8 +146,6 @@ The `nexa-webapp` repository contains the single page application (SPA) that man
 | `npm run dev` | Starts the Vite dev server locally. |
 | `npm run build` | Builds the production package (`dist/`). |
 | `npm run preview` | Previews the production build locally. |
-| `npm run mock:api` | Starts only the local JSON mock API. |
-| `npm run dev:all` | Runs mock API and Vite dev server together. |
 
 ---
 
@@ -193,7 +186,7 @@ To keep development organized, specific contexts are assigned to primary owners:
 ## Documentation
 
 Full frontend specs, architecture guides, and developer workflows are maintained in:
-- 🔗 **[Nexa Engineering Wiki Index](https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-webapp/wiki)**
+- **[Nexa Engineering Wiki Index](https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-webapp/wiki)**
 - [Frontend Architecture Specs](docs/frontend-architecture.md)
 - [Validation Evidence Log](docs/validation-evidence.md)
 

@@ -7,7 +7,7 @@ This folder documents the SemVer tags used by the Nexa WebApp academic repositor
 - Tags stay pure SemVer: `vMAJOR.MINOR.PATCH`.
 - Latest current version is `v1.4.0`.
 - No `v2.0.0` or `v3.0.0` release exists yet.
-- Release notes describe frontend and Mock API scope only.
+- Release notes describe frontend and backend-integration scope.
 - Source archives are enough; generated `dist/` bundles are not uploaded.
 
 ## Releases
@@ -19,7 +19,7 @@ This folder documents the SemVer tags used by the Nexa WebApp academic repositor
 | `v1.0.0` | TB1 delivery |
 | `v1.0.1` | Routing/documentation patch |
 | `v1.1.0` | Post-TB1 bounded-context expansion |
-| `v1.1.1` | Mock API path patch |
+| `v1.1.1` | API path patch |
 | `v1.2.0` | Pre-readiness WebApp iteration |
 | `v1.3.0` | Frontend product readiness sweep |
 | `v1.4.0` | Bounded-context frontend architecture |
