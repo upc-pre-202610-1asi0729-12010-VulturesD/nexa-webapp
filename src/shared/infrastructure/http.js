@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 export const LOCAL_API_BASE_URL = 'http://localhost:3000';
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || LOCAL_API_BASE_URL;
-export const NEXA_API_BASE_URL = import.meta.env.VITE_NEXA_API_BASE_URL || 'https://localhost:7001/api/v1';
-export const CORE_BACKEND_ENABLED = import.meta.env.VITE_CORE_BACKEND_ENABLED === 'true';
-export const MOCK_API_FALLBACK_ENABLED = import.meta.env.VITE_ENABLE_MOCK_API_FALLBACK !== 'false';
+export const NEXA_API_BASE_URL = import.meta.env.VITE_NEXA_API_BASE_URL || 'http://localhost:5068/api/v1';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || NEXA_API_BASE_URL;
+export const CORE_BACKEND_ENABLED = import.meta.env.VITE_CORE_BACKEND_ENABLED !== 'false';
+export const MOCK_API_FALLBACK_ENABLED = import.meta.env.VITE_ENABLE_MOCK_API_FALLBACK === 'true';
 
 export const http = axios.create({
   baseURL: API_BASE_URL,
