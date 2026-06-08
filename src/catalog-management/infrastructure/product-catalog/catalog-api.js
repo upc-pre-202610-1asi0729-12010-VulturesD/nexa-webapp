@@ -11,9 +11,9 @@ class CatalogApiService {
   constructor() {
     this.products = new BaseEndpoint('/api/v1/catalog-items', baseApi, {
       useCoreBackend: true,
-      fallbackEndpointPath: '/api/v1/products',
     });
     this.categories = new BaseEndpoint('/api/v1/categories');
+    this.brands = new BaseEndpoint('/api/v1/brands');
   }
 
   /**
@@ -39,6 +39,10 @@ class CatalogApiService {
    */
   getCategories() {
     return this.categories.getAll();
+  }
+
+  getBrands() {
+    return this.brands.getAll();
   }
 }
 
