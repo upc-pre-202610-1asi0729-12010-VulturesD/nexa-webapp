@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useDataStore } from '@/app/application/stores/data.store';
@@ -12,6 +12,7 @@ const route  = useRoute();
 const router = useRouter();
 const ds     = useDataStore();
 const auth   = useAuthStore();
+const mobileMenuOpen = ref(false);
 
 const roleKey = computed(() => auth.user?.roleKey || 'commercial');
 const dashboardTo = computed(() => {
@@ -94,6 +95,17 @@ function setLang(l) {
   i18n.global.locale.value = l;
   localStorage.setItem('nexa.lang', l);
 }
+
+function goOps(to) {
+  mobileMenuOpen.value = false;
+  router.push(to);
+}
+
+function logout() {
+  auth.logout();
+  mobileMenuOpen.value = false;
+  router.push('/auth/login');
+}
 </script>
 
 <template>
@@ -144,6 +156,15 @@ function setLang(l) {
       <!-- Main -->
     <div class="main">
       <header class="topbar" role="banner">
+        <button
+          class="topbar-icon-btn ops-menu-trigger"
+          type="button"
+          :aria-label="t('portal.nav.more')"
+          :aria-expanded="mobileMenuOpen"
+          @click="mobileMenuOpen = !mobileMenuOpen"
+        >
+          <i class="pi pi-bars" aria-hidden="true"></i>
+        </button>
         <div class="topbar-company" aria-label="Company identity">
           <div class="company-mark">{{ companyInitials }}</div>
           <div class="topbar-company-copy">
@@ -181,6 +202,40 @@ function setLang(l) {
       </main>
     </div>
 
+    <transition name="fade">
+      <div
+        v-if="mobileMenuOpen"
+        class="ops-mobile-menu-backdrop"
+        @click="mobileMenuOpen = false"
+        aria-hidden="true"
+      ></div>
+    </transition>
+
+    <nav
+      class="ops-mobile-menu"
+      :class="{ open: mobileMenuOpen }"
+      role="navigation"
+      :aria-label="t('nav.main')"
+    >
+      <button
+        v-for="item in navMain"
+        :key="item.to"
+        type="button"
+        class="ops-mobile-menu-item"
+        :class="{ active: isNavActive(item) }"
+        :aria-current="isNavActive(item) ? 'page' : undefined"
+        @click="goOps(item.to)"
+      >
+        <i :class="'pi ' + item.icon" aria-hidden="true"></i>
+        <span>{{ item.label }}</span>
+        <span v-if="item.badge && item.badge() > 0" class="nav-count">{{ item.badge() }}</span>
+      </button>
+      <button type="button" class="ops-mobile-menu-item ops-mobile-menu-item-danger" @click="logout">
+        <i class="pi pi-sign-out" aria-hidden="true"></i>
+        <span>{{ t('common.logout') }}</span>
+      </button>
+    </nav>
+
     <!-- Mobile nav -->
     <nav class="mobile-nav" role="navigation" :aria-label="t('common.mobileNav')">
       <div class="mobile-nav-inner">
@@ -189,7 +244,7 @@ function setLang(l) {
           :key="item.to"
           class="mobile-nav-item"
           :class="{ active: isNavActive(item) }"
-          @click="router.push(item.to)"
+          @click="goOps(item.to)"
           :aria-current="isNavActive(item) ? 'page' : undefined"
         >
           <i :class="'pi ' + item.icon" aria-hidden="true"></i>{{ item.label }}

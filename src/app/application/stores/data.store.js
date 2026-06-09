@@ -43,10 +43,51 @@ const endpoints = {
   temperatureLogs: '/api/v1/temperature-logs',
   alerts: '/api/v1/alerts',
   activityLog: '/api/v1/activity-log',
+  supportConversations: '/api/v1/support-conversations',
 };
 
+const mockResourceKeys = new Set([
+  'tenants',
+  'subscriptions',
+  'roles',
+  'users',
+  'clients',
+  'clientContacts',
+  'deliveryAddresses',
+  'productImages',
+  'priceLists',
+  'promotions',
+  'stockMovements',
+  'availabilitySnapshots',
+  'purchaseRequests',
+  'requestItems',
+  'orderTimelineEvents',
+  'businessDocuments',
+  'customerPortals',
+  'portalRequirements',
+  'portalUploadTasks',
+  'dispatchItems',
+  'deliveryEvents',
+  'proofOfDelivery',
+  'chatThreads',
+  'messages',
+  'paymentMethods',
+  'creditRequests',
+  'creditPayments',
+  'notifications',
+  'temperatureLogs',
+  'alerts',
+  'activityLog',
+  'supportConversations',
+]);
+
 const api = Object.fromEntries(
-  Object.entries(endpoints).map(([key, path]) => [key, new BaseEndpoint(path)])
+  Object.entries(endpoints).map(([key, path]) => [
+    key,
+    new BaseEndpoint(path, undefined, mockResourceKeys.has(key)
+      ? { useCoreBackend: false, useMockApi: true }
+      : {})
+  ])
 );
 
 /**
@@ -101,6 +142,7 @@ export const useDataStore = defineStore('data', () => {
     alerts:    [],
     activity:  [],
     activityLog: [],
+    supportConversations: [],
   });
 
   function clientName(id)  {
@@ -660,6 +702,15 @@ export const useDataStore = defineStore('data', () => {
     }
   }
 
+  async function readMockCollection(key) {
+    try {
+      const rows = await api[key]?.getAll();
+      return Array.isArray(rows) ? rows : [];
+    } catch {
+      return [];
+    }
+  }
+
   const businessDocumentsApi = new BusinessDocumentsApi();
 
   function orderItemsFromCoreOrders(orders = [], products = D.value.products) {
@@ -761,6 +812,39 @@ export const useDataStore = defineStore('data', () => {
     }
   }
 
+  async function loadMockCollections() {
+    const keys = [
+      'clients',
+      'clientContacts',
+      'deliveryAddresses',
+      'purchaseRequests',
+      'requestItems',
+      'promotions',
+      'customerPortals',
+      'portalRequirements',
+      'portalUploadTasks',
+      'paymentMethods',
+      'creditRequests',
+      'creditPayments',
+      'users',
+      'subscriptions',
+      'chatThreads',
+      'messages',
+      'temperatureLogs',
+      'stockMovements',
+      'supportConversations',
+      'activityLog',
+      'notifications',
+      'alerts',
+    ];
+    const entries = await Promise.all(keys.map(async key => [key, await readMockCollection(key)]));
+    entries.forEach(([key, rows]) => {
+      if (rows.length) D.value[key] = rows;
+    });
+    if (D.value.activityLog.length) D.value.activity = D.value.activityLog;
+    if (D.value.stockMovements.length) D.value.movements = D.value.stockMovements;
+  }
+
   async function init() {
     Object.assign(D.value, {
       company: {
@@ -777,6 +861,7 @@ export const useDataStore = defineStore('data', () => {
       activity: [],
     });
     await loadCoreCollections();
+    await loadMockCollections();
   }
 
   init();

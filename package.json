@@ -16,7 +16,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server": "json-server --watch server/db.json --routes server/routes.json --host 127.0.0.1 --port 3000",
+    "mock:api": "npm run server"
   },
   "dependencies": {
     "@primeuix/themes": "^1.0.0",
@@ -31,6 +33,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.4",
+    "json-server": "^0.17.4",
     "vite": "^5.4.10"
   }
 }
