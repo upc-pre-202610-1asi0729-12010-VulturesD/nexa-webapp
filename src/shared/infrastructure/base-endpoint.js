@@ -5,14 +5,16 @@ import { baseApi } from './base-api';
  * Optional fallback stays disabled unless a caller opts in explicitly.
  */
 export class BaseEndpoint {
-  constructor(endpointPath, api = baseApi, { useCoreBackend = true, fallbackEndpointPath = endpointPath, allowMockFallback = false } = {}) {
+  constructor(endpointPath, api = baseApi, { useCoreBackend = true, useMockApi = false, fallbackEndpointPath = endpointPath, allowMockFallback = false } = {}) {
     this.api = api;
     this.http = api.http;
     this.fallbackHttp = api.fallbackHttp;
+    this.mockHttp = api.mockHttp;
     this.coreHttp = api.coreHttp;
     this.endpointPath = endpointPath;
     this.fallbackEndpointPath = fallbackEndpointPath;
     this.useCoreBackend = useCoreBackend;
+    this.useMockApi = useMockApi;
     this.allowMockFallback = allowMockFallback;
   }
 
@@ -24,10 +26,12 @@ export class BaseEndpoint {
   }
 
   primaryHttp() {
+    if (this.useMockApi) return this.mockHttp;
     return this.useCoreBackend && this.api.coreBackendEnabled ? this.coreHttp : this.http;
   }
 
   primaryEndpointPath() {
+    if (this.useMockApi) return this.fallbackEndpointPath;
     return this.useCoreBackend && this.api.coreBackendEnabled
       ? this.endpointPath
       : this.fallbackEndpointPath;
