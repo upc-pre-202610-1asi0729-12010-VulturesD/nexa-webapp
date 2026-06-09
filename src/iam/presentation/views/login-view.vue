@@ -14,8 +14,8 @@ const showPass = ref(false);
 const error = ref('');
 const loading = ref(false);
 
-const demoProfiles = computed(() =>
-  auth.demoUsers
+const workspaceProfiles = computed(() =>
+  auth.workspaceUsers
     .filter(profile => profile.roleKey !== 'admin' && profile.segment !== 'ADMIN')
     .map(profile => ({
       name: profile.name,
@@ -30,7 +30,7 @@ const demoProfiles = computed(() =>
 );
 
 onMounted(() => {
-  auth.loadDemoUsers().catch(() => {});
+  auth.loadWorkspaceUsers().catch(() => {});
 });
 
 function pickProfile(p) {
@@ -70,12 +70,11 @@ async function doLogin() {
   <div class="auth-form-title">{{ t('auth.welcome') }}</div>
   <div class="auth-form-sub">{{ t('auth.subtitle') }}</div>
 
-  <!-- Demo profiles -->
   <div style="margin-bottom:20px">
     <div class="profile-section-label">{{ t('auth.quickAccess') }}</div>
-    <div v-if="demoProfiles.length" class="profile-list">
+    <div v-if="workspaceProfiles.length" class="profile-list">
       <div
-        v-for="p in demoProfiles"
+        v-for="p in workspaceProfiles"
         :key="p.email"
         class="profile-card"
         :class="{ 'profile-card--active': email === p.email }"
