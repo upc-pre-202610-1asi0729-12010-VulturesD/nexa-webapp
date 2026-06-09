@@ -11,7 +11,6 @@ class InventoryApiService {
   constructor() {
     this.lots = new BaseEndpoint('/api/v1/inventory-items', baseApi, {
       useCoreBackend: true,
-      fallbackEndpointPath: '/api/v1/inventory-lots',
     });
     this.movements = new BaseEndpoint('/api/v1/stock-movements');
     this.warehouses = new BaseEndpoint('/api/v1/warehouses');
