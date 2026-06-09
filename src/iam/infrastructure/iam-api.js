@@ -9,7 +9,7 @@ import { baseApi } from '@/shared/infrastructure/base-api';
  */
 class IamApiService {
   constructor() {
-    this.users = new BaseEndpoint('/api/v1/users');
+    this.users = new BaseEndpoint('/api/v1/users', undefined, { useCoreBackend: false, useMockApi: true });
   }
 
   /**
