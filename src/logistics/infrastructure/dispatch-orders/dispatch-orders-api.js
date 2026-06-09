@@ -1,4 +1,5 @@
 import { BaseEndpoint } from '@/shared/infrastructure/base-endpoint';
+import { baseApi } from '@/shared/infrastructure/base-api';
 
 /**
  * Dispatch orders API service.
@@ -8,7 +9,7 @@ import { BaseEndpoint } from '@/shared/infrastructure/base-endpoint';
  */
 class DispatchOrdersApiService {
   constructor() {
-    this.dispatchOrders = new BaseEndpoint('/api/v1/dispatch-orders');
+    this.dispatchOrders = new BaseEndpoint('/api/v1/shipments', baseApi, { useCoreBackend: true });
   }
 
   /**

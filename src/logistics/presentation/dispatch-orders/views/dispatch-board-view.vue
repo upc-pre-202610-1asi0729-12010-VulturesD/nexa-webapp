@@ -1,13 +1,11 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useToast } from 'primevue/usetoast';
 import { useDataStore } from '@/app/application/stores/data.store';
 import { orderStatusLabel, orderStatusBadge, coldTypeLabel, coldTypeBadge, displayCode } from '@/shared/status';
 import { creditSummary } from '@/shared/credit';
 
 const router = useRouter();
-const toast = useToast();
 const ds = useDataStore();
 const D = ds.D;
 const search = ref('');
@@ -34,7 +32,7 @@ const filtered = computed(() => {
     const q = search.value.toLowerCase();
     rows = rows.filter(dispatch =>
       displayCode(dispatch).toLowerCase().includes(q) ||
-      dispatch.orderId.toLowerCase().includes(q) ||
+      String(dispatch.orderId).toLowerCase().includes(q) ||
       ds.clientName(dispatch.clientId).toLowerCase().includes(q)
     );
   }
@@ -45,11 +43,6 @@ function byColumn(column) {
   return filtered.value.filter(dispatch => (dispatch.column || dispatch.status) === column.key);
 }
 
-function nextStatus(status) {
-  const flow = ['validating', 'document_pending', 'ready_for_operations', 'preparing', 'ready_for_route', 'in_route', 'delivered'];
-  return flow[Math.min(flow.indexOf(status) + 1, flow.length - 1)] || 'preparing';
-}
-
 function isDelayed(dispatch) {
   return dispatch.status === 'delayed' || (dispatch.eta && new Date(dispatch.eta) < new Date() && !['delivered', 'incident'].includes(dispatch.status));
 }
@@ -58,12 +51,6 @@ function creditFor(dispatch) {
   return creditSummary(ds.clientById(dispatch.clientId) || {});
 }
 
-function advance(dispatch) {
-  if (dispatch.status === 'incident' || dispatch.status === 'delivered') return;
-  const next = nextStatus(dispatch.status);
-  ds.updateDispatchStatus(dispatch.id, next);
-  toast.add({ severity: next === 'delivered' ? 'success' : 'info', summary: orderStatusLabel(next), detail: displayCode(dispatch), life: 3000 });
-}
 </script>
 
 <template>
@@ -148,13 +135,8 @@ function advance(dispatch) {
           <i class="pi pi-exclamation-triangle"></i>
           <div>{{ dispatch.incidentNote }}</div>
         </div>
-        <button
-          v-if="!['delivered', 'incident'].includes(dispatch.status)"
-          class="btn btn-primary btn-sm"
-          style="margin-top:12px;width:100%;justify-content:center"
-          @click.stop="advance(dispatch)"
-        >
-          <i class="pi pi-arrow-right"></i> Move to {{ orderStatusLabel(nextStatus(dispatch.status)) }}
+        <button class="btn btn-secondary btn-sm" style="margin-top:12px;width:100%;justify-content:center" disabled>
+          <i class="pi pi-lock"></i> Backend workflow action pending
         </button>
       </article>
     </section>
