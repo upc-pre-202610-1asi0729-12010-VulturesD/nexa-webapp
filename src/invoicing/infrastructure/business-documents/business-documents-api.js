@@ -5,7 +5,7 @@ export class BusinessDocumentsApi {
   constructor() {
     this.documents = new BaseEndpoint('/api/v1/invoices', baseApi, { useCoreBackend: true });
     this.payments = new BaseEndpoint('/api/v1/payments', baseApi, { useCoreBackend: true });
-    this.portalTasks = new BaseEndpoint('/api/v1/portal-upload-tasks');
+    this.portalTasks = new BaseEndpoint('/api/v1/portal-upload-tasks', baseApi, { useCoreBackend: false, useMockApi: true });
   }
 
   getDocuments() { return this.documents.getAll(); }
