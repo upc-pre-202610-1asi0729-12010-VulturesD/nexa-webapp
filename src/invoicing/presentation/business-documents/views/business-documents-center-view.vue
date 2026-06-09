@@ -5,154 +5,96 @@ import { documentStatusLabel, documentStatusBadge, orderStatusLabel, orderStatus
 
 const ds = useDataStore();
 const D = ds.D;
-const selectedOrderId = ref('');
+const statusFilter = ref('all');
 
-const ordersWithDocs = computed(() =>
-  D.purchaseOrders
-    .map(order => ({
-      ...order,
-      docs: ds.documentsForOrder(order.id),
-      task: ds.uploadTaskForOrder(order.id),
-    }))
-    .filter(order => order.docs.length)
-);
-
-const selectedOrder = computed(() =>
-  ordersWithDocs.value.find(order => order.id === selectedOrderId.value) || ordersWithDocs.value[0]
-);
-
-const selectedDocs = computed(() => selectedOrder.value?.docs || []);
-const selectedPaymentState = computed(() => {
-  const order = selectedOrder.value;
-  if (!order) return { label: 'No order selected', badge: 'badge-gray', message: 'Select a purchase order to review billing state.' };
-  if (order.paymentStatus === 'failed') return { label: 'Payment failed', badge: 'badge-red', message: 'Review payment evidence before documents are visible to buyer.' };
-  if (order.paymentStatus === 'confirmed' || order.status === 'delivered') return { label: 'Payment confirmed', badge: 'badge-green', message: 'Billing information is ready for customer follow-up.' };
-  if (order.paymentCondition === 'cash') return { label: 'Cash pending', badge: 'badge-amber', message: 'Cash orders require payment confirmation before closing.' };
-  return { label: 'Credit terms', badge: 'badge-blue', message: `Payment condition: ${order.paymentCondition || 'standard'}.` };
+const documents = computed(() => {
+  const rows = D.businessDocuments || [];
+  if (statusFilter.value === 'all') return rows;
+  return rows.filter(document => document.status === statusFilter.value);
 });
-const pendingCount = computed(() => D.businessDocuments.filter(doc => doc.required && ['pending', 'observed', 'rejected'].includes(doc.status)).length);
-const acceptedCount = computed(() => D.businessDocuments.filter(doc => ['accepted', 'uploaded', 'generated'].includes(doc.status)).length);
-const invoiceDocs = computed(() => D.businessDocuments.filter(doc => doc.type?.startsWith('invoice')));
-const invoiceAcceptedCount = computed(() => invoiceDocs.value.filter(doc => ['accepted', 'uploaded', 'generated'].includes(doc.status)).length);
-const invoiceRejectedCount = computed(() => invoiceDocs.value.filter(doc => ['rejected', 'observed'].includes(doc.status)).length);
-
-function nextStatus(doc) {
-  const order = ['pending', 'generated', 'uploaded', 'accepted'];
-  const current = order.indexOf(doc.status);
-  return order[Math.min(current + 1, order.length - 1)] || 'generated';
-}
-
-function advance(doc) {
-  ds.updateDocumentStatus(doc.id, nextStatus(doc));
-}
+const pendingCount = computed(() => D.businessDocuments.filter(document => document.status === 'pending').length);
+const acceptedCount = computed(() => D.businessDocuments.filter(document => document.status === 'accepted').length);
+const totalAmount = computed(() => D.businessDocuments.reduce((sum, document) => sum + Number(document.amount || 0), 0));
+const formatMoney = (value, currency = 'PEN') => `${currency} ${Number(value || 0).toFixed(2)}`;
 </script>
 
 <template>
   <div class="page-header">
     <div>
       <div class="page-title">Business Documents</div>
-      <div class="page-subtitle">Invoices, guides, CDR, POD and manual upload tasks for external customer portals.</div>
+      <div class="page-subtitle">Invoice records loaded from the Nexa backend invoicing endpoints.</div>
     </div>
-    <span class="demo-label">Reference document</span>
   </div>
 
   <div class="grid-3" style="margin-bottom:18px">
     <div class="card kpi-card">
       <div class="kpi-label"><i class="pi pi-clock" style="color:#F59E0B"></i> Pending</div>
       <div class="kpi-value" style="color:#F59E0B">{{ pendingCount }}</div>
-      <div class="kpi-sub">Require S1 action</div>
+      <div class="kpi-sub">Invoices awaiting payment confirmation</div>
     </div>
     <div class="card kpi-card">
-      <div class="kpi-label"><i class="pi pi-check" style="color:#16A34A"></i> Visible or accepted</div>
+      <div class="kpi-label"><i class="pi pi-check" style="color:#16A34A"></i> Accepted</div>
       <div class="kpi-value" style="color:#16A34A">{{ acceptedCount }}</div>
-      <div class="kpi-sub">Available for tracking</div>
+      <div class="kpi-sub">Invoices marked as paid</div>
     </div>
     <div class="card kpi-card">
-      <div class="kpi-label"><i class="pi pi-upload" style="color:#2563EB"></i> External portals</div>
-      <div class="kpi-value" style="color:#2563EB">{{ D.portalUploadTasks.length }}</div>
-      <div class="kpi-sub">Manual checklist, no real integration</div>
-    </div>
-    <div class="card kpi-card">
-      <div class="kpi-label"><i class="pi pi-file-check" style="color:#7C3AED"></i> Invoice records</div>
-      <div class="kpi-value" style="color:#7C3AED">{{ invoiceAcceptedCount }}/{{ invoiceDocs.length }}</div>
-      <div class="kpi-sub">{{ invoiceRejectedCount }} observed or rejected</div>
+      <div class="kpi-label"><i class="pi pi-wallet" style="color:#2563EB"></i> Total billed</div>
+      <div class="kpi-value" style="color:#2563EB">S/ {{ totalAmount.toFixed(2) }}</div>
+      <div class="kpi-sub">Current backend invoice amount</div>
     </div>
   </div>
 
-  <div class="flow-grid-12">
-    <section class="flow-panel span-4">
-      <div class="flow-panel-head">
-        <div>
-          <div class="flow-title">Purchase Orders with Documents</div>
-          <div class="flow-subtitle">Select a purchase order to review the checklist.</div>
-        </div>
-      </div>
-      <div class="flow-panel-pad">
-        <button
-          v-for="order in ordersWithDocs"
-          :key="order.id"
-          class="flow-list-item"
-          style="width:100%;background:transparent;border-left:none;border-right:none;border-top:none;text-align:left;cursor:pointer"
-          :style="selectedOrder?.id === order.id ? 'background:#EFF6FF;border-radius:10px;padding-left:10px;padding-right:10px' : ''"
-          @click="selectedOrderId = order.id"
-        >
-          <div>
-            <div class="flow-row">
-              <span class="mono">{{ order.id }}</span>
-              <span :class="'badge ' + orderStatusBadge(order.status)">{{ orderStatusLabel(order.status) }}</span>
-            </div>
-            <div class="flow-note">{{ ds.clientName(order.clientId) }}</div>
-          </div>
-          <span class="flow-pill">{{ order.docs.filter(doc => doc.required && doc.status !== 'not_required').length }}/{{ order.docs.length }}</span>
-        </button>
-      </div>
-    </section>
-
-    <section class="flow-panel span-8" v-if="selectedOrder">
-      <div class="flow-panel-head">
-        <div>
-          <div class="flow-title">{{ selectedOrder.id }} - {{ ds.clientName(selectedOrder.clientId) }}</div>
-          <div class="flow-subtitle">Document profile: {{ ds.clientById(selectedOrder.clientId)?.documentProfile || 'standard_docs' }}</div>
-        </div>
-        <span :class="'badge ' + orderStatusBadge(selectedOrder.status)">{{ orderStatusLabel(selectedOrder.status) }}</span>
-      </div>
-      <div class="flow-panel-pad">
-        <div class="banner banner-info">
-          <i class="pi pi-credit-card"></i>
-          <div>
-            <strong>{{ selectedPaymentState.label }}.</strong> {{ selectedPaymentState.message }}
-          </div>
-        </div>
-        <div v-if="selectedOrder.task" class="banner banner-warning">
-          <i class="pi pi-upload"></i>
-          <div>
-            <strong>External portal task:</strong> {{ selectedOrder.task.status }} - due {{ selectedOrder.task.dueDate }}.
-            Complete this manual upload before the external customer portal deadline.
-          </div>
-        </div>
-
-        <div class="flow-stack">
-          <div v-for="doc in selectedDocs" :key="doc.id" class="document-check">
-            <div>
-              <div style="font-size:13px;font-weight:800">{{ doc.label }}</div>
-              <div class="flow-note">
-                {{ doc.required ? 'Required' : 'Not required' }} -
-                {{ doc.visibleToBuyer ? 'visible to S3' : 'internal until completed' }}
-              </div>
-            </div>
-            <div class="flow-row">
-              <span :class="'badge ' + documentStatusBadge(doc.status)">{{ documentStatusLabel(doc.status) }}</span>
-              <button
-                class="btn btn-secondary btn-sm"
-                :disabled="doc.status === 'accepted' || doc.status === 'not_required'"
-                @click="advance(doc)"
-              >
-                Mark Progress
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+  <div class="filter-bar">
+    <button v-for="status in ['all', 'pending', 'accepted']" :key="status" class="filter-chip" :class="{ active: statusFilter === status }" @click="statusFilter = status">
+      {{ status === 'all' ? 'All invoices' : documentStatusLabel(status) }}
+    </button>
   </div>
+
+  <section class="flow-panel">
+    <div class="flow-panel-head">
+      <div>
+        <div class="flow-title">Invoices</div>
+        <div class="flow-subtitle">Mapped from `/api/v1/invoices`; payment references are available in the Payments page.</div>
+      </div>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Invoice</th>
+          <th>Purchase Order</th>
+          <th>Customer</th>
+          <th>Amount</th>
+          <th>Payment Status</th>
+          <th>Order Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="document in documents" :key="document.id">
+          <td>
+            <div style="font-weight:800">{{ document.label }}</div>
+            <div class="flow-note">{{ document.fileName }}</div>
+          </td>
+          <td><span class="mono">{{ document.orderId }}</span></td>
+          <td>{{ ds.clientName(document.clientId) }}</td>
+          <td style="font-weight:700">{{ formatMoney(document.amount, document.currency) }}</td>
+          <td><span :class="'badge ' + documentStatusBadge(document.status)">{{ documentStatusLabel(document.status) }}</span></td>
+          <td>
+            <span v-if="ds.purchaseOrderById(document.orderId)" :class="'badge ' + orderStatusBadge(ds.purchaseOrderById(document.orderId).status)">
+              {{ orderStatusLabel(ds.purchaseOrderById(document.orderId).status) }}
+            </span>
+            <span v-else class="badge badge-gray">Order pending</span>
+          </td>
+        </tr>
+        <tr v-if="!documents.length">
+          <td colspan="6">
+            <div class="empty-state compact">
+              <div class="empty-state-icon"><i class="pi pi-file"></i></div>
+              <div class="empty-state-title">No invoices found</div>
+              <div class="empty-state-desc">No backend invoice records match this filter.</div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 </template>
