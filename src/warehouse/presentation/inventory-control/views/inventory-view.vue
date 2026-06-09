@@ -133,13 +133,13 @@ function availablePercent(product) {
   <div v-if="tab === 'overview'" role="tabpanel">
     <div style="margin-bottom:20px">
       <div class="section-label">{{ t('inventory.warehouses') }}</div>
-      <div class="grid-2">
+      <div class="warehouse-grid">
         <div v-for="wh in D.warehouses" :key="wh.id">
           <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;color:#374151;margin-bottom:8px;display:flex;align-items:center;gap:6px">
             <i class="pi pi-building" style="color:#9CA3AF" aria-hidden="true"></i> {{ wh.name }}
             <span style="font-size:11px;color:#9CA3AF;font-weight:400">· {{ wh.address }}</span>
           </div>
-          <div class="grid-2" style="gap:10px">
+          <div class="warehouse-zone-grid">
             <div v-for="z in wh.zones" :key="z.id" class="card card-pad">
               <div style="display:flex;justify-content:space-between;margin-bottom:12px">
                 <div>
