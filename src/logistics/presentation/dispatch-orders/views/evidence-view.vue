@@ -72,7 +72,7 @@ const completedRows = computed(() => rows.value.filter(row => row.pod?.status ==
           <td>
             <div class="flow-row">
               <button class="btn btn-ghost btn-sm" @click="router.push('/ops/operations/dispatch-orders/' + row.dispatch.id)">Details</button>
-              <button class="btn btn-secondary btn-sm" disabled>POD backend pending</button>
+              <button class="btn btn-secondary btn-sm" disabled>POD upload read-only</button>
             </div>
           </td>
         </tr>

@@ -140,7 +140,7 @@ const temperatureSummary = computed(() => {
             <span>{{ new Date(log.timestamp).toLocaleTimeString('en-US') }}</span>
             <strong :style="{ color: log.status === 'ok' ? '#15803D' : '#B45309' }">{{ log.temperatureC }} C - {{ log.status }}</strong>
           </div>
-          <button class="btn btn-secondary" disabled><i class="pi pi-lock"></i> POD registration pending backend support</button>
+          <button class="btn btn-secondary" disabled><i class="pi pi-lock"></i> POD registration read-only</button>
         </div>
       </section>
 
