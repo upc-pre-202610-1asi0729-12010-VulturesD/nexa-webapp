@@ -2,7 +2,7 @@ import { BaseEndpoint } from '@/shared/infrastructure/base-endpoint';
 
 class ClientsApiService {
   constructor() {
-    this.clients = new BaseEndpoint('/api/v1/clients');
+    this.clients = new BaseEndpoint('/api/v1/clients', undefined, { useCoreBackend: false, useMockApi: true });
   }
 
   getClients() {
