@@ -76,8 +76,8 @@ const manualClient = computed(() => {
     id,
     name: id,
     status: 'active',
-    condition: 'Backend customer',
-    type: 'Backend order customer',
+    condition: 'Direct customer identifier',
+    type: 'Direct order customer',
     address: '',
   };
 });
@@ -177,7 +177,7 @@ async function confirm() {
         <div v-if="!D.clients.length" class="card card-pad">
           <div class="banner banner-info" style="margin-bottom:12px">
             <i class="pi pi-info-circle"></i>
-            <div>Client account endpoint is pending. Enter a backend customer identifier to create an order with the real Orders API.</div>
+            <div>Client account lookup is not available for this workspace. Enter a customer identifier to create an order through the Orders API.</div>
           </div>
           <label class="field">
             <span class="field-label">Customer identifier</span>
