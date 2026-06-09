@@ -15,6 +15,11 @@ const permissions = computed(() => {
   if (roleKey.value === 'logistics') return ['Inventory Control', 'Dispatch Orders', 'Proof of Delivery', 'Operational Analytics'];
   return ['Product Catalog', 'Purchase Orders', 'Manual Order Entry', 'Business Documents'];
 });
+const preferences = computed(() => [
+  { label: 'Language', value: auth.user?.preferredLanguage || 'en' },
+  { label: 'Department', value: auth.user?.department || roleTitle.value },
+  { label: 'Plan access', value: auth.user?.planAccess || 'standard' },
+]);
 
 function endSession() {
   auth.logout();
@@ -27,7 +32,7 @@ function endSession() {
     <div class="page-header">
       <div>
         <div class="page-title">My Profile</div>
-        <div class="page-subtitle">Account details come from Nexa authentication. Profile editing is pending backend support.</div>
+        <div class="page-subtitle">Account details come from Nexa authentication. Preferences below are local read-only presentation data.</div>
       </div>
       <div class="profile-account-actions">
         <button class="btn btn-secondary" @click="endSession"><i class="pi pi-users"></i> Switch Account</button>
@@ -65,15 +70,14 @@ function endSession() {
       <section class="flow-panel span-5">
         <div class="flow-panel-head">
           <div>
-            <div class="flow-title">Backend Support Pending</div>
-            <div class="flow-subtitle">Editable preferences need a user profile endpoint.</div>
+            <div class="flow-title">Workspace Preferences</div>
+            <div class="flow-subtitle">Read-only profile metadata for current AV2 workspace.</div>
           </div>
         </div>
-        <div class="flow-panel-pad">
-          <div class="empty-state compact">
-            <div class="empty-state-icon"><i class="pi pi-user-edit"></i></div>
-            <div class="empty-state-title">Profile editing pending</div>
-            <div class="empty-state-desc">This module is pending backend support and will be enabled in a future integration cycle.</div>
+        <div class="flow-panel-pad flow-stack">
+          <div v-for="preference in preferences" :key="preference.label" class="mini-row">
+            <span>{{ preference.label }}</span>
+            <strong>{{ preference.value }}</strong>
           </div>
         </div>
       </section>
