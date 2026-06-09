@@ -13,6 +13,7 @@ const payments = computed(() => {
   const scoped = rows.filter(payment => payment.clientId === clientId.value);
   return scoped.length ? scoped : rows;
 });
+const paymentMethods = computed(() => ds.paymentMethodsForClient(clientId.value));
 const totalPaid = computed(() =>
   payments.value
     .filter(payment => String(payment.status).toLowerCase() === 'paid')
@@ -31,13 +32,13 @@ const formatMoney = (value, currency = 'PEN') => `${currency} ${Number(value || 
     <div class="page-header">
       <div>
         <div class="page-title">Payments</div>
-        <div class="page-subtitle">Payment records loaded from Nexa backend. Card and wallet method management is pending backend support.</div>
+        <div class="page-subtitle">Backend payment records plus optional local payment-method references.</div>
       </div>
     </div>
 
     <div class="banner banner-info">
       <i class="pi pi-info-circle" aria-hidden="true"></i>
-      <div>This screen shows backend payment records only. Payment method creation will be enabled when a payment-method endpoint is available.</div>
+      <div>Payment records come from the operations backend. Saved methods are shown in read-only workspace mode.</div>
     </div>
 
     <div class="grid-3" style="margin-bottom:18px">
@@ -103,15 +104,24 @@ const formatMoney = (value, currency = 'PEN') => `${currency} ${Number(value || 
     <section class="flow-panel" style="margin-top:18px">
       <div class="flow-panel-head">
         <div>
-          <div class="flow-title">Payment Method Management</div>
-          <div class="flow-subtitle">Cards, wallets and default method selection are not connected in this backend cycle.</div>
+          <div class="flow-title">Payment Methods</div>
+          <div class="flow-subtitle">Local references used for buyer portal presentation.</div>
         </div>
       </div>
-      <div class="flow-panel-pad">
-        <div class="empty-state compact">
+      <div class="flow-panel-pad flow-stack">
+        <div v-for="method in paymentMethods" :key="method.id" class="flow-list-item">
+          <div>
+            <strong>{{ method.label || method.brand }}</strong>
+            <div class="flow-note">{{ method.brand }} · {{ method.type }} · **** {{ method.last4 }}</div>
+          </div>
+          <button class="btn btn-secondary btn-sm" :disabled="method.isDefault" @click="ds.setDefaultPaymentMethod(method.id)">
+            {{ method.isDefault ? 'Default' : 'Set default' }}
+          </button>
+        </div>
+        <div v-if="!paymentMethods.length" class="empty-state compact">
           <div class="empty-state-icon"><i class="pi pi-wallet"></i></div>
-          <div class="empty-state-title">Payment methods pending</div>
-          <div class="empty-state-desc">This module is pending backend support and will be enabled in a future integration cycle.</div>
+          <div class="empty-state-title">No local payment methods</div>
+          <div class="empty-state-desc">Run npm run server to load optional payment method references.</div>
         </div>
       </div>
     </section>

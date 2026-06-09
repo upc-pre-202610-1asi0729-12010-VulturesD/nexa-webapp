@@ -11,6 +11,8 @@ const ds = useDataStore();
 const clientId = computed(() => auth.user?.clientId || '');
 const clientOrders = computed(() => ds.D.purchaseOrders.filter(order => order.clientId === clientId.value));
 const clientInvoices = computed(() => ds.D.businessDocuments.filter(document => document.clientId === clientId.value));
+const client = computed(() => ds.clientById(clientId.value));
+const contact = computed(() => ds.contactByClientId(clientId.value));
 const initials = computed(() => auth.user?.initials || auth.user?.name?.split(' ').slice(0, 2).map(part => part[0]).join('').toUpperCase() || 'BP');
 
 function endSession() {
@@ -25,7 +27,7 @@ function endSession() {
       <div>
         <span class="eyebrow">Buyer Portal</span>
         <h1>Buyer Profile</h1>
-        <p>Buyer identity is linked to the authenticated account. Editable buyer profile fields are pending backend support.</p>
+        <p>Buyer identity comes from authenticated access; client profile details are shown for the current workspace.</p>
       </div>
     </section>
 
@@ -82,15 +84,18 @@ function endSession() {
       <section class="flow-panel span-12">
         <div class="flow-panel-head">
           <div>
-            <div class="flow-title">Profile Management</div>
-            <div class="flow-subtitle">Delivery preferences, notification preferences and editable buyer metadata need backend profile endpoints.</div>
+            <div class="flow-title">Client Profile</div>
+            <div class="flow-subtitle">Local B2B account metadata for buyer portal presentation.</div>
           </div>
         </div>
-        <div class="flow-panel-pad">
-          <div class="empty-state compact">
-            <div class="empty-state-icon"><i class="pi pi-user-edit"></i></div>
-            <div class="empty-state-title">Buyer profile editing pending</div>
-            <div class="empty-state-desc">This module is pending backend support and will be enabled in a future integration cycle.</div>
+        <div class="flow-panel-pad form-grid">
+          <label class="field"><span class="field-label">Company</span><input class="plain-input" :value="client?.businessName || clientId" disabled /></label>
+          <label class="field"><span class="field-label">RUC</span><input class="plain-input" :value="client?.ruc || 'N/A'" disabled /></label>
+          <label class="field"><span class="field-label">Primary contact</span><input class="plain-input" :value="contact?.name || auth.user?.name" disabled /></label>
+          <label class="field"><span class="field-label">Delivery address</span><input class="plain-input" :value="client?.address || 'Local profile unavailable'" disabled /></label>
+          <div class="banner banner-info span-full" style="margin:0">
+            <i class="pi pi-info-circle"></i>
+            <div>Editable buyer profile updates remain local-only until a backend profile endpoint is exposed.</div>
           </div>
         </div>
       </section>
