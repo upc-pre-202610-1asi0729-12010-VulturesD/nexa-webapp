@@ -1,11 +1,13 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { useDataStore } from '@/app/application/stores/data.store';
 import { orderStatusLabel, orderStatusBadge, coldTypeLabel, coldTypeBadge, displayCode } from '@/shared/status';
 import { creditSummary } from '@/shared/credit';
 
 const router = useRouter();
+const { t } = useI18n();
 const ds = useDataStore();
 const D = ds.D;
 const search = ref('');
@@ -67,7 +69,7 @@ function creditFor(dispatch) {
   <div class="filter-bar">
     <div class="search-input">
       <i class="pi pi-search"></i>
-      <input v-model="search" placeholder="Search dispatch order, purchase order or client..." />
+      <input v-model="search" :placeholder="t('dispatch.searchPlaceholder')" :aria-label="t('dispatch.searchPlaceholder')" />
     </div>
     <button
       v-for="routeName in routes"
@@ -76,7 +78,7 @@ function creditFor(dispatch) {
       :class="{ active: routeFilter === routeName }"
       @click="routeFilter = routeName"
     >
-      {{ routeName === 'all' ? 'All routes' : routeName }}
+      {{ routeName === 'all' ? t('dispatch.allRoutes') : routeName }}
     </button>
   </div>
 
