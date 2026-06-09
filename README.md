@@ -110,7 +110,7 @@ The `nexa-webapp` repository contains the single page application (SPA) that man
 | **State Management** | Pinia |
 | **Routing & Client** | Vue Router 4 & Axios |
 | **Localization** | Vue I18n |
-| **Backend Integration** | Nexa Platform REST API (`http://localhost:5068/api/v1`) |
+| **Backend Integration** | Nexa Platform REST API (`http://localhost:5068/api/v1`) + optional local mock API (`http://127.0.0.1:3000`) for unsupported modules |
 
 ---
 
@@ -125,10 +125,12 @@ The `nexa-webapp` repository contains the single page application (SPA) that man
 
 2. **Run WebApp connected to the Nexa Platform backend**:
    - Ensure the backend project is running at `http://localhost:5068`.
+   - Optional: run `npm run server` in another terminal for unsupported AV2 modules that use local mock resources.
    - Ensure `.env.development` is configured with:
      ```env
      VITE_CORE_BACKEND_ENABLED=true
      VITE_NEXA_API_BASE_URL=http://localhost:5068/api/v1
+     VITE_NEXA_MOCK_API_BASE_URL=http://127.0.0.1:3000
      VITE_ENABLE_MOCK_API_FALLBACK=false
      ```
    - Start the Vite development server:
@@ -146,6 +148,8 @@ The `nexa-webapp` repository contains the single page application (SPA) that man
 | `npm run dev` | Starts the Vite dev server locally. |
 | `npm run build` | Builds the production package (`dist/`). |
 | `npm run preview` | Previews the production build locally. |
+| `npm run server` | Starts the optional local mock API for unsupported modules. |
+| `npm run mock:api` | Alias for the optional local mock API. |
 
 ---
 

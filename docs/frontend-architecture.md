@@ -1,6 +1,6 @@
 # Frontend Architecture
 
-Nexa WebApp follows a bounded-context frontend layout over Vue 3, Vite, Pinia, Vue Router, PrimeVue, and the Nexa Platform REST API.
+Nexa WebApp follows a bounded-context frontend layout over Vue 3, Vite, Pinia, Vue Router, PrimeVue, the Nexa Platform REST API, and an optional local mock API for unsupported AV2 modules.
 
 ## Official Contexts
 
@@ -77,9 +77,9 @@ Buyer Portal support flows remain constrained by available backend contracts. Ad
 
 ## Backend Boundary
 
-Supported modules consume Nexa Platform through `VITE_NEXA_API_BASE_URL`. Unsupported modules must not invent replacement data; they should show pending backend support or read-only summaries derived from authenticated session and real collections.
+Supported modules consume Nexa Platform through `VITE_NEXA_API_BASE_URL`. Unsupported modules may consume the optional mock API through `VITE_NEXA_MOCK_API_BASE_URL`.
 
-Catalog, inventory, warehouses, purchase orders, shipments, invoices, payments, categories, brands, and authentication consume Nexa Platform endpoints. See `docs/core-backend-integration.md` for local environment variables and catalog image serving.
+Catalog, inventory, warehouses, purchase orders, shipments, invoices, payments, categories, brands, and authentication consume Nexa Platform endpoints. Clients, purchase requests, promotions, customer portals, editable payment methods, support conversations, temperature logs, and stock-movement supplements use isolated mock resources. See `docs/av2-webapp-data-source-map.md` for ownership by screen.
 
 Expected future backend groups include `/api/v1/promotions`, `/api/v1/purchase-requests`, `/api/v1/clients`, `/api/v1/deliveries`, `/api/v1/cold-chain-events`, `/api/v1/subscriptions`, `/api/v1/payment-methods`, and profile administration endpoints.
 
