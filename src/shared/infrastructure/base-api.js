@@ -1,4 +1,4 @@
-import http, { API_BASE_URL, CORE_BACKEND_ENABLED, LOCAL_API_BASE_URL, MOCK_API_FALLBACK_ENABLED, coreHttp, localHttp } from './http';
+import http, { API_BASE_URL, CORE_BACKEND_ENABLED, LOCAL_API_BASE_URL, MOCK_API_FALLBACK_ENABLED, coreHttp, localHttp, mockHttp } from './http';
 
 /**
  * Shared API access point for bounded-context infrastructure services.
@@ -17,6 +17,10 @@ export class BaseApi {
 
   get fallbackHttp() {
     return this.fallbackClient;
+  }
+
+  get mockHttp() {
+    return mockHttp;
   }
 
   get coreHttp() {

@@ -19,7 +19,7 @@ export const opsRoutes = {
         return user?.roleKey === 'logistics' ? '/ops/operations/dashboard' : '/ops/commercial/dashboard';
       },
     },
-    // #2 Legacy aliases keep older demo links working while menus use canonical domain routes.
+    // #2 Legacy aliases keep older links working while menus use canonical domain routes.
     { path: 'commercial/orders', redirect: '/ops/commercial/purchase-orders' },
     { path: 'commercial/orders/create', redirect: '/ops/commercial/manual-order-entry' },
     { path: 'commercial/orders/:id', redirect: to => `/ops/commercial/purchase-orders/${to.params.id}` },

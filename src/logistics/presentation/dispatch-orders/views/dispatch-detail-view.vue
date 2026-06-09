@@ -1,14 +1,12 @@
 <script setup>
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useToast } from 'primevue/usetoast';
 import { useDataStore } from '@/app/application/stores/data.store';
 import { orderStatusLabel, orderStatusBadge, coldTypeLabel, coldTypeBadge, documentStatusLabel, documentStatusBadge, displayCode } from '@/shared/status';
 import { creditSummary } from '@/shared/credit';
 
 const route = useRoute();
 const router = useRouter();
-const toast = useToast();
 const ds = useDataStore();
 
 const dispatch = computed(() => ds.dispatchOrderById(route.params.id));
@@ -31,10 +29,6 @@ const temperatureSummary = computed(() => {
   };
 });
 
-function setStatus(status) {
-  ds.updateDispatchStatus(dispatch.value.id, status);
-  toast.add({ severity: status === 'delivered' ? 'success' : status === 'incident' ? 'warn' : 'info', summary: orderStatusLabel(status), detail: displayCode(dispatch.value), life: 3000 });
-}
 </script>
 
 <template>
@@ -56,10 +50,7 @@ function setStatus(status) {
         <div class="page-subtitle">{{ ds.clientName(dispatch.clientId) }} - {{ dispatch.routeName }} - ETA {{ new Date(dispatch.eta).toLocaleString('en-US') }}</div>
       </div>
       <div class="flow-row">
-        <button class="btn btn-secondary" @click="setStatus('preparing')"><i class="pi pi-box"></i> Prepare</button>
-        <button class="btn btn-secondary" @click="setStatus('in_route')"><i class="pi pi-send"></i> On route</button>
-        <button class="btn btn-success" @click="setStatus('delivered')"><i class="pi pi-check"></i> Delivered</button>
-        <button class="btn btn-danger" @click="setStatus('incident')"><i class="pi pi-exclamation-triangle"></i> Incident</button>
+        <button class="btn btn-secondary" disabled><i class="pi pi-lock"></i> Backend workflow action pending</button>
       </div>
     </div>
 
@@ -149,7 +140,7 @@ function setStatus(status) {
             <span>{{ new Date(log.timestamp).toLocaleTimeString('en-US') }}</span>
             <strong :style="{ color: log.status === 'ok' ? '#15803D' : '#B45309' }">{{ log.temperatureC }} C - {{ log.status }}</strong>
           </div>
-          <button class="btn btn-primary" @click="setStatus('delivered')"><i class="pi pi-check"></i> Complete POD</button>
+          <button class="btn btn-secondary" disabled><i class="pi pi-lock"></i> POD registration read-only</button>
         </div>
       </section>
 

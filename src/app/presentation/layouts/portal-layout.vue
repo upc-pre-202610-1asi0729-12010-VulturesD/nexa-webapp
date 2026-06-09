@@ -6,7 +6,6 @@ import { useToast } from 'primevue/usetoast';
 import { useCartStore } from '@/app/application/stores/cart.store';
 import { useAuthStore } from '@/iam/application/iam.store';
 import { useDataStore } from '@/app/application/stores/data.store';
-import BuyerAssistantPreview from '@/sales/presentation/buyer-portal/components/buyer-assistant-preview.vue';
 import i18n from '@/i18n';
 import logo from '@/assets/img/nexa.svg';
 
@@ -31,8 +30,16 @@ const navItems = [
   { to: '/portal/profile', labelKey: 'portal.nav.profile', icon: 'pi-user-edit' },
 ];
 
-const bottomNavItems = computed(() => navItems.slice(0, 4));
-const mobileMenuItems = computed(() => navItems.slice(4));
+const bottomNavItems = computed(() => [
+  navItems[0],
+  navItems[1],
+  navItems[3],
+  navItems[5],
+  navItems[8],
+]);
+const mobileMenuItems = computed(() =>
+  navItems.filter(item => !bottomNavItems.value.some(bottomItem => bottomItem.to === item.to))
+);
 const footerLinks = computed(() => [
   { to: '/portal/legal/terms', label: t('footer.terms') },
   { to: '/portal/legal/privacy', label: t('footer.privacy') },
@@ -48,6 +55,12 @@ function setLang(l) {
 function goPortal(to) {
   mobileMenuOpen.value = false;
   router.push(to);
+}
+
+function logout() {
+  auth.logout();
+  mobileMenuOpen.value = false;
+  router.push('/auth/login');
 }
 
 function goRequestBuilder() {
@@ -148,6 +161,14 @@ function goRequestBuilder() {
         <i :class="['pi', n.icon]" aria-hidden="true"></i>
         <span>{{ t(n.labelKey) }}</span>
       </button>
+      <button
+        type="button"
+        class="portal-mobile-menu-item portal-mobile-menu-item-danger"
+        @click="logout"
+      >
+        <i class="pi pi-sign-out" aria-hidden="true"></i>
+        <span>{{ t('common.logout') }}</span>
+      </button>
     </nav>
 
     <nav class="portal-bottom-nav" role="navigation" :aria-label="t('common.mobileNav')">
@@ -164,16 +185,6 @@ function goRequestBuilder() {
           aria-hidden="true"
         ></i>
         <span>{{ t(n.labelKey) }}</span>
-      </button>
-      <button
-        type="button"
-        class="portal-bottom-nav-item"
-        :class="{ active: mobileMenuItems.some(n => route.path.startsWith(n.to)) }"
-        :aria-expanded="mobileMenuOpen"
-        @click="mobileMenuOpen = !mobileMenuOpen"
-      >
-        <i class="pi pi-bars" aria-hidden="true"></i>
-        <span>{{ t('portal.nav.more') }}</span>
       </button>
     </nav>
 
@@ -219,7 +230,5 @@ function goRequestBuilder() {
         </button>
       </div>
     </aside>
-
-    <BuyerAssistantPreview />
   </div>
 </template>

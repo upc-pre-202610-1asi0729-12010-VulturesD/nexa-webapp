@@ -1,6 +1,20 @@
 import { ValueObject } from '@/shared/domain/model/value-objects/value-object';
 
-const DISPATCH_STATUSES = ['ready', 'in_transit', 'delivered', 'cancelled'];
+const DISPATCH_STATUSES = [
+  'ready',
+  'ready_for_operations',
+  'ready_for_dispatch',
+  'ready_for_route',
+  'preparing',
+  'in_transit',
+  'in_route',
+  'delivered',
+  'cancelled',
+  'delayed',
+  'incident',
+  'validating',
+  'document_pending',
+];
 
 export class DispatchStatus extends ValueObject {
   constructor(value = 'ready') {
@@ -12,6 +26,6 @@ export class DispatchStatus extends ValueObject {
   }
 
   canClose() {
-    return this.value === 'in_transit';
+    return ['in_transit', 'in_route'].includes(this.value);
   }
 }

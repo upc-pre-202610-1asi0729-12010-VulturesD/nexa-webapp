@@ -1,12 +1,10 @@
 <script setup>
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { useToast } from 'primevue/usetoast';
 import { useDataStore } from '@/app/application/stores/data.store';
 import { orderStatusLabel, orderStatusBadge, displayCode } from '@/shared/status';
 
 const router = useRouter();
-const toast = useToast();
 const ds = useDataStore();
 const D = ds.D;
 
@@ -20,11 +18,6 @@ const rows = computed(() =>
 const pendingRows = computed(() => rows.value.filter(row => row.dispatch.requiresPOD && row.pod?.status !== 'complete'));
 const completedRows = computed(() => rows.value.filter(row => row.pod?.status === 'complete'));
 
-function complete(dispatch) {
-  ds.completePod(dispatch.id);
-  ds.updateDispatchStatus(dispatch.id, 'delivered');
-  toast.add({ severity: 'success', summary: 'POD completed', detail: displayCode(dispatch), life: 3000 });
-}
 </script>
 
 <template>
@@ -79,7 +72,7 @@ function complete(dispatch) {
           <td>
             <div class="flow-row">
               <button class="btn btn-ghost btn-sm" @click="router.push('/ops/operations/dispatch-orders/' + row.dispatch.id)">Details</button>
-              <button class="btn btn-primary btn-sm" :disabled="row.pod?.status === 'complete'" @click="complete(row.dispatch)">Complete POD</button>
+              <button class="btn btn-secondary btn-sm" disabled>POD upload read-only</button>
             </div>
           </td>
         </tr>

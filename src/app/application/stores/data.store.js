@@ -4,6 +4,8 @@ import { catalogApplication } from '@/catalog-management/application/product-cat
 import { purchaseOrdersApplication } from '@/sales/application/purchase-orders/purchase-orders.application';
 import { inventoryApplication } from '@/warehouse/application/inventory-control/inventory.application';
 import { BaseEndpoint } from '@/shared/infrastructure/base-endpoint';
+import { dispatchOrdersApplication } from '@/logistics/application/dispatch-orders/dispatch-orders.application';
+import { BusinessDocumentsApi } from '@/invoicing/infrastructure/business-documents/business-documents-api';
 
 const endpoints = {
   tenants: '/api/v1/tenants',
@@ -14,6 +16,7 @@ const endpoints = {
   clientContacts: '/api/v1/client-contacts',
   deliveryAddresses: '/api/v1/delivery-addresses',
   categories: '/api/v1/categories',
+  brands: '/api/v1/brands',
   productImages: '/api/v1/product-images',
   priceLists: '/api/v1/price-lists',
   promotions: '/api/v1/promotions',
@@ -40,15 +43,56 @@ const endpoints = {
   temperatureLogs: '/api/v1/temperature-logs',
   alerts: '/api/v1/alerts',
   activityLog: '/api/v1/activity-log',
+  supportConversations: '/api/v1/support-conversations',
 };
 
+const mockResourceKeys = new Set([
+  'tenants',
+  'subscriptions',
+  'roles',
+  'users',
+  'clients',
+  'clientContacts',
+  'deliveryAddresses',
+  'productImages',
+  'priceLists',
+  'promotions',
+  'stockMovements',
+  'availabilitySnapshots',
+  'purchaseRequests',
+  'requestItems',
+  'orderTimelineEvents',
+  'businessDocuments',
+  'customerPortals',
+  'portalRequirements',
+  'portalUploadTasks',
+  'dispatchItems',
+  'deliveryEvents',
+  'proofOfDelivery',
+  'chatThreads',
+  'messages',
+  'paymentMethods',
+  'creditRequests',
+  'creditPayments',
+  'notifications',
+  'temperatureLogs',
+  'alerts',
+  'activityLog',
+  'supportConversations',
+]);
+
 const api = Object.fromEntries(
-  Object.entries(endpoints).map(([key, path]) => [key, new BaseEndpoint(path)])
+  Object.entries(endpoints).map(([key, path]) => [
+    key,
+    new BaseEndpoint(path, undefined, mockResourceKeys.has(key)
+      ? { useCoreBackend: false, useMockApi: true }
+      : {})
+  ])
 );
 
 /**
  * Central store for runtime data.
- * Loads business data from the configured Mock API, with local server fallback in shared infrastructure.
+ * Loads business data from the configured Nexa backend through bounded-context services.
  */
 export const useDataStore = defineStore('data', () => {
   const D = ref({
@@ -61,6 +105,7 @@ export const useDataStore = defineStore('data', () => {
     warehouses: [],
     products:  [],
     categories: [],
+    brands: [],
     productImages: [],
     priceLists: [],
     promotions: [],
@@ -89,6 +134,7 @@ export const useDataStore = defineStore('data', () => {
     chatThreads: [],
     messages: [],
     paymentMethods: [],
+    payments: [],
     creditRequests: [],
     creditPayments: [],
     notifications: [],
@@ -96,6 +142,7 @@ export const useDataStore = defineStore('data', () => {
     alerts:    [],
     activity:  [],
     activityLog: [],
+    supportConversations: [],
   });
 
   function clientName(id)  {
@@ -105,10 +152,20 @@ export const useDataStore = defineStore('data', () => {
   function productName(id) { return (D.value.products.find(p => p.id === id) || {}).name || id; }
   function productById(id) { return D.value.products.find(p => p.id === id); }
   function clientById(id)  { return D.value.clients.find(c => c.id === id); }
-  function orderById(id)   { return D.value.orders.find(o => o.id === id) || D.value.purchaseOrders.find(o => o.id === id || o.code === id); }
+  function orderById(id)   {
+    const key = String(id);
+    return D.value.orders.find(o => String(o.id) === key || String(o.backendId) === key || String(o.code) === key) ||
+      D.value.purchaseOrders.find(o => String(o.id) === key || String(o.backendId) === key || String(o.code) === key);
+  }
   function purchaseRequestById(id) { return D.value.purchaseRequests.find(r => r.id === id || r.code === id); }
-  function purchaseOrderById(id) { return D.value.purchaseOrders.find(o => o.id === id || o.code === id); }
-  function dispatchOrderById(id) { return D.value.dispatchOrders.find(d => d.id === id || d.code === id); }
+  function purchaseOrderById(id) {
+    const key = String(id);
+    return D.value.purchaseOrders.find(o => String(o.id) === key || String(o.backendId) === key || String(o.code) === key);
+  }
+  function dispatchOrderById(id) {
+    const key = String(id);
+    return D.value.dispatchOrders.find(d => String(d.id) === key || String(d.backendId) === key || String(d.code) === key);
+  }
   function deliveryAddressById(id) { return D.value.deliveryAddresses.find(a => a.id === id); }
   function contactByClientId(clientId) { return D.value.clientContacts.find(c => c.clientId === clientId && c.isPrimary) || D.value.clientContacts.find(c => c.clientId === clientId); }
   function requestItemsFor(requestId) { return D.value.requestItems.filter(item => item.purchaseRequestId === requestId); }
@@ -152,43 +209,12 @@ export const useDataStore = defineStore('data', () => {
     return `${prefix}-${String((nums.length ? Math.max(...nums) : 0) + 1).padStart(width, '0')}`;
   }
 
-  function addOrder(order) {
-    D.value.orders.unshift(order);
-    purchaseOrdersApplication.createOrder(order).catch(() => {});
-    if (!D.value.purchaseOrders.some(item => item.id === order.id)) {
-      const purchaseOrder = {
-        id: order.id,
-        code: order.id,
-        requestId: null,
-        clientId: order.clientId,
-        status: order.status,
-        commercialOwnerId: order.createdBy || 'USR-001',
-        operationsOwnerId: 'USR-002',
-        documentStatus: 'pending',
-        dispatchStatus: order.status,
-        paymentCondition: clientById(order.clientId)?.paymentCondition || clientById(order.clientId)?.condition || 'cash',
-        totalEstimatedWeightKg: (order.items || []).reduce((sum, item) => sum + Number(item.qty || 0), 0),
-        total: order.total,
-        priority: order.priority,
-        createdAt: `${order.date || new Date().toISOString().slice(0, 10)}T12:00:00Z`,
-        requestedDeliveryDate: order.date,
-        deliveryAddressId: null,
-      };
-      D.value.purchaseOrders.unshift(purchaseOrder);
-      D.value.orderItems.unshift(...(order.items || []).map((item, index) => ({
-        id: nextCode('OI', D.value.orderItems.concat((order.items || []).slice(0, index)), 3),
-        orderId: order.id,
-        productId: item.productId,
-        quantity: item.qty,
-        unit: productById(item.productId)?.unit,
-        price: item.price,
-        estimatedWeightKg: item.qty,
-        stockOk: item.stockOk,
-      })));
-      createResource('purchaseOrders', purchaseOrder);
-      createDispatchForOrder(purchaseOrder);
-      createDocumentChecklistForOrder(purchaseOrder);
-    }
+  async function addOrder(order) {
+    const created = await purchaseOrdersApplication.createOrder(order);
+    D.value.orders.unshift(created);
+    D.value.purchaseOrders.unshift(created);
+    D.value.orderItems.unshift(...orderItemsFromCoreOrders([created], D.value.products));
+    return created;
   }
 
   function patchResource(key, id, payload) {
@@ -217,7 +243,6 @@ export const useDataStore = defineStore('data', () => {
       tenantId: D.value.company.id || 'TEN-001',
       status: 'active',
       planAccess: D.value.company.subscriptionPlan || 'standard',
-      password: 'demo1234',
       lastLogin: null,
       ...payload,
     };
@@ -677,6 +702,17 @@ export const useDataStore = defineStore('data', () => {
     }
   }
 
+  async function readMockCollection(key) {
+    try {
+      const rows = await api[key]?.getAll();
+      return Array.isArray(rows) ? rows : [];
+    } catch {
+      return [];
+    }
+  }
+
+  const businessDocumentsApi = new BusinessDocumentsApi();
+
   function orderItemsFromCoreOrders(orders = [], products = D.value.products) {
     return orders.flatMap(order => (order.items || []).map((item, index) => {
       const product = products.find(row => row.id === item.productId) || productById(item.productId) || {};
@@ -699,115 +735,133 @@ export const useDataStore = defineStore('data', () => {
   }
 
   async function loadCoreCollections() {
-    const [products, lots, orders] = await Promise.all([
+    const [products, categories, brands, warehouses, lots, orders, dispatchOrders, invoices, payments] = await Promise.all([
       readCoreCollection(() => catalogApplication.getProducts()),
+      readCoreCollection(() => catalogApplication.getCategories()),
+      readCoreCollection(() => catalogApplication.getBrands()),
+      readCoreCollection(() => inventoryApplication.getWarehouses()),
       readCoreCollection(() => inventoryApplication.getLots()),
       readCoreCollection(() => purchaseOrdersApplication.getOrders()),
+      readCoreCollection(() => dispatchOrdersApplication.getDispatchOrders()),
+      readCoreCollection(() => businessDocumentsApi.getInvoices()),
+      readCoreCollection(() => businessDocumentsApi.getPayments()),
     ]);
 
     if (products.length) D.value.products = products;
+    if (categories.length) D.value.categories = categories;
+    if (brands.length) D.value.brands = brands;
     if (lots.length) {
       D.value.inventoryLots = lots;
       D.value.lots = lots;
+    }
+    if (warehouses.length) {
+      D.value.warehouses = warehouses.map(warehouse => {
+        const warehouseLots = lots.filter(lot => lot.warehouse === warehouse.address || lot.zone === warehouse.address);
+        const used = warehouseLots.reduce((sum, lot) => sum + Number(lot.qty || 0), 0);
+        const reserved = warehouseLots.reduce((sum, lot) => sum + Number(lot.reserved || 0), 0);
+        const capacity = Math.max(100, Math.ceil((used + reserved) * 1.25));
+        return {
+          ...warehouse,
+          zones: (warehouse.zones || []).map(zone => ({
+            ...zone,
+            used,
+            capacity,
+          })),
+        };
+      });
     }
     if (orders.length) {
       D.value.orders = orders;
       D.value.purchaseOrders = orders;
       D.value.orderItems = orderItemsFromCoreOrders(orders, products.length ? products : D.value.products);
     }
+    if (dispatchOrders.length) {
+      D.value.dispatchOrders = dispatchOrders.map(dispatch => {
+        const order = orders.find(row => Number(row.backendId) === Number(dispatch.orderId));
+        return {
+          ...dispatch,
+          orderBackendId: dispatch.orderId,
+          orderId: order?.id || dispatch.orderId,
+          clientId: order?.clientId || dispatch.clientId,
+          dest: order?.clientId || dispatch.dest,
+        };
+      });
+    }
+    if (invoices.length) {
+      D.value.businessDocuments = invoices.map(invoice => {
+        const order = orders.find(row => Number(row.backendId) === Number(invoice.orderId));
+        return {
+          ...invoice,
+          orderBackendId: invoice.orderId,
+          orderId: order?.id || invoice.orderId,
+          clientId: order?.clientId || invoice.clientId,
+        };
+      });
+    }
+    if (payments.length) {
+      D.value.payments = payments.map(payment => {
+        const invoice = invoices.find(row => Number(row.backendId) === Number(payment.invoiceId) || Number(row.id) === Number(payment.invoiceId));
+        const order = orders.find(row => Number(row.backendId) === Number(invoice?.orderBackendId || invoice?.orderId));
+        return {
+          ...payment,
+          invoiceCode: invoice?.id || payment.invoiceId,
+          orderId: order?.id || invoice?.orderId || null,
+          clientId: order?.clientId || null,
+        };
+      });
+    }
   }
 
-  const FALLBACK_CLIENTS = [
-    {
-      id: 'CLI-001',
-      name: 'Importaciones y Comercio Internacional S.A.',
-      tradeName: 'ICISA Demo',
-      ruc: '20600000001',
-      type: 'B2B Buyer',
-      contact: 'Elena Litano',
-      phone: '+51 987 654 321',
-      address: 'Av. Paseo de la República 123, Miraflores, Lima',
-      condition: 'Approved',
-      creditLimit: 50000,
-      creditUsed: 15400,
-      status: 'active',
-      lastOrder: '2026-06-05',
-      monthlyCreditLimit: 50000,
-      monthlyCreditUsed: 15400,
-      monthlyCreditAvailable: 34600,
-      monthlyCreditDue: 15400,
-      monthlyCreditPeriod: '2026-06',
-      monthlyCreditStatus: 'ok',
-      dueDate: '2026-06-30'
-    },
-    {
-      id: 'CLI-002',
-      name: 'Gourmet Market Lima S.A.C.',
-      ruc: '20600000002',
-      type: 'B2B Buyer',
-      contact: 'Valeria Sanchez',
-      phone: '+51 955 120 210',
-      address: 'Av. Larco 456, Miraflores, Lima',
-      condition: 'Approved',
-      creditLimit: 30000,
-      creditUsed: 5000,
-      status: 'active',
-      lastOrder: '2026-06-04'
-    },
-    {
-      id: 'CLI-003',
-      name: 'Distribuidora La Merced S.A.C.',
-      ruc: '20600000003',
-      type: 'B2B Buyer',
-      contact: 'Roberto Garcia',
-      phone: '+51 955 230 330',
-      address: 'Av. Aramburú 789, San Isidro, Lima',
-      condition: 'Approved',
-      creditLimit: 20000,
-      creditUsed: 0,
-      status: 'active',
-      lastOrder: '2026-06-01'
-    }
-  ];
+  async function loadMockCollections() {
+    const keys = [
+      'clients',
+      'clientContacts',
+      'deliveryAddresses',
+      'purchaseRequests',
+      'requestItems',
+      'promotions',
+      'customerPortals',
+      'portalRequirements',
+      'portalUploadTasks',
+      'paymentMethods',
+      'creditRequests',
+      'creditPayments',
+      'users',
+      'subscriptions',
+      'chatThreads',
+      'messages',
+      'temperatureLogs',
+      'stockMovements',
+      'supportConversations',
+      'activityLog',
+      'notifications',
+      'alerts',
+    ];
+    const entries = await Promise.all(keys.map(async key => [key, await readMockCollection(key)]));
+    entries.forEach(([key, rows]) => {
+      if (rows.length) D.value[key] = rows;
+    });
+    if (D.value.activityLog.length) D.value.activity = D.value.activityLog;
+    if (D.value.stockMovements.length) D.value.movements = D.value.stockMovements;
+  }
 
   async function init() {
-    const entries = await Promise.all(
-      Object.keys(api).map(async (key) => {
-        try {
-          const res = await api[key].getAll();
-          if (key === 'clients' && (!res || res.length === 0)) {
-            return [key, FALLBACK_CLIENTS];
-          }
-          return [key, res];
-        } catch {
-          if (key === 'clients') {
-            return [key, FALLBACK_CLIENTS];
-          }
-          return [key, []];
-        }
-      })
-    );
-    const data = Object.fromEntries(entries);
-
     Object.assign(D.value, {
-      ...data,
       company: {
-        id: data.tenants?.[0]?.id || 'TEN-001',
-        name: data.tenants?.[0]?.name || 'ICISA Demo',
-        legalName: data.tenants?.[0]?.legalName || 'Importaciones y Comercio Internacional S.A.',
-        ruc: data.tenants?.[0]?.ruc || '20123456789',
-        address: data.tenants?.[0]?.address || 'Lima, Peru',
-        country: data.tenants?.[0]?.country || 'PE',
-        subscriptionPlan: data.tenants?.[0]?.subscriptionPlan || 'standard',
+        id: 'NEXA',
+        name: 'Nexa',
+        legalName: 'Nexa Cold-Chain Platform',
+        ruc: '',
+        address: 'Peru',
+        country: 'PE',
+        subscriptionPlan: 'standard',
       },
-      lots: data.inventoryLots || [],
-      movements: data.stockMovements || [],
-      activity: data.activityLog || [],
+      lots: [],
+      movements: [],
+      activity: [],
     });
     await loadCoreCollections();
-    if (!D.value.products.length) {
-      // Keep empty state if cloud and local Mock API are unavailable.
-    }
+    await loadMockCollections();
   }
 
   init();

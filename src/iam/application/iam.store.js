@@ -14,7 +14,7 @@ export const useAuthStore = defineStore('auth', () => {
   const user  = ref(hiddenAdminSession ? null : storedUser);
   const token = ref(hiddenAdminSession ? null : localStorage.getItem('nexa.token') || null);
   const scope = ref(hiddenAdminSession ? 'ops' : localStorage.getItem('nexa.scope') || 'ops');
-  const demoUsers = ref([]);
+  const workspaceUsers = ref([]);
 
   const isAuthenticated = computed(() => !!token.value);
 
@@ -25,7 +25,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     if (!found) throw new Error('Invalid credentials');
     if (found.roleKey === 'admin' || found.segment === 'ADMIN') {
-      throw new Error('Admin demo access is hidden in v1. Use a commercial, operations or buyer demo profile.');
+      throw new Error('Admin access is unavailable in this workspace. Use a commercial, operations or buyer profile.');
     }
 
     const sessionUser = {
@@ -49,7 +49,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     scope.value = found.scope || found.role || 'ops';
     user.value  = sessionUser;
-    token.value = found.accessToken || ('demo.' + btoa(email).slice(0, 12));
+    token.value = found.accessToken || ('session.' + btoa(email).slice(0, 12));
     localStorage.setItem('nexa.user',  JSON.stringify(sessionUser));
     localStorage.setItem('nexa.token', token.value);
     localStorage.setItem('nexa.scope', scope.value);
@@ -64,10 +64,10 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('nexa.scope');
   }
 
-  async function loadDemoUsers() {
-    demoUsers.value = await iamApplication.getUsers();
-    return demoUsers.value;
+  async function loadWorkspaceUsers() {
+    workspaceUsers.value = await iamApplication.getUsers();
+    return workspaceUsers.value;
   }
 
-  return { user, token, scope, demoUsers, isAuthenticated, login, logout, loadDemoUsers };
+  return { user, token, scope, workspaceUsers, isAuthenticated, login, logout, loadWorkspaceUsers };
 });

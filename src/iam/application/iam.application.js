@@ -5,7 +5,7 @@ import { baseApi } from '@/shared/infrastructure/base-api';
 /**
  * IAM application use cases.
  *
- * @summary Handles authentication logic against the mock API.
+ * @summary Handles authentication logic against the Nexa API.
  */
 export const iamApplication = {
   /**
@@ -37,12 +37,26 @@ export const iamApplication = {
         (u.username || '').toLowerCase().trim() === searchEmail
       );
       
-      // Safe fallback for buyer.demo@nexa.com
-      if (searchEmail === 'buyer.demo@nexa.com') {
-        profile = {
+      const roleProfileMap = {
+        sales: {
+          role: "ops",
+          scope: "ops",
+          roleKey: "commercial",
+          roleName: "Sales",
+          department: "Sales",
+          initials: "VS"
+        },
+        logistics: {
+          role: "ops",
+          scope: "ops",
+          roleKey: "logistics",
+          roleName: "Logistics",
+          department: "Logistics",
+          initials: "RG"
+        },
+        buyer: {
           id: "USR-BUYER",
           name: "Elena Litano",
-          email: "buyer.demo@nexa.com",
           role: "portal",
           scope: "portal",
           roleKey: "buyer",
@@ -50,9 +64,14 @@ export const iamApplication = {
           department: "Purchasing",
           initials: "EL",
           clientId: "CLI-001",
-          ...(profile || {})
-        };
-      }
+        }
+      };
+
+      const backendRole = String(backendUser.role || '').toLowerCase();
+      profile = {
+        ...(roleProfileMap[backendRole] || {}),
+        ...(profile || {})
+      };
 
       if (!profile) {
         profile = {};

@@ -43,4 +43,12 @@ export const catalogApplication = {
   getCategories() {
     return catalogApiService.getCategories();
   },
+
+  /**
+   * @summary Returns all brands.
+   * @returns {Promise<Array>}
+   */
+  getBrands() {
+    return catalogApiService.getBrands();
+  },
 };

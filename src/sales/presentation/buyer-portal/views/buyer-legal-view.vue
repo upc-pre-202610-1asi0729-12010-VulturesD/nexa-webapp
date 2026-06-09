@@ -139,7 +139,7 @@ const sideLinks = computed(() => [
 
       <main class="legal-content">
         <div class="legal-content-head">
-          <span class="demo-label">{{ current.badge }}</span>
+          <span class="status-label">{{ current.badge }}</span>
           <span class="flow-note">Last updated: {{ current.updated }}</span>
         </div>
         <article

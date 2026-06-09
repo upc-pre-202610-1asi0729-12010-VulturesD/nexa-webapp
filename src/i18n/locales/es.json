@@ -85,7 +85,9 @@
     "mobileNav": "Navegación móvil",
     "pending": "pendientes",
     "noClientAccount": "Sin cuenta de cliente",
-    "noClientAccountDesc": "Inicia sesión con una cuenta B2B asociada a un cliente."
+    "noClientAccountDesc": "Inicia sesión con una cuenta B2B asociada a un cliente.",
+    "pendingBackendTitle": "Soporte backend pendiente",
+    "pendingBackendDesc": "Este módulo se habilitará cuando el servicio de plataforma correspondiente esté disponible."
   },
   "dashboard": {
     "greeting": "Buenos días",
@@ -233,6 +235,8 @@
   "dispatch": {
     "subtitle": "unidades en operación hoy",
     "schedule": "Programar despacho",
+    "searchPlaceholder": "Buscar orden de despacho, pedido o cliente...",
+    "allRoutes": "Todas las rutas",
     "kpi": {
       "ready": "Listos para salir",
       "readySub": "Esperando salida de almacén",
@@ -335,6 +339,7 @@
     "emptyCartDesc": "Agrega productos del catálogo para comenzar tu pedido",
     "total": "Total",
     "submitRequest": "Enviar solicitud",
+    "requestNotesPlaceholder": "Notas de entrega, documentos o ruta",
     "cartClose": "Cerrar carrito",
     "cartDecrease": "Disminuir cantidad de {name}",
     "cartIncrease": "Aumentar cantidad de {name}",
@@ -387,37 +392,6 @@
       "nextRequests": "Revisar conversaciones de solicitud",
       "nextDocuments": "Consultar documentos comerciales",
       "nextPayments": "Revisar métodos de pago"
-    },
-    "assistant": {
-      "title": "Nexa Assistant",
-      "subtitle": "Guía del portal comprador",
-      "open": "Abrir Nexa Assistant",
-      "close": "Cerrar assistant",
-      "disclaimer": "La guía se basa en tus registros visibles del portal y acciones disponibles.",
-      "placeholder": "Pregunta por una orden, documento o solicitud...",
-      "inputLabel": "Preguntar a Nexa Assistant",
-      "send": "Enviar",
-      "thinking": "Consultando...",
-      "welcome": "Pregunta por tus solicitudes, órdenes, documentos o estado de entrega. Puedo guiarte a la acción correcta del portal.",
-      "chips": {
-        "order": "¿Dónde está mi orden?",
-        "documents": "¿Qué documentos están disponibles?",
-        "delivery": "¿Puedo cambiar mi ventana de entrega?",
-        "promotions": "¿Qué productos están en promoción?",
-        "request": "¿Cómo creo una solicitud?",
-        "validation": "¿Qué significa validación comercial?"
-      },
-      "answers": {
-        "noOrder": "Aún no hay una orden de compra confirmada activa. Abre Mis solicitudes para revisar el estado de validación comercial.",
-        "order": "Tu última orden de compra {code} está {status}. Abre Mis pedidos para revisar la línea de tracking.",
-        "documents": "Hay {count} documento(s) comerciales visibles para comprador. Algunos archivos pueden seguir pendientes hasta completar validación comercial.",
-        "delivery": "Envía un mensaje en la conversación de la solicitud de compra. El equipo comercial confirmará si el cambio es posible.",
-        "promotions": "Hay {count} promoción(es) activas visibles en tu portal comprador. Las ofertas siguen sujetas a validación comercial.",
-        "noPromotions": "No hay promociones visibles para comprador en este momento.",
-        "request": "Abre Catálogo de productos, agrega productos autorizados a tu solicitud y revisa cantidades y entrega en Crear solicitud.",
-        "validation": "La validación comercial significa que el proveedor revisa disponibilidad, condiciones de entrega, documentos comerciales y estado de cuenta antes de confirmar una orden.",
-        "fallback": "Puedo guiarte a Catálogo de productos, Mis solicitudes, Mis pedidos y Documentos comerciales."
-      }
     },
     "table": {
       "order": "Pedido",
@@ -472,7 +446,7 @@
     "noExpiring": "Sin lotes críticos",
     "allStockNormal": "Todos los stocks en niveles normales",
     "noSalesData": "Sin datos de ventas",
-    "demoBanner": "Los datos operativos reflejan el periodo comercial actual. La integracion backend habilitara historicos, exportaciones y alertas automatizadas.",
+    "dataBanner": "Los datos operativos reflejan el periodo comercial actual. Históricos, exportaciones y alertas automatizadas están planificados para un próximo ciclo de integración.",
     "activeOrders": "Pedidos activos",
     "ofPeriod": "de {total} en el período",
     "completedDeliveries": "Entregas completadas",

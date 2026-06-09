@@ -38,24 +38,6 @@ const confirmationChecks = computed(() => {
 });
 const canConfirmOrder = computed(() => confirmationChecks.value.every(check => check.ok));
 
-function confirmOrder() {
-  if (!order.value) return;
-  if (!canConfirmOrder.value) {
-    toast.add({ severity: 'warn', summary: 'Validation pending', detail: 'Complete order checks before confirmation.', life: 3500 });
-    return;
-  }
-  if (order.value.code) ds.updateOrderStatus(order.value.id, 'confirmed');
-  else order.value.status = 'confirmed';
-  toast.add({ severity: 'success', summary: t('orders.status.confirmed'), detail: `${order.value.id}`, life: 3500 });
-}
-
-function cancelOrder() {
-  if (!order.value) return;
-  order.value.status = 'cancelled';
-  toast.add({ severity: 'warn', summary: t('orders.status.cancelled'), detail: `${order.value.id}`, life: 3500 });
-  setTimeout(() => router.push('/ops/commercial/purchase-orders'), 1500);
-}
-
 const timeline = computed(() => {
   if (!order.value) return [];
   return ORDER_STATUS_FLOW.map((status, index) => {
@@ -91,8 +73,7 @@ const timeline = computed(() => {
       <div class="page-subtitle">{{ ds.clientName(order.clientId) }} · {{ orderDate }}</div>
     </div>
     <button class="btn btn-ghost" @click="toast.add({ severity:'info', summary:'Printing...', detail:'Opens the browser print dialog', life:2500 })"><i class="pi pi-print"></i> Print</button>
-    <button class="btn btn-primary" v-if="order.status === 'validating'" @click="confirmOrder"><i class="pi pi-check"></i> Confirm</button>
-    <button class="btn btn-danger" v-if="['blocked','validating'].includes(order.status)" @click="cancelOrder"><i class="pi pi-times"></i> Cancel</button>
+    <button class="btn btn-secondary" :disabled="!canConfirmOrder"><i class="pi pi-lock"></i> Backend workflow action pending</button>
   </div>
 
   <div class="banner banner-warning" v-if="order.notes">

@@ -9,7 +9,7 @@ defineProps({ documents: { type: Array, default: () => [] } });
     <div class="flow-panel-head">
       <div>
         <h2>Document Checklist</h2>
-        <p>Reference demo business documents. They do not represent official issuance.</p>
+        <p>Business documents linked to invoice, delivery and collection evidence.</p>
       </div>
     </div>
     <div class="flow-stack">

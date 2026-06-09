@@ -1,18 +1,21 @@
 import { baseApi } from './base-api';
 
 /**
- * Mock API fallback used only until backend endpoints are available.
- * Returns response data to keep current application services unchanged.
+ * Endpoint adapter for Nexa backend resources.
+ * Optional fallback stays disabled unless a caller opts in explicitly.
  */
 export class BaseEndpoint {
-  constructor(endpointPath, api = baseApi, { useCoreBackend = false, fallbackEndpointPath = endpointPath } = {}) {
+  constructor(endpointPath, api = baseApi, { useCoreBackend = true, useMockApi = false, fallbackEndpointPath = endpointPath, allowMockFallback = false } = {}) {
     this.api = api;
     this.http = api.http;
     this.fallbackHttp = api.fallbackHttp;
+    this.mockHttp = api.mockHttp;
     this.coreHttp = api.coreHttp;
     this.endpointPath = endpointPath;
     this.fallbackEndpointPath = fallbackEndpointPath;
     this.useCoreBackend = useCoreBackend;
+    this.useMockApi = useMockApi;
+    this.allowMockFallback = allowMockFallback;
   }
 
   pathFor(client, suffix = '', endpointPath = this.endpointPath) {
@@ -23,18 +26,20 @@ export class BaseEndpoint {
   }
 
   primaryHttp() {
+    if (this.useMockApi) return this.mockHttp;
     return this.useCoreBackend && this.api.coreBackendEnabled ? this.coreHttp : this.http;
   }
 
   primaryEndpointPath() {
+    if (this.useMockApi) return this.fallbackEndpointPath;
     return this.useCoreBackend && this.api.coreBackendEnabled
       ? this.endpointPath
       : this.fallbackEndpointPath;
   }
 
   shouldUseFallback() {
+    if (!this.allowMockFallback) return false;
     if (!this.api.mockFallbackEnabled) return false;
-    if (this.useCoreBackend && this.api.coreBackendEnabled) return true;
     return !this.api.usesLocalBaseUrl;
   }
 

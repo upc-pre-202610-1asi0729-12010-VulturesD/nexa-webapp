@@ -1,77 +1,70 @@
 <script setup>
 import { computed } from 'vue';
 import { useDataStore } from '@/app/application/stores/data.store';
-import { documentStatusBadge } from '@/shared/status';
 
 const ds = useDataStore();
-const D = ds.D;
-
-const portalRows = computed(() => D.customerPortals.map(portal => ({
-  portal,
-  client: ds.clientById(portal.clientId),
-  requirements: D.portalRequirements.find(item => item.portalId === portal.id),
-  tasks: D.portalUploadTasks.filter(task => task.portalId === portal.id),
-})));
-
-function statusLabel(status) {
-  return String(status || 'manual').replace(/_/g, ' ').replace(/\b\w/g, letter => letter.toUpperCase());
-}
-
-function docTypeLabel(type) {
-  return {
-    invoice_pdf: 'Invoice PDF',
-    invoice_xml: 'Invoice XML',
-    guide_pdf: 'Guide PDF',
-    guide_xml: 'Guide XML',
-    cdr: 'CDR',
-    pod: 'POD',
-    external_portal_receipt: 'External Portal Receipt',
-  }[type] || String(type).replace(/_/g, ' ').replace(/\b\w/g, letter => letter.toUpperCase());
-}
+const portals = computed(() => ds.D.customerPortals);
+const pendingTasks = computed(() => ds.D.portalUploadTasks.filter(task => task.status !== 'completed'));
+const requirementsFor = (clientId) => ds.portalRequirementsForClient(clientId);
+const tasksFor = (clientId) => ds.D.portalUploadTasks.filter(task => task.clientId === clientId);
 </script>
 
 <template>
   <div>
     <div class="page-header">
       <div>
-        <h1 class="page-title">External Customer Portals</h1>
-        <p class="page-subtitle">Operational checklist for external customer portal requirements and manual upload tasks.</p>
+        <div class="page-title">Customer Portals</div>
+        <div class="page-subtitle">External upload requirements, customer portal tasks, and shipment-document follow-up.</div>
       </div>
     </div>
 
-    <div class="banner banner-info">
-      <i class="pi pi-info-circle" aria-hidden="true"></i>
-      <div>Nexa records portal requirements and manual upload tasks so documents can be completed before customer deadlines.</div>
+    <div class="grid-3" style="margin-bottom:18px">
+      <div class="card kpi-card">
+        <div class="kpi-label"><i class="pi pi-upload"></i> Portals</div>
+        <div class="kpi-value">{{ portals.length }}</div>
+        <div class="kpi-sub">Customer upload channels</div>
+      </div>
+      <div class="card kpi-card">
+        <div class="kpi-label"><i class="pi pi-clock" style="color:#F59E0B"></i> Pending tasks</div>
+        <div class="kpi-value" style="color:#F59E0B">{{ pendingTasks.length }}</div>
+        <div class="kpi-sub">Need manual document follow-up</div>
+      </div>
+      <div class="card kpi-card">
+        <div class="kpi-label"><i class="pi pi-truck" style="color:#2563EB"></i> Backend shipments</div>
+        <div class="kpi-value" style="color:#2563EB">{{ ds.D.dispatchOrders.length }}</div>
+        <div class="kpi-sub">Real shipment records remain protected</div>
+      </div>
     </div>
 
-    <div class="customer-portals-grid">
-      <section v-for="row in portalRows" :key="row.portal.id" class="flow-panel customer-portal-card">
-        <div class="flow-panel-head">
-          <div class="customer-portal-title">
-            <h2>{{ row.portal.name }}</h2>
-            <p>{{ row.client?.businessName || row.client?.commercialName }}</p>
-          </div>
-          <span class="badge badge-blue">{{ statusLabel(row.portal.integrationStatus || 'manual') }}</span>
-        </div>
-        <div class="flow-stack">
+    <div v-if="!portals.length" class="empty-state">
+      <div class="empty-state-icon"><i class="pi pi-database"></i></div>
+      <div class="empty-state-title">Portal workspace unavailable</div>
+      <div class="empty-state-desc">Start the local support service to review customer portal requirements.</div>
+    </div>
+
+    <div v-else class="grid-3">
+      <article v-for="portal in portals" :key="portal.id" class="flow-panel flow-panel-pad">
+        <div class="flow-row-between" style="align-items:flex-start">
           <div>
-            <div class="meta-label">Required Business Documents</div>
-            <div class="document-type-list">
-              <span v-for="doc in row.requirements?.requiredDocumentTypes || []" :key="doc" :class="'badge ' + documentStatusBadge('pending')">
-                {{ docTypeLabel(doc) }}
-              </span>
-            </div>
+            <div class="meta-label">{{ ds.clientName(portal.clientId) }}</div>
+            <h2 style="margin:6px 0">{{ portal.name }}</h2>
+            <p class="muted-text">{{ portal.owner }} · {{ portal.uploadMode }}</p>
           </div>
-          <div>
-            <div class="meta-label">Upload Tasks</div>
-            <div v-if="!row.tasks.length" class="muted-text" style="margin-top:6px">No pending tasks.</div>
-            <div v-for="task in row.tasks" :key="task.id" class="mini-row customer-portal-task">
-              <span class="mono">{{ task.orderId }}</span>
-              <span :class="'badge ' + (task.status === 'completed' ? 'badge-green' : 'badge-amber')">{{ statusLabel(task.status) }}</span>
-            </div>
+          <span :class="'badge ' + (portal.status === 'active' ? 'badge-green' : 'badge-amber')">{{ portal.status }}</span>
+        </div>
+        <div class="divider" style="margin:12px 0"></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span v-for="type in requirementsFor(portal.clientId)?.requiredDocumentTypes || []" :key="type" class="badge badge-blue">
+            {{ type }}
+          </span>
+        </div>
+        <div class="flow-stack" style="margin-top:12px;gap:8px">
+          <div v-for="task in tasksFor(portal.clientId)" :key="task.id" class="mini-row">
+            <span class="mono">{{ task.orderId }}</span>
+            <span :class="'badge ' + (task.status === 'completed' ? 'badge-green' : 'badge-amber')">{{ task.status }}</span>
           </div>
         </div>
-      </section>
+      </article>
     </div>
   </div>
 </template>
