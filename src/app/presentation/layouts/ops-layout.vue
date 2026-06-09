@@ -86,7 +86,7 @@ function isNavActive(item) {
 }
 
 const companyLegalName = computed(() => ds.D.company.legalName || 'Importaciones y Comercio Internacional S.A.');
-const companyDisplayName = computed(() => ds.D.company.name || 'ICISA Demo');
+const companyDisplayName = computed(() => ds.D.company.name || 'Nexa');
 const companyInitials = computed(() => (companyDisplayName.value || 'ICISA').slice(0, 2).toUpperCase());
 
 function setLang(l) {

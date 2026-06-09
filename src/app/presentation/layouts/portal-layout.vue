@@ -6,7 +6,6 @@ import { useToast } from 'primevue/usetoast';
 import { useCartStore } from '@/app/application/stores/cart.store';
 import { useAuthStore } from '@/iam/application/iam.store';
 import { useDataStore } from '@/app/application/stores/data.store';
-import BuyerAssistantPreview from '@/sales/presentation/buyer-portal/components/buyer-assistant-preview.vue';
 import i18n from '@/i18n';
 import logo from '@/assets/img/nexa.svg';
 
@@ -219,7 +218,5 @@ function goRequestBuilder() {
         </button>
       </div>
     </aside>
-
-    <BuyerAssistantPreview />
   </div>
 </template>
