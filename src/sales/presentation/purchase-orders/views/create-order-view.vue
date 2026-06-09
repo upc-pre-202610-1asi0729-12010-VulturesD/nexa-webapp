@@ -15,6 +15,7 @@ const D = ds.D;
 const step = ref(1);
 const steps = ['Client', 'Products', 'Delivery', 'Confirm'];
 const clientSearch = ref('');
+const manualClientId = ref('');
 const selectedClient = ref(null);
 const lines = ref([]);
 const delivery = ref({ date: tomorrowISO(), address: '', notes: '', priority: 'medium' });
@@ -27,7 +28,7 @@ function tomorrowISO() {
 
 function pickClient(c) {
   selectedClient.value = c;
-  delivery.value.address = c.address;
+  delivery.value.address = c.address || '';
 }
 function proceedToProducts() {
   if (!selectedClient.value || isCreditBlocked.value) return;
@@ -68,6 +69,18 @@ const filteredClients = computed(() => {
     ].filter(Boolean).some(value => String(value).toLowerCase().includes(q));
   });
 });
+const manualClient = computed(() => {
+  const id = manualClientId.value.trim();
+  if (!id) return null;
+  return {
+    id,
+    name: id,
+    status: 'active',
+    condition: 'Backend customer',
+    type: 'Backend order customer',
+    address: '',
+  };
+});
 function addLine(p) {
   const max = Math.max(0, p.stock - p.reserved);
   if (!max) return;
@@ -93,35 +106,42 @@ const canConfirmOrder = computed(() =>
   !deliveryDateWarning.value &&
   !isCreditBlocked.value
 );
-function confirm() {
+async function confirm() {
   if (!canConfirmOrder.value) {
     toast.add({ severity: 'warn', summary: 'Review order data', detail: deliveryDateWarning.value || 'Client, stock and quantities must be valid.', life: 3500 });
     return;
   }
   const newId = ds.nextOrderId();
   const today = new Date().toISOString().slice(0, 10);
-  ds.addOrder({
-    id:       newId,
-    clientId: selectedClient.value.id,
-    status:   'validating',
-    priority: delivery.value.priority,
-    date:     today,
-    items:    lines.value.map(l => ({
-      productId: l.productId,
-      qty:       l.qty,
-      price:     l.price,
-      stockOk:   l.qty <= l.max,
-    })),
-    total:  total.value,
-    notes:  delivery.value.notes || '',
-    source: 'assisted_order',
-    createdBy: auth.user?.id || null,
-    createdByName: auth.user?.name || '',
-    createdByRole: auth.user?.roleName || '',
-    createdByRoleKey: auth.user?.roleKey || '',
-  });
-  toast.add({ severity: 'success', summary: 'Purchase order created', detail: `${newId} — in validation`, life: 3500 });
-  router.push(`/ops/commercial/purchase-orders/${newId}`);
+  try {
+    const created = await ds.addOrder({
+      id:       newId,
+      code:     newId,
+      clientId: selectedClient.value.id,
+      status:   'pending',
+      priority: delivery.value.priority,
+      date:     today,
+      items:    lines.value.map(l => ({
+        productId: l.productId,
+        catalogItemId: ds.productById(l.productId)?.catalogItemId,
+        itemName: l.name,
+        qty:       l.qty,
+        price:     l.price,
+        stockOk:   l.qty <= l.max,
+      })),
+      total:  total.value,
+      notes:  delivery.value.notes || '',
+      source: 'manual_order_entry',
+      createdBy: auth.user?.id || null,
+      createdByName: auth.user?.name || '',
+      createdByRole: auth.user?.roleName || '',
+      createdByRoleKey: auth.user?.roleKey || '',
+    });
+    toast.add({ severity: 'success', summary: 'Purchase order created', detail: `${created.id} - pending`, life: 3500 });
+    router.push(`/ops/commercial/purchase-orders/${created.id}`);
+  } catch {
+    toast.add({ severity: 'error', summary: 'Order was not created', detail: 'The backend did not accept the order request.', life: 4000 });
+  }
 }
 </script>
 
@@ -154,7 +174,20 @@ function confirm() {
           <i class="pi pi-search"></i>
           <input v-model="clientSearch" placeholder="Search by company name or RUC" aria-label="Search by company name or RUC" />
         </div>
-        <div v-if="!filteredClients.length" class="empty-state" style="padding:28px">
+        <div v-if="!D.clients.length" class="card card-pad">
+          <div class="banner banner-info" style="margin-bottom:12px">
+            <i class="pi pi-info-circle"></i>
+            <div>Client account endpoint is pending. Enter a backend customer identifier to create an order with the real Orders API.</div>
+          </div>
+          <label class="field">
+            <span class="field-label">Customer identifier</span>
+            <input class="plain-input" v-model="manualClientId" placeholder="CUS-0001 or CLI-001" />
+          </label>
+          <button class="btn btn-primary" style="margin-top:12px;width:100%;justify-content:center" :disabled="!manualClient" @click="pickClient(manualClient)">
+            Use customer identifier
+          </button>
+        </div>
+        <div v-else-if="!filteredClients.length" class="empty-state" style="padding:28px">
           <div class="empty-state-icon"><i class="pi pi-search"></i></div>
           <div class="empty-state-title">No clients found.</div>
         </div>
