@@ -1,5 +1,6 @@
 import { inventoryApiService } from '../../infrastructure/inventory-control/inventory-api';
 import { InventoryLotAssembler } from '../../infrastructure/inventory-control/inventory-lot.assembler';
+import { WarehouseAssembler } from '../../infrastructure/inventory-control/warehouse.assembler';
 
 const mapLotResource = (lot) => InventoryLotAssembler.toResource(InventoryLotAssembler.toEntity(lot));
 
@@ -44,6 +45,8 @@ export const inventoryApplication = {
    * @returns {Promise<Array>}
    */
   getWarehouses() {
-    return inventoryApiService.getWarehouses();
+    return inventoryApiService.getWarehouses().then(warehouses =>
+      warehouses.map(warehouse => WarehouseAssembler.toResource(WarehouseAssembler.toEntity(warehouse)))
+    );
   },
 };

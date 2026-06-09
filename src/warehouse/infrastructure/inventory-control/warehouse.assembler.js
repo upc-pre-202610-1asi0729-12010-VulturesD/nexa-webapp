@@ -4,7 +4,20 @@ import { WarehouseResource } from './warehouse.resource';
 export const WarehouseAssembler = {
   toEntity(resource) {
     if (!resource) return null;
-    return new Warehouse(resource);
+    const range = `${Number(resource.minimumTemperature ?? 0)}°C - ${Number(resource.maximumTemperature ?? 0)}°C`;
+    return new Warehouse({
+      id: resource.id,
+      name: resource.name,
+      address: resource.location || resource.address,
+      zones: resource.zones || [{
+        id: `${resource.id}-main`,
+        name: resource.location || resource.name,
+        temp: range,
+        capacity: 100,
+        used: 0,
+        tempOk: resource.isActive !== false,
+      }],
+    });
   },
 
   toResource(entity) {
