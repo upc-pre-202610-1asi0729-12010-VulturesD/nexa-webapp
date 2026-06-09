@@ -87,7 +87,7 @@
     "noClientAccount": "Sin cuenta de cliente",
     "noClientAccountDesc": "Inicia sesión con una cuenta B2B asociada a un cliente.",
     "pendingBackendTitle": "Soporte backend pendiente",
-    "pendingBackendDesc": "Este módulo está pendiente de soporte backend y será habilitado en un próximo ciclo de integración."
+    "pendingBackendDesc": "Este módulo se habilitará cuando el servicio de plataforma correspondiente esté disponible."
   },
   "dashboard": {
     "greeting": "Buenos días",
@@ -235,6 +235,8 @@
   "dispatch": {
     "subtitle": "unidades en operación hoy",
     "schedule": "Programar despacho",
+    "searchPlaceholder": "Buscar orden de despacho, pedido o cliente...",
+    "allRoutes": "Todas las rutas",
     "kpi": {
       "ready": "Listos para salir",
       "readySub": "Esperando salida de almacén",
@@ -337,6 +339,7 @@
     "emptyCartDesc": "Agrega productos del catálogo para comenzar tu pedido",
     "total": "Total",
     "submitRequest": "Enviar solicitud",
+    "requestNotesPlaceholder": "Notas de entrega, documentos o ruta",
     "cartClose": "Cerrar carrito",
     "cartDecrease": "Disminuir cantidad de {name}",
     "cartIncrease": "Aumentar cantidad de {name}",
@@ -443,7 +446,7 @@
     "noExpiring": "Sin lotes críticos",
     "allStockNormal": "Todos los stocks en niveles normales",
     "noSalesData": "Sin datos de ventas",
-    "dataBanner": "Los datos operativos reflejan el periodo comercial actual. Historicos, exportaciones y alertas automatizadas estan pendientes de soporte backend.",
+    "dataBanner": "Los datos operativos reflejan el periodo comercial actual. Históricos, exportaciones y alertas automatizadas están planificados para un próximo ciclo de integración.",
     "activeOrders": "Pedidos activos",
     "ofPeriod": "de {total} en el período",
     "completedDeliveries": "Entregas completadas",
