@@ -11,7 +11,6 @@ class PurchaseOrdersApiService {
   constructor() {
     this.orders = new BaseEndpoint('/api/v1/orders', baseApi, {
       useCoreBackend: true,
-      fallbackEndpointPath: '/api/v1/purchase-orders',
     });
   }
 

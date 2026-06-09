@@ -15,8 +15,12 @@ const cart = useCartStore();
 const auth = useAuthStore();
 const D = ds.D;
 
-const client = computed(() => ds.clientById(auth.user?.clientId));
-const hasClient = computed(() => Boolean(client.value));
+const client = computed(() => ds.clientById(auth.user?.clientId) || (auth.user?.clientId ? {
+  id: auth.user.clientId,
+  name: auth.user.clientId,
+  commercialName: auth.user.clientId,
+} : null));
+const hasClient = computed(() => Boolean(auth.user?.clientId));
 const myRequests = computed(() => D.purchaseRequests.filter(request => request.clientId === auth.user?.clientId));
 const myOrders = computed(() => D.purchaseOrders.filter(order => order.clientId === auth.user?.clientId));
 const credit = computed(() => creditSummary(client.value || {}));
@@ -55,7 +59,7 @@ const formatMoney = (value) => Number(value || 0).toLocaleString();
   <template v-else>
     <section class="buyer-shell-band" style="margin-bottom:22px">
       <div style="position:relative;z-index:1;max-width:860px">
-        <div class="demo-label" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.26);margin-bottom:12px">{{ t('portal.homePanel.eyebrow') }}</div>
+        <div class="flow-pill flow-pill-blue" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.26);margin-bottom:12px">{{ t('portal.homePanel.eyebrow') }}</div>
         <div class="buyer-title">{{ t('portal.homePanel.title', { name: firstName }) }}</div>
         <div class="buyer-subtitle" style="margin-top:10px">
           {{ t('portal.homePanel.subtitle', { company: client.commercialName || client.name }) }}

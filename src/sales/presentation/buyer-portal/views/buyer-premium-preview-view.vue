@@ -49,9 +49,9 @@
     </article>
     <article class="buyer-card flow-panel-pad">
       <div class="flow-kpi-icon" style="background:#F8FAFC;color:#334155"><i class="pi pi-comments"></i></div>
-      <div class="flow-title" style="margin-top:12px">AI assistant</div>
+      <div class="flow-title" style="margin-top:12px">Guided support</div>
       <div class="flow-note">Contextual help for products, storage, documents and recurring request workflows.</div>
-      <span class="premium-lock" style="margin-top:14px"><i class="pi pi-lock"></i> Future AI</span>
+      <span class="premium-lock" style="margin-top:14px"><i class="pi pi-lock"></i> Future support</span>
     </article>
   </div>
 </template>

@@ -163,7 +163,7 @@ const creditRequestsPreview = computed(() => pendingCreditRequests.value.slice(0
     <section class="flow-panel span-8">
       <div class="flow-panel-head">
         <div class="flow-title">{{ t('commercialDashboard.recentActivity') }}</div>
-        <span class="demo-label">{{ t('commercialDashboard.operationalActivity') }}</span>
+        <span class="status-label">{{ t('commercialDashboard.operationalActivity') }}</span>
       </div>
       <div class="flow-panel-pad">
         <div v-for="item in recentActivity" :key="item.id" class="activity-item">

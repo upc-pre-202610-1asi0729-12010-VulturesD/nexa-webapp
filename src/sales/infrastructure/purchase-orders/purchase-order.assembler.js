@@ -12,6 +12,7 @@ const normalizeStatus = (status = 'validating') => {
   return {
     pending: 'pending',
     confirmed: 'confirmed',
+    paid: 'ready_for_dispatch',
     rejected: 'rejected',
     cancelled: 'cancelled',
     canceled: 'cancelled',
