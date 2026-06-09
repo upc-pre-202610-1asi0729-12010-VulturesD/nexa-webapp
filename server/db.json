@@ -218,5 +218,20 @@
   ],
   "alerts": [
     { "id": "ALT-001", "title": "Temperature attention", "body": "Shipment AV2-SHP-0005 is near chilled threshold.", "severity": "warning" }
+  ],
+  "deliveryEvents": [
+    { "id": "DE-001", "shipmentId": "AV2-SHP-0001", "status": "departed", "notes": "Departed from Callao warehouse", "timestamp": "2026-06-10T10:30:00Z" }
+  ],
+  "orderTimelineEvents": [
+    { "id": "OTE-001", "orderId": "AV2-ORD-0001", "status": "submitted", "label": "Order submitted", "timestamp": "2026-06-10T09:10:00Z" }
+  ],
+  "proofOfDeliveryUploads": [
+    { "id": "PODU-001", "dispatchOrderId": "DSP-2026-0001", "status": "verified", "fileName": "pod-receipt.png", "uploadedAt": "2026-06-10T12:30:00Z" }
+  ],
+  "premiumPreviews": [
+    { "id": "PREM-001", "featureName": "GPS Real-time Telemetry", "type": "gps", "status": "preview_active" }
+  ],
+  "companyAdminUsers": [
+    { "id": "CADM-001", "name": "Admin User", "email": "admin@icisa.pe", "role": "admin", "status": "active" }
   ]
 }
