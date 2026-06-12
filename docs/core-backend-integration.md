@@ -8,7 +8,7 @@ Use these values for local development:
 
 ```env
 VITE_NEXA_API_BASE_URL=http://localhost:5068/api/v1
-VITE_NEXA_MOCK_API_BASE_URL=http://127.0.0.1:3000
+VITE_NEXA_MOCK_API_BASE_URL=http://127.0.0.1:3000/api/v1
 VITE_ENABLE_MOCK_API_FALLBACK=false
 VITE_CORE_BACKEND_ENABLED=true
 ```

@@ -130,7 +130,7 @@ The `nexa-webapp` repository contains the single page application (SPA) that man
      ```env
      VITE_CORE_BACKEND_ENABLED=true
      VITE_NEXA_API_BASE_URL=http://localhost:5068/api/v1
-     VITE_NEXA_MOCK_API_BASE_URL=http://127.0.0.1:3000
+     VITE_NEXA_MOCK_API_BASE_URL=http://127.0.0.1:3000/api/v1
      VITE_ENABLE_MOCK_API_FALLBACK=false
      ```
    - Start the Vite development server:
