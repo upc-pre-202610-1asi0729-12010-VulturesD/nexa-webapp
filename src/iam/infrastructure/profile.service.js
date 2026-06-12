@@ -1,7 +1,7 @@
 import http from '@/shared/infrastructure/http';
 import { Profile } from '../domain/model/profile.model';
 
-const BASE = '/api/v1/profile';
+const BASE = '/profile';
 
 export const profileService = {
   async get() {
