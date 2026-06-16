@@ -1,6 +1,8 @@
-# Frontend Architecture & Domain-Driven Design (DDD) Mapping
+# Frontend Architecture & DDD
 
 Nexa WebApp follows a Bounded-Context frontend layout over Vue 3, Vite, Pinia, Vue Router, PrimeVue, and the Nexa Platform REST API. The design applies Clean Architecture and Domain-Driven Design (DDD) principles to the frontend presentation layer.
+
+---
 
 ## Bounded Context Boundaries
 
@@ -66,10 +68,6 @@ For contexts not yet integrated with live backend services (e.g., promotions, pu
 
 ---
 
-## Import & Boundary Rules
-
-1. **Strict Context Boundaries**: Imports must reference the context-level folders.
-   - Use `@/sales/...`, never `@/purchase-orders/...`.
-   - Use `@/catalog-management/...`, never `@/product-catalog/...`.
-2. **Kebab-Case File Naming**: All files (including entities, routes, and services) must use lowercase kebab-case (e.g., `product-brand.js`, `company-administration-view.vue`).
-3. **Shared Kernel Boundary**: Cross-cutting utilities (Axios clients, shared CSS, global helpers) reside under `@/shared/` and must remain business-agnostic.
+<p align="center">
+  [Home](Home.md) · [Project Overview](Project-Overview.md) · [Architecture](Frontend-Architecture.md) · [Development Workflow](Branching-and-Commits.md) · [Quality & Security](Quality-and-Security.md)
+</p>

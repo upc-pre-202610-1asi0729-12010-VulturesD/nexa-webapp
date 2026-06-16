@@ -1,24 +1,45 @@
 # Security Policy
 
-## Supported Version
+We are committed to securing the Nexa WebApp B2B platform. This document outlines active versions, reporting mechanisms, and the secure development standards expected from contributors.
 
-| Version | Supported |
-|---|---|
-| `v1.2.0` | Yes |
+## Supported Versions
 
-Earlier tags are preserved for academic history and are not maintained as production releases.
+Only the latest active release branch is patched for security vulnerabilities. Academic tags are preserved for evaluation history and do not receive updates.
 
-## Reporting
+| Version | Supported | Security Patches |
+|---|---|---|
+| `v1.7.x` |  Yes | Active |
+| `< v1.7.0` |  No | Terminated |
 
-Open a private report with the repository maintainers when possible. If private reporting is unavailable, create a GitHub issue with minimal reproduction details and avoid posting secrets.
+---
 
-## Scope
+## Reporting a Vulnerability
 
-Current security expectations cover:
+> [!IMPORTANT]
+> Do **NOT** disclose vulnerabilities or post private keys/credentials in public GitHub issues.
 
-- Avoiding committed secrets.
-- Avoiding generated dependency folders.
-- Keeping Mock API data clearly marked as simulation.
-- Running `npm ci` and `npm run build` before merging.
+If you discover a security issue:
+1. **Private Reporting**: Submit the details via a private email to the project maintainers or utilize the **GitHub Security Advisories** private reporting tool.
+2. **Details to Include**: Provide a brief description, steps to reproduce, browser version, and a proof of concept if applicable.
+3. **Response Timeline**: The team will review findings within 48 hours and coordinate a patch release in a dedicated feature/hotfix branch.
 
-This WebApp does not claim production authentication, production telemetry, or production backend security.
+---
+
+## Secure Coding Practices & Scope
+
+Our security posture covers the following key boundaries inside each Bounded Context:
+
+### 1. Credentials & Secret Management
+- **No Hardcoded Secrets**: Secrets, local passwords, API tokens, and JWT configurations must never be committed to the repository.
+- **Environment Isolation**: Always use `.env.development` or `.env.production` for URL endpoint parameters and ensure local credential overlays are git-ignored.
+
+### 2. UI Injection & Data Sanitization
+- **XSS Prevention**: Vue 3's template interpolation (`{{ }}`) automatically escapes HTML. Avoid using `v-html` unless the data source is explicitly sanitized.
+- **Data Validation**: The Anti-Corruption Layer (ACL) in Pinia must validate model attributes before mutating local storage arrays to prevent state corruption.
+
+### 3. Dependency Security
+- Before opening a pull request, run:
+  ```bash
+  npm audit
+  ```
+- Any critical vulnerability in npm packages must be addressed by updating package dependencies in `package.json` and regenerating the lockfile.
