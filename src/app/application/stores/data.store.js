@@ -6,6 +6,7 @@ import { inventoryApplication } from '@/warehouse/application/inventory-control/
 import { BaseEndpoint } from '@/shared/infrastructure/base-endpoint';
 import { dispatchOrdersApplication } from '@/logistics/application/dispatch-orders/dispatch-orders.application';
 import { BusinessDocumentsApi } from '@/invoicing/infrastructure/business-documents/business-documents-api';
+import initialData from '@/shared/data/initial-data.json';
 
 const endpoints = {
   tenants: '/api/v1/tenants',
@@ -46,7 +47,7 @@ const endpoints = {
   supportConversations: '/api/v1/support-conversations',
 };
 
-const mockResourceKeys = new Set([
+const localResourceKeys = new Set([
   'tenants',
   'subscriptions',
   'roles',
@@ -84,9 +85,7 @@ const mockResourceKeys = new Set([
 const api = Object.fromEntries(
   Object.entries(endpoints).map(([key, path]) => [
     key,
-    new BaseEndpoint(path, undefined, mockResourceKeys.has(key)
-      ? { useCoreBackend: false, useMockApi: true }
-      : {})
+    new BaseEndpoint(path)
   ])
 );
 
@@ -218,10 +217,12 @@ export const useDataStore = defineStore('data', () => {
   }
 
   function patchResource(key, id, payload) {
+    if (localResourceKeys.has(key)) return;
     api[key]?.patch(id, payload).catch(() => {});
   }
 
   function createResource(key, payload) {
+    if (localResourceKeys.has(key)) return;
     api[key]?.create(payload).catch(() => {});
   }
 
@@ -702,14 +703,7 @@ export const useDataStore = defineStore('data', () => {
     }
   }
 
-  async function readMockCollection(key) {
-    try {
-      const rows = await api[key]?.getAll();
-      return Array.isArray(rows) ? rows : [];
-    } catch {
-      return [];
-    }
-  }
+  // Local static resources are loaded directly from the bundled JSON dataset
 
   const businessDocumentsApi = new BusinessDocumentsApi();
 
@@ -812,7 +806,7 @@ export const useDataStore = defineStore('data', () => {
     }
   }
 
-  async function loadMockCollections() {
+  async function loadLocalCollections() {
     const keys = [
       'clients',
       'clientContacts',
@@ -837,9 +831,11 @@ export const useDataStore = defineStore('data', () => {
       'notifications',
       'alerts',
     ];
-    const entries = await Promise.all(keys.map(async key => [key, await readMockCollection(key)]));
-    entries.forEach(([key, rows]) => {
-      if (rows.length) D.value[key] = rows;
+    keys.forEach(key => {
+      const rows = initialData[key];
+      if (Array.isArray(rows) && rows.length) {
+        D.value[key] = JSON.parse(JSON.stringify(rows));
+      }
     });
     if (D.value.activityLog.length) D.value.activity = D.value.activityLog;
     if (D.value.stockMovements.length) D.value.movements = D.value.stockMovements;
@@ -861,7 +857,7 @@ export const useDataStore = defineStore('data', () => {
       activity: [],
     });
     await loadCoreCollections();
-    await loadMockCollections();
+    await loadLocalCollections();
   }
 
   init();
