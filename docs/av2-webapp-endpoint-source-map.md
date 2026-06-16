@@ -1,10 +1,9 @@
 # AV2 WebApp Endpoint Source Map
 
-This document describes the API source mapping and endpoint architecture for the local execution of the Nexa WebApp. The application functions in a hybrid mode, routing traffic to either the real backend platform or a local mock server based on whether the module is supported.
+This document describes the API source mapping and endpoint architecture for the local execution of the Nexa WebApp. The application connects to the real backend platform, while unsupported modules are backed by local in-memory static datasets.
 
 ## Local Services
 - **Real Backend**: `http://localhost:5068/api/v1`
-- **Mock API**: `http://127.0.0.1:3000/api/v1`
 - **WebApp**: `http://localhost:5173`
 
 ---
@@ -27,10 +26,10 @@ These modules are backed by the database-backed ASP.NET Core platform and must a
 
 ---
 
-## Mock API Modules
-These modules represent unsupported or future capabilities and are backed by the mock JSON Server. Kebab-case semantic paths are mapped to camelCase resource keys on the server.
+## In-Memory Local Modules
+These modules represent unsupported or future capabilities and are backed by the local static dataset loaded in-memory during the session.
 
-| Module | Semantic Route Prefix | Mock Resource |
+| Module | Semantic Route Prefix | Data Key |
 |---|---|---|
 | clients | `/api/v1/clients` | `clients` |
 | client-contacts | `/api/v1/client-contacts` | `clientContacts` |
@@ -62,6 +61,5 @@ These modules represent unsupported or future capabilities and are backed by the
 ---
 
 ## Rules
-1. **Source Integrity**: Real backend modules must not use the mock API. If the core backend is disabled or down, requests must fail explicitly.
-2. **Semantic Paths**: The WebApp only references kebab-case paths. The mock server routes map these to camelCase keys under the hood.
-3. **Mock Scope**: The mock server is restricted only to unsupported modules and does not seed fake data for real backend resources.
+1. **Source Integrity**: Real backend modules must not use any fallback. If the core backend is disabled or down, requests must fail explicitly.
+2. **Local Scope**: Local in-memory resources are isolated and initialized at session boot to support presentation flow.

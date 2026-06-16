@@ -6,7 +6,7 @@
 
 - Bounded context:
 - User-facing impact:
-- Mock API impact:
+- Data layer impact:
 
 ## Validation
 
@@ -16,4 +16,4 @@
 
 ## Notes
 
-This PR must not change SemVer tags, rewrite history, or claim Firebase deployment completion.
+This PR must not change SemVer tags, rewrite history, or claim deployment completion before verification.
