@@ -2,7 +2,7 @@ import { BaseEndpoint } from '@/shared/infrastructure/base-endpoint';
 
 export class PromotionsApi {
   constructor() {
-    this.promotions = new BaseEndpoint('/api/v1/promotions', undefined, { useCoreBackend: false, useMockApi: true });
+    this.promotions = new BaseEndpoint('/api/v1/promotions');
   }
 
   getPromotions() { return this.promotions.getAll(); }
