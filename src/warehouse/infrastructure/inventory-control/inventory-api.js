@@ -12,7 +12,7 @@ class InventoryApiService {
     this.lots = new BaseEndpoint('/api/v1/inventory-items', baseApi, {
       useCoreBackend: true,
     });
-    this.movements = new BaseEndpoint('/api/v1/stock-movements', undefined, { useCoreBackend: false, useMockApi: true });
+    this.movements = new BaseEndpoint('/api/v1/stock-movements');
     this.warehouses = new BaseEndpoint('/api/v1/warehouses');
   }
 

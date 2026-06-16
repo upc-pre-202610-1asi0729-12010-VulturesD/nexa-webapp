@@ -9,7 +9,7 @@ import { baseApi } from '@/shared/infrastructure/base-api';
  */
 class IamApiService {
   constructor() {
-    this.users = new BaseEndpoint('/api/v1/users', undefined, { useCoreBackend: false, useMockApi: true });
+    this.users = new BaseEndpoint('/api/v1/users');
   }
 
   /**
@@ -23,7 +23,7 @@ class IamApiService {
           id: "USR-LOGISTICS",
           name: "Roberto Garcia",
           email: "logistics@nexa.com",
-          password: "NexaDemo2026!",
+          password: "Nexa2026!",
           role: "ops",
           scope: "ops",
           roleKey: "logistics",
@@ -35,7 +35,7 @@ class IamApiService {
           id: "USR-SALES",
           name: "Valeria Sanchez",
           email: "sales@nexa.com",
-          password: "NexaDemo2026!",
+          password: "Nexa2026!",
           role: "ops",
           scope: "ops",
           roleKey: "commercial",
@@ -46,8 +46,8 @@ class IamApiService {
         {
           id: "USR-BUYER",
           name: "Elena Litano",
-          email: "buyer.demo@nexa.com",
-          password: "NexaDemo2026!",
+          email: "buyer@nexa.com",
+          password: "Nexa2026!",
           role: "portal",
           scope: "portal",
           roleKey: "buyer",
