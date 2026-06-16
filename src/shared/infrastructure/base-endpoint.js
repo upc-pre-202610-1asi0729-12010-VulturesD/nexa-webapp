@@ -5,17 +5,12 @@ import { baseApi } from './base-api';
  * Optional fallback stays disabled unless a caller opts in explicitly.
  */
 export class BaseEndpoint {
-  constructor(endpointPath, api = baseApi, { useCoreBackend = true, useMockApi = false, fallbackEndpointPath = endpointPath, allowMockFallback = false } = {}) {
+  constructor(endpointPath, api = baseApi, { useCoreBackend = true } = {}) {
     this.api = api;
     this.http = api.http;
-    this.fallbackHttp = api.fallbackHttp;
-    this.mockHttp = api.mockHttp;
     this.coreHttp = api.coreHttp;
     this.endpointPath = endpointPath;
-    this.fallbackEndpointPath = fallbackEndpointPath;
     this.useCoreBackend = useCoreBackend;
-    this.useMockApi = useMockApi;
-    this.allowMockFallback = allowMockFallback;
   }
 
   pathFor(client, suffix = '', endpointPath = this.endpointPath) {
@@ -26,34 +21,17 @@ export class BaseEndpoint {
   }
 
   primaryHttp() {
-    if (this.useMockApi) return this.mockHttp;
     return this.useCoreBackend && this.api.coreBackendEnabled ? this.coreHttp : this.http;
   }
 
   primaryEndpointPath() {
-    if (this.useMockApi) return this.fallbackEndpointPath;
-    return this.useCoreBackend && this.api.coreBackendEnabled
-      ? this.endpointPath
-      : this.fallbackEndpointPath;
-  }
-
-  shouldUseFallback() {
-    if (!this.allowMockFallback) return false;
-    if (!this.api.mockFallbackEnabled) return false;
-    return !this.api.usesLocalBaseUrl;
+    return this.endpointPath;
   }
 
   async request(operation, validate) {
-    try {
-      const data = await operation(this.primaryHttp(), this.primaryEndpointPath());
-      if (!validate || validate(data)) return data;
-      throw new Error(`Invalid API payload for ${this.endpointPath}`);
-    } catch (primaryError) {
-      if (!this.shouldUseFallback()) throw primaryError;
-      const data = await operation(this.fallbackHttp, this.fallbackEndpointPath);
-      if (!validate || validate(data)) return data;
-      throw new Error(`Invalid local API payload for ${this.endpointPath}`);
-    }
+    const data = await operation(this.primaryHttp(), this.primaryEndpointPath());
+    if (!validate || validate(data)) return data;
+    throw new Error(`Invalid API payload for ${this.endpointPath}`);
   }
 
   getAll() {
