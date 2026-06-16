@@ -291,8 +291,8 @@ async function confirm() {
   <!-- STEP 2: Products -->
   <div v-if="step === 2">
     <div class="card-title" style="margin-bottom:12px">Add Products for {{ selectedClient?.name }}</div>
-    <div class="grid-2" style="align-items:start">
-      <div class="card" style="overflow:hidden">
+    <div class="create-order-grid">
+      <div class="card">
         <div class="card-header"><span class="card-title">Catalog</span></div>
         <table class="data-table">
           <thead><tr><th>Product</th><th>Avail.</th><th>Price</th><th></th></tr></thead>
@@ -409,3 +409,17 @@ async function confirm() {
     </div>
   </div>
 </template>
+
+<style scoped>
+.create-order-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 1024px) {
+  .create-order-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

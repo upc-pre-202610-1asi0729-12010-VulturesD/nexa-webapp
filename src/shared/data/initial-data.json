@@ -388,6 +388,7 @@
   "paymentMethods": [
     {
       "id": "PM-001",
+      "clientId": "PM-001",
       "clientId": "CLI-001",
       "type": "card",
       "brand": "Visa",
@@ -484,7 +485,7 @@
     {
       "id": "USR-BUYER",
       "name": "Elena Litano",
-      "email": "elena.litano@icisa.pe",
+      "email": "buyer@nexa.com",
       "roleName": "B2B Buyer",
       "role": "Buyer Portal",
       "initials": "EL",
