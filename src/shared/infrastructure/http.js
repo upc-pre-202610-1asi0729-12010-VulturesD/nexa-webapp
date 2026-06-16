@@ -1,24 +1,14 @@
 import axios from 'axios';
 
-export const MOCK_API_BASE_URL = import.meta.env.VITE_NEXA_MOCK_API_BASE_URL || 'http://127.0.0.1:3000';
-export const LOCAL_API_BASE_URL = MOCK_API_BASE_URL;
 export const NEXA_API_BASE_URL = import.meta.env.VITE_NEXA_API_BASE_URL || 'http://localhost:5068/api/v1';
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || NEXA_API_BASE_URL;
 export const CORE_BACKEND_ENABLED = import.meta.env.VITE_CORE_BACKEND_ENABLED !== 'false';
-export const MOCK_API_FALLBACK_ENABLED = import.meta.env.VITE_ENABLE_MOCK_API_FALLBACK === 'true';
 
 export const http = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' },
 });
-
-export const localHttp = axios.create({
-  baseURL: MOCK_API_BASE_URL,
-  timeout: 10000,
-  headers: { 'Content-Type': 'application/json' },
-});
-export const mockHttp = localHttp;
 
 export const coreHttp = axios.create({
   baseURL: NEXA_API_BASE_URL,
