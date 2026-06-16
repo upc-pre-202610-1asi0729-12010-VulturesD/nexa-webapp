@@ -3,13 +3,11 @@
 ## Local Execution
 
 - Backend: `http://localhost:5068/api/v1`
-- Optional mock API: `http://127.0.0.1:3000`
 - WebApp: `npm run dev`
-- Optional mock server: `npm run server`
 
 ## Data Sources
 
-| Module/Screen | Source | Endpoint or Mock Resource | Notes |
+| Module/Screen | Source | Endpoint or Local Data Key | Notes |
 |---|---|---|---|
 | Authentication | Real backend | `POST /authentication/sign-in` | Supported by Nexa Platform. |
 | Product Catalog | Real backend | `GET /catalog-items`, `/categories`, `/brands` | Backend exposes catalog data and product assets. |
@@ -21,17 +19,17 @@
 | Proof of Delivery display | Real backend + local display state | `GET /shipments` | Shipment display is supported; upload mutation is not. |
 | Business Documents | Real backend | `GET /invoices`, `/payments` | Invoices and payments are backend-backed. |
 | Buyer Business Documents | Real backend | `GET /invoices`, `/payments` | Buyer view filters backend document records. |
-| B2B Clients | Optional mock API | `clients`, `clientContacts`, `deliveryAddresses` | Client endpoints are not exposed yet. |
-| Purchase Requests | Optional mock API | `purchaseRequests`, `requestItems`, `messages` | Request workflow endpoint is not exposed yet. |
-| Request Builder | Optional mock API/local store | `purchaseRequests`, `requestItems` | Request mutation is local workspace support for presentation. |
-| Commercial Validation | Optional mock API | `purchaseRequests`, `requestItems`, `creditRequests` | Validation workflow for requests is not exposed yet. |
-| Promotions | Optional mock API | `promotions` | Promotion endpoint is not exposed yet. |
-| Customer Portals | Optional mock API | `customerPortals`, `portalRequirements`, `portalUploadTasks` | External portal configuration is not exposed yet. |
-| Company Administration | Optional mock API | `users`, `subscriptions` | Company management endpoints are not exposed yet. |
-| Editable Profile Areas | Local/session + optional mock API | session user, `clients`, `clientContacts` | Authentication is real; profile update endpoint is not exposed yet. |
-| Payment Method Management | Real backend + optional mock API | `/payments`, `paymentMethods`, `creditPayments` | Payment records are real; saved method management is not exposed yet. |
-| Operational Analytics | Real backend + optional mock API | backend orders/shipments/inventory, `temperatureLogs`, `stockMovements` | Core metrics use real data; supplemental operational logs are local. |
-| Support Conversations | Optional mock API | `supportConversations`, `messages` | Support workflow endpoint is not exposed yet. |
+| B2B Clients | In-memory local data | `clients`, `clientContacts`, `deliveryAddresses` | Client endpoints are not exposed yet. |
+| Purchase Requests | In-memory local data | `purchaseRequests`, `requestItems`, `messages` | Request workflow endpoint is not exposed yet. |
+| Request Builder | In-memory local data | `purchaseRequests`, `requestItems` | Request mutation is local workspace support for presentation. |
+| Commercial Validation | In-memory local data | `purchaseRequests`, `requestItems`, `creditRequests` | Validation workflow for requests is not exposed yet. |
+| Promotions | In-memory local data | `promotions` | Promotion endpoint is not exposed yet. |
+| Customer Portals | In-memory local data | `customerPortals`, `portalRequirements`, `portalUploadTasks` | External portal configuration is not exposed yet. |
+| Company Administration | In-memory local data | `users`, `subscriptions` | Company management endpoints are not exposed yet. |
+| Editable Profile Areas | Local/session + in-memory data | session user, `clients`, `clientContacts` | Authentication is real; profile update endpoint is not exposed yet. |
+| Payment Method Management | Real backend + in-memory data | `/payments`, `paymentMethods`, `creditPayments` | Payment records are real; saved method management is not exposed yet. |
+| Operational Analytics | Real backend + in-memory data | backend orders/shipments/inventory, `temperatureLogs`, `stockMovements` | Core metrics use real data; supplemental operational logs are local. |
+| Support Conversations | In-memory local data | `supportConversations`, `messages` | Support workflow endpoint is not exposed yet. |
 
 ## Real Backend Modules
 
@@ -46,7 +44,7 @@
 - Invoices
 - Payments
 
-## Mock/Local Demo Modules
+## In-Memory Local Modules
 
 - B2B clients
 - Purchase requests and request items
@@ -59,7 +57,7 @@
 
 ## Notes
 
-- Mock data is used only for WebApp areas not yet exposed by backend endpoints.
-- Real backend modules do not use mock fallback.
-- `npm run dev` starts only the WebApp.
-- `npm run server` starts only the optional mock API for unsupported modules.
+- Static initial data is used only for WebApp areas not yet exposed by backend endpoints.
+- Real backend modules do not use any fallback.
+- `npm run dev` starts the WebApp.
+
