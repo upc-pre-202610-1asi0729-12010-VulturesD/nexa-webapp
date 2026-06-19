@@ -25,7 +25,7 @@ type PodForm = {
         <div class="page-title">{{ 'nav.dispatch' | t }}</div>
         <div class="page-subtitle">{{ dispatches().length }} {{ 'dispatch.subtitle' | t }}</div>
       </div>
-      <button class="btn btn-secondary" disabled title="Disponible en AV2">
+      <button class="btn btn-secondary" disabled title="Disponible en una próxima versión">
         <i class="pi pi-plus" aria-hidden="true"></i> {{ 'dispatch.schedule' | t }}
       </button>
     </div>

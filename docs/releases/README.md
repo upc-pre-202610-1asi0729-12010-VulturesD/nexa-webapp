@@ -12,6 +12,7 @@ This folder documents release notes for the Angular WebApp used in the Open Sour
 
 | Version | Scope |
 | --- | --- |
+| [v2.0.1](./v2.0.1.md) | Open Source audit alignment and production integration verification |
 | `v2.0.0` | Open Source delivery baseline: Angular, Render Static Site, Spring Boot API integration |
 
 Current validation:

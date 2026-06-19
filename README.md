@@ -12,9 +12,9 @@
 
 <br/>
 
-![Angular](https://img.shields.io/badge/Angular-18-DD0031?style=for-the-badge&logo=angular&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Angular Material](https://img.shields.io/badge/Angular%20Material-18-0a2540?style=for-the-badge)
+![Angular](https://img.shields.io/badge/Angular-21-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Angular Material](https://img.shields.io/badge/Angular%20Material-21-0a2540?style=for-the-badge)
 ![REST API](https://img.shields.io/badge/API-%2Fapi%2Fv1-0EA5E9?style=for-the-badge)
 ![Render](https://img.shields.io/badge/Deploy-Render-22c55e?style=for-the-badge)
 
@@ -24,11 +24,11 @@
 ![Cycle](https://img.shields.io/badge/Cycle-2026--10-0a2540?style=flat-square)
 ![University](https://img.shields.io/badge/University-UPC-0a2540?style=flat-square)
 ![Team](https://img.shields.io/badge/Team-Nexa-2a67d9?style=flat-square)
-![Status](https://img.shields.io/badge/Status-Release%202.0.0-22c55e?style=flat-square)
+![Status](https://img.shields.io/badge/Status-Release%202.0.1-22c55e?style=flat-square)
 
 <br/>
 
-🌐 **[Open Live WebApp Login →](https://nexa-webapp-fv2v.onrender.com/#/auth/login)**
+🌐 **[Open Live WebApp Login →](https://nexa-webapp-fv2v.onrender.com/login)**
 
 <br/>
 
@@ -61,11 +61,11 @@ The WebApp consumes `nexa-platform` through RESTful endpoints under `/api/v1`. L
     <td width="50%">
       <p><a href="https://github.com/upc-pre-202610-1asi0729-12010-VulturesD/nexa-webapp">upc-pre-202610-1asi0729-12010-VulturesD/nexa-webapp</a> (This Repository)</p>
       <p>Angular Web Application for operational workflows and buyer-facing coordination.</p>
-      <p><a href="https://nexa-webapp-fv2v.onrender.com/#/auth/login">Open Live WebApp Login</a></p>
+      <p><a href="https://nexa-webapp-fv2v.onrender.com/login">Open Live WebApp Login</a></p>
       <p>
         <img alt="Angular" src="https://img.shields.io/badge/Angular-21-DD0031?style=flat-square&logo=angular&logoColor=white" />
         <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white" />
-        <img alt="Angular Material" src="https://img.shields.io/badge/Angular%20Material-18-0a2540?style=flat-square" />
+        <img alt="Angular Material" src="https://img.shields.io/badge/Angular%20Material-21-0a2540?style=flat-square" />
       </p>
     </td>
   </tr>

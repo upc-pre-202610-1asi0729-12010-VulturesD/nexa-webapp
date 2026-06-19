@@ -16,7 +16,7 @@ body:
       label: Steps to reproduce
       description: List the route, user role, and actions.
       placeholder: |
-        1. Go to /#/auth/login
+        1. Go to /login
         2. Sign in as ...
         3. Open ...
     validations:
