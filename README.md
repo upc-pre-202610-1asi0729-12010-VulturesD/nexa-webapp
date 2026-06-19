@@ -28,7 +28,7 @@
 
 <br/>
 
-🌐 **[Open Live WebApp Login →](https://nexa-open-source-webapp.onrender.com/#/auth/login)**
+🌐 **[Open Live WebApp Login →](https://nexa-webapp-fv2v.onrender.com/#/auth/login)**
 
 <br/>
 
@@ -61,7 +61,7 @@ The WebApp consumes `nexa-platform` through RESTful endpoints under `/api/v1`. L
     <td width="50%">
       <p><a href="https://github.com/upc-pre-202610-1asi0729-12010-VulturesD/nexa-webapp">upc-pre-202610-1asi0729-12010-VulturesD/nexa-webapp</a> (This Repository)</p>
       <p>Angular Web Application for operational workflows and buyer-facing coordination.</p>
-      <p><a href="https://nexa-open-source-webapp.onrender.com/#/auth/login">Open Live WebApp Login</a></p>
+      <p><a href="https://nexa-webapp-fv2v.onrender.com/#/auth/login">Open Live WebApp Login</a></p>
       <p>
         <img alt="Angular" src="https://img.shields.io/badge/Angular-21-DD0031?style=flat-square&logo=angular&logoColor=white" />
         <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white" />
