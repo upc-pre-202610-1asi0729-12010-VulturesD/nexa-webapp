@@ -13,7 +13,7 @@ http://localhost:8080/api/v1
 Production API base URL:
 
 ```text
-https://nexa-platform.onrender.com/api/v1
+https://nexa-open-source-platform.onrender.com/api/v1
 ```
 
 ## Core Endpoints

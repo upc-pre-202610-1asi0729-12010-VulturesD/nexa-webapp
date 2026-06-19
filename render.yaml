@@ -1,7 +1,7 @@
 services:
   - type: web
     runtime: static
-    name: nexa-webapp
+    name: nexa-open-source-webapp
     buildCommand: npm ci && npm run build
     staticPublishPath: dist/nexa-webapp/browser
     envVars:
