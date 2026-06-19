@@ -1,15 +1,13 @@
 import { Component, inject, signal, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+
+import { Router } from '@angular/router';
 import { PurchaseRequestsStore } from '@app/ordering/application/purchase-requests.store';
-import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
 import { NexaIconComponent } from '@app/shared/presentation/icons/nexa-icon.component';
 
 @Component({
-  selector: 'nx-purchase-requests',
-  standalone: true,
-  imports: [CommonModule, RouterLink, TranslatePipe, NexaIconComponent],
-  template: `
+    selector: 'nx-purchase-requests',
+    imports: [NexaIconComponent],
+    template: `
     <div class="page">
       <div class="page-header" role="banner">
         <div>
@@ -64,7 +62,7 @@ import { NexaIconComponent } from '@app/shared/presentation/icons/nexa-icon.comp
       }
     </div>
   `,
-  styles: [`
+    styles: [`
     .priority-high { background: #fee2e2; color: #991b1b; }
     .priority-normal { background: #f1f5f9; color: #334155; }
     .priority-low { background: #f0fdf4; color: #166534; }

@@ -8,10 +8,9 @@ import { AnalyticsStore } from '../../application/analytics.store';
 import { CommercialReport, OperationsReport } from '@app/analytics/domain/model';
 
 @Component({
-  selector: 'nx-reports',
-  standalone: true,
-  imports: [CommonModule, PageHeaderComponent, StatusBadgeComponent, TranslatePipe],
-  template: `
+    selector: 'nx-reports',
+    imports: [CommonModule, PageHeaderComponent, StatusBadgeComponent, TranslatePipe],
+    template: `
     <div class="page">
       <nx-page-header [title]="'reports.title' | t" [subtitle]="'reports.subtitle' | t">
         <button class="btn btn-ghost" disabled title="Export available in next iteration">
@@ -151,7 +150,7 @@ import { CommercialReport, OperationsReport } from '@app/analytics/domain/model'
         }
       }
     </div>
-  `,
+  `
 })
 export class ReportsPage {
   private readonly store = inject(AnalyticsStore);

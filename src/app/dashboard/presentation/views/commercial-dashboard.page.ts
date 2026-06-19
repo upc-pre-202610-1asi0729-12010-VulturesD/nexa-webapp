@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { DashboardStore } from '@app/dashboard/application/dashboard.store';
@@ -12,10 +12,9 @@ import { I18nService } from '@app/shared/presentation/services/i18n.service';
 import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
 
 @Component({
-  selector: 'nx-commercial-dashboard',
-  standalone: true,
-  imports: [CommonModule, TranslatePipe],
-  template: `
+    selector: 'nx-commercial-dashboard',
+    imports: [TranslatePipe],
+    template: `
     <div class="page">
       <div class="page-header" role="banner">
         <div>
@@ -185,7 +184,7 @@ import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
         </div>
       }
     </div>
-  `,
+  `
 })
 export class CommercialDashboardPage {
   private readonly api = inject(DashboardStore);

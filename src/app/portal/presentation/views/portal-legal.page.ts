@@ -1,17 +1,15 @@
 import { Component, inject, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+
+import { Router, ActivatedRoute } from '@angular/router';
 import { I18nService } from '@app/shared/presentation/services/i18n.service';
 import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
-import { NexaIconComponent } from '@app/shared/presentation/icons/nexa-icon.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
 
 @Component({
-  selector: 'nx-portal-legal',
-  standalone: true,
-  imports: [CommonModule, RouterLink, TranslatePipe, NexaIconComponent],
-  template: `
+    selector: 'nx-portal-legal',
+    imports: [TranslatePipe],
+    template: `
     <div class="legal-page">
       @if (legalDocument(); as legal) {
         <section class="legal-hero">
@@ -66,7 +64,7 @@ import { map } from 'rxjs/operators';
         </div>
       }
     </div>
-  `,
+  `
 })
 export class PortalLegalPage {
   private readonly route = inject(ActivatedRoute);

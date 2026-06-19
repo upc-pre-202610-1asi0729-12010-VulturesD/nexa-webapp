@@ -8,13 +8,11 @@ import { Dispatch } from '@app/dispatch/domain/model';
 import { Client } from '@app/clients/domain/model';
 import { InventoryLot } from '@app/inventory/domain/model';
 import { I18nService } from '@app/shared/presentation/services/i18n.service';
-import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
 
 @Component({
-  selector: 'nx-operations-dashboard',
-  standalone: true,
-  imports: [CommonModule, TranslatePipe],
-  template: `
+    selector: 'nx-operations-dashboard',
+    imports: [CommonModule],
+    template: `
     <div class="page">
       <div class="page-header">
         <div>
@@ -139,7 +137,7 @@ import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
       }
     </div>
   `,
-  styles: [`
+    styles: [`
     .quick-action-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));

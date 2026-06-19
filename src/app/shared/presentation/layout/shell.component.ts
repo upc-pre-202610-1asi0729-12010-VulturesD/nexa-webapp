@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -26,14 +26,14 @@ const NAV: NavItem[] = [
   { labelKey: 'nav.dashboard',           icon: 'pi-th-large',    path: '/dashboard',  roles: ['commercial', 'logistics'], sectionKey: 'nav.main', exact: true },
   { labelKey: 'nav.portal',              icon: 'pi-home',        path: '/portal',     roles: ['buyer'],                   sectionKey: 'nav.buyer', exact: true },
   { labelKey: 'nav.catalog',             icon: 'pi-box',         path: '/products',   roles: ['commercial'],              sectionKey: 'nav.main' },
-  
+
   // Commercial
   { labelKey: 'nav.requests',            icon: 'pi-inbox',       path: '/commercial/purchase-requests', roles: ['commercial'], sectionKey: 'nav.commercial' },
   { labelKey: 'nav.orders',              icon: 'pi-file-edit',   path: '/orders',     roles: ['commercial'],              sectionKey: 'nav.commercial', badge: 'pendingOrders' },
   { labelKey: 'nav.createOrder',         icon: 'pi-plus-circle', path: '/orders/new', roles: ['commercial'],              sectionKey: 'nav.commercial', exact: true },
   { labelKey: 'nav.clients',             icon: 'pi-users',       path: '/clients',    roles: ['commercial'],              sectionKey: 'nav.commercial' },
   { labelKey: 'nav.documents',           icon: 'pi-file-check',  path: '/commercial/business-documents', roles: ['commercial'], sectionKey: 'nav.commercial' },
-  
+
   // Operations / Logistics
   { labelKey: 'nav.inventory',           icon: 'pi-database',    path: '/inventory',  roles: ['logistics'],               sectionKey: 'nav.operations', exact: true },
   { labelKey: 'nav.dispatchBoard',       icon: 'pi-send',        path: '/dispatches', roles: ['logistics'],               sectionKey: 'nav.operations' },
@@ -47,18 +47,16 @@ const NAV: NavItem[] = [
 ];
 
 @Component({
-  selector: 'nx-shell',
-  standalone: true,
-  imports: [
-    CommonModule,
+    selector: 'nx-shell',
+    imports: [
     RouterOutlet,
     RouterLink,
     TranslatePipe,
     NexaIconComponent,
     MatSidenavModule,
-    MatToolbarModule,
-  ],
-  template: `
+    MatToolbarModule
+],
+    template: `
     <mat-sidenav-container id="ops-app" class="app-shell">
       <mat-sidenav class="sidebar" mode="side" opened>
         <div class="sidebar-logo">
@@ -169,11 +167,11 @@ const NAV: NavItem[] = [
       </div>
     </nav>
   `,
-  styles: [`
+    styles: [`
     .lang-switch { display: flex; gap: 6px; padding: 0 12px 10px; }
     .lang-opt { padding: 4px 10px; border-radius: 6px; border: 1px solid #E5E7EB; font-size: 11px; font-weight: 600; color: #6B7280; cursor: pointer; background: #fff; }
     .lang-opt.active { background: #EFF6FF; border-color: #BFDBFE; color: #2563EB; }
-  `],
+  `]
 })
 export class ShellComponent {
   private readonly session = inject(IamStore);

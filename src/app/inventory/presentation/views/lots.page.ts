@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { forkJoin } from 'rxjs';
 import { PageHeaderComponent } from '@app/shared/presentation/components/page-header.component';
 import { StatusBadgeComponent } from '@app/shared/presentation/components/status-badge.component';
@@ -8,10 +8,9 @@ import { InventoryLot } from '@app/inventory/domain/model';
 import { Product } from '@app/catalog/domain/model';
 
 @Component({
-  selector: 'nx-lots',
-  standalone: true,
-  imports: [CommonModule, PageHeaderComponent, StatusBadgeComponent],
-  template: `
+    selector: 'nx-lots',
+    imports: [PageHeaderComponent, StatusBadgeComponent],
+    template: `
     <div class="page">
       <nx-page-header title="Lotes de inventario" subtitle="Trazabilidad y vencimientos"></nx-page-header>
 
@@ -47,7 +46,7 @@ import { Product } from '@app/catalog/domain/model';
         }
       </div>
     </div>
-  `,
+  `
 })
 export class LotsPage {
   private readonly api = inject(InventoryQueriesStore);

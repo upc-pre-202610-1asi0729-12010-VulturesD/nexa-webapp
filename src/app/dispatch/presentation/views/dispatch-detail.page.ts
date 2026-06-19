@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { PageHeaderComponent } from '@app/shared/presentation/components/page-header.component';
@@ -9,10 +9,9 @@ import { Client } from '@app/clients/domain/model';
 import { Dispatch } from '@app/dispatch/domain/model';
 
 @Component({
-  selector: 'nx-dispatch-detail',
-  standalone: true,
-  imports: [CommonModule, RouterLink, PageHeaderComponent, StatusBadgeComponent],
-  template: `
+    selector: 'nx-dispatch-detail',
+    imports: [RouterLink, PageHeaderComponent, StatusBadgeComponent],
+    template: `
     <div class="page">
       <nx-page-header [title]="'Despacho ' + (dispatch()?.id || '')" subtitle="Detalle operativo">
         <a routerLink="/dispatches" class="btn btn-ghost"><i class="pi pi-arrow-left"></i> Volver</a>
@@ -91,11 +90,11 @@ import { Dispatch } from '@app/dispatch/domain/model';
       }
     </div>
   `,
-  styles: [`
+    styles: [`
     .check-row { display: flex; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid #F3F0EC; font-size: 13px; color: #1F2937; }
     .check-row:last-child { border-bottom: none; }
     .check-mark { width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; background: #DCFCE7; color: #15803D; font-size: 11px; }
-  `],
+  `]
 })
 export class DispatchDetailPage {
   private readonly api = inject(DispatchStore);

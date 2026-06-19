@@ -14,10 +14,9 @@ const FLOW = ['validating', 'confirmed', 'preparing', 'dispatched', 'delivered']
 interface OrderExt extends Order { createdByName?: string; createdByRole?: string; }
 
 @Component({
-  selector: 'nx-order-detail',
-  standalone: true,
-  imports: [CommonModule, RouterLink, TranslatePipe],
-  template: `
+    selector: 'nx-order-detail',
+    imports: [CommonModule, RouterLink, TranslatePipe],
+    template: `
     <div class="page">
       @if (loading()) {
         <div class="card card-pad"><div class="skeleton" style="height:14px"></div></div>
@@ -160,7 +159,7 @@ interface OrderExt extends Order { createdByName?: string; createdByRole?: strin
         </div>
       }
     </div>
-  `,
+  `
 })
 export class OrderDetailPage {
   private readonly api = inject(OrdersStore);

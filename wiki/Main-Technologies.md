@@ -2,7 +2,7 @@
 
 | Area | Technology |
 | --- | --- |
-| Framework | Angular 18 |
+| Framework | Angular 21 |
 | Language | TypeScript |
 | UI | Angular Material |
 | Routing | Angular Router |

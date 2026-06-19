@@ -11,10 +11,9 @@ import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
 import { NexaIconComponent } from '@app/shared/presentation/icons/nexa-icon.component';
 
 @Component({
-  selector: 'nx-portal-catalog',
-  standalone: true,
-  imports: [CommonModule, RouterLink, TranslatePipe, NexaIconComponent],
-  template: `
+    selector: 'nx-portal-catalog',
+    imports: [CommonModule, RouterLink, TranslatePipe, NexaIconComponent],
+    template: `
     <div class="buyer-page">
       <header class="portal-catalog-header" role="banner">
         <div>
@@ -171,7 +170,7 @@ import { NexaIconComponent } from '@app/shared/presentation/icons/nexa-icon.comp
         }
       }
     </div>
-  `,
+  `
 })
 export class PortalCatalogPage {
   private readonly store = inject(PortalStore);

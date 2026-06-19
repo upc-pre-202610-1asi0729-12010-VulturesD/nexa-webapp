@@ -1,14 +1,13 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
 import { NexaIconComponent } from '@app/shared/presentation/icons/nexa-icon.component';
 import { I18nService } from '@app/shared/presentation/services/i18n.service';
 
 @Component({
-  selector: 'nx-portal-premium',
-  standalone: true,
-  imports: [CommonModule, TranslatePipe, NexaIconComponent],
-  template: `
+    selector: 'nx-portal-premium',
+    imports: [TranslatePipe, NexaIconComponent],
+    template: `
     <div class="buyer-page">
       <header class="portal-page-header">
         <div>
@@ -41,7 +40,7 @@ import { I18nService } from '@app/shared/presentation/services/i18n.service';
         }
       </div>
     </div>
-  `,
+  `
 })
 export class PortalPremiumPage {
   private readonly i18n = inject(I18nService);

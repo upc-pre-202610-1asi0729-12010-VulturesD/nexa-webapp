@@ -32,10 +32,9 @@ const ORDER_TRACKING_STEPS = [
 ] as const;
 
 @Component({
-  selector: 'nx-portal-orders',
-  standalone: true,
-  imports: [CommonModule, RouterLink, TranslatePipe, NexaIconComponent],
-  template: `
+    selector: 'nx-portal-orders',
+    imports: [CommonModule, RouterLink, TranslatePipe, NexaIconComponent],
+    template: `
     <div class="buyer-page">
       <header class="portal-page-header">
         <div>
@@ -87,7 +86,7 @@ const ORDER_TRACKING_STEPS = [
         }
       }
     </div>
-  `,
+  `
 })
 export class PortalOrdersPage {
   private readonly store = inject(PortalStore);

@@ -29,10 +29,9 @@ const PORTAL_NAV: PortalNavItem[] = [
 ];
 
 @Component({
-  selector: 'nx-portal-shell',
-  standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, TranslatePipe, NexaIconComponent],
-  template: `
+    selector: 'nx-portal-shell',
+    imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, TranslatePipe, NexaIconComponent],
+    template: `
     <div class="buyer-app-shell">
       <header class="buyer-topbar">
         <a class="buyer-brand" routerLink="/portal/home" aria-label="Nexa">
@@ -167,7 +166,7 @@ const PORTAL_NAV: PortalNavItem[] = [
         }
       </nav>
     </div>
-  `,
+  `
 })
 export class PortalShellComponent {
   private readonly router = inject(Router);

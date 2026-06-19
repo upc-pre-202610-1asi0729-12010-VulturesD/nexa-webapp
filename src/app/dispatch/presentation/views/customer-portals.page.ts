@@ -1,15 +1,14 @@
 import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterLink } from '@angular/router';
 import { ClientsStore } from '@app/clients/application/clients.store';
 import { Client } from '@app/clients/domain/model';
 import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
 
 @Component({
-  selector: 'nx-customer-portals',
-  standalone: true,
-  imports: [CommonModule, RouterLink, TranslatePipe],
-  template: `
+    selector: 'nx-customer-portals',
+    imports: [RouterLink, TranslatePipe],
+    template: `
     <div class="page">
       <div class="page-header" role="banner">
         <div>
@@ -60,7 +59,7 @@ import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
         </div>
       }
     </div>
-  `,
+  `
 })
 export class CustomerPortalsPage {
   private readonly api = inject(ClientsStore);

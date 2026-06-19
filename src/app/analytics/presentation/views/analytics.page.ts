@@ -9,10 +9,9 @@ import { I18nService } from '@app/shared/presentation/services/i18n.service';
 import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
 
 @Component({
-  selector: 'nx-analytics',
-  standalone: true,
-  imports: [CommonModule, TranslatePipe],
-  template: `
+    selector: 'nx-analytics',
+    imports: [CommonModule, TranslatePipe],
+    template: `
     <div class="page">
       <div class="page-header" role="banner">
         <div>
@@ -111,7 +110,7 @@ import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
         </div>
       }
     </div>
-  `,
+  `
 })
 export class AnalyticsPage {
   private readonly analytics = inject(AnalyticsStore);
