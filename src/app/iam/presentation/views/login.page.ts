@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IamStore } from '@app/iam/application/iam.store';
@@ -9,14 +9,12 @@ import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
 import { User } from '@app/iam/domain/model/user.model';
 
 @Component({
-  selector: 'nx-login',
-  standalone: true,
-  imports: [
-    CommonModule,
+    selector: 'nx-login',
+    imports: [
     FormsModule,
-    TranslatePipe,
-  ],
-  template: `
+    TranslatePipe
+],
+    template: `
     <div class="auth-page">
       <div class="auth-wrap">
         <!-- Left brand panel -->
@@ -105,7 +103,7 @@ import { User } from '@app/iam/domain/model/user.model';
         </section>
       </div>
     </div>
-  `,
+  `
 })
 export class LoginPage {
   private readonly session = inject(IamStore);

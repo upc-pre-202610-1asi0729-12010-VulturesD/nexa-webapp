@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
 import { NexaIconComponent } from '@app/shared/presentation/icons/nexa-icon.component';
 
 @Component({
-  selector: 'nx-portal-order-success',
-  standalone: true,
-  imports: [CommonModule, RouterLink, TranslatePipe, NexaIconComponent],
-  template: `
+    selector: 'nx-portal-order-success',
+    imports: [RouterLink, TranslatePipe, NexaIconComponent],
+    template: `
     <div class="buyer-page">
       <section class="buyer-shell-band portal-section-hero">
         <div>
@@ -51,6 +50,6 @@ import { NexaIconComponent } from '@app/shared/presentation/icons/nexa-icon.comp
         </article>
       </div>
     </div>
-  `,
+  `
 })
 export class PortalOrderSuccessPage {}

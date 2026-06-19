@@ -20,10 +20,9 @@ interface DraftLine {
 }
 
 @Component({
-  selector: 'nx-order-new',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  template: `
+    selector: 'nx-order-new',
+    imports: [CommonModule, FormsModule],
+    template: `
     <div class="page">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
         <button class="btn btn-ghost btn-sm" (click)="router.navigate(['/orders'])"><i class="pi pi-arrow-left"></i> Pedidos</button>
@@ -262,7 +261,7 @@ interface DraftLine {
         }
       }
     </div>
-  `,
+  `
 })
 export class OrderNewPage {
   private readonly api = inject(OrdersStore);

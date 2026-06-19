@@ -14,10 +14,9 @@ const STATUS_KEYS = ['validating', 'blocked', 'confirmed', 'preparing', 'dispatc
 type StatusKey = typeof STATUS_KEYS[number];
 
 @Component({
-  selector: 'nx-orders',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
-  template: `
+    selector: 'nx-orders',
+    imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
+    template: `
     <div class="page">
       <div class="page-header" role="banner">
         <div>
@@ -83,7 +82,7 @@ type StatusKey = typeof STATUS_KEYS[number];
         }
       </div>
     </div>
-  `,
+  `
 })
 export class OrdersPage {
   private readonly api = inject(OrdersStore);

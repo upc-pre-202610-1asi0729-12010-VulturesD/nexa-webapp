@@ -1,5 +1,4 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-import { timeout } from 'rxjs';
 import { environment } from '@env/environment';
 import { User } from '@app/iam/domain/model/user.model';
 
@@ -23,7 +22,7 @@ export const apiBaseInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req.clone({
       url,
       setHeaders: token ? { Authorization: `Bearer ${token}` } : {},
-    })).pipe(timeout(1500));
+    }));
   }
   return next(req);
 };

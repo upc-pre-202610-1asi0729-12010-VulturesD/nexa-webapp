@@ -81,11 +81,11 @@ mat-sidenav-container.app-shell {
 .nav-item.mat-mdc-list-item {
   border-radius: 8px;
   height: auto;
-  --mdc-list-list-item-label-text-color: var(--gray-600);
-  --mdc-list-list-item-hover-label-text-color: var(--gray-900);
+  --mat-list-list-item-label-text-color: var(--gray-600);
+  --mat-list-list-item-hover-label-text-color: var(--gray-900);
 }
 .nav-item.mat-mdc-list-item.active {
-  --mdc-list-list-item-label-text-color: var(--nexa-blue-600);
+  --mat-list-list-item-label-text-color: var(--nexa-blue-600);
 }
 .topbar.mat-toolbar {
   font-family: var(--font-body);
@@ -116,7 +116,7 @@ mat-sidenav-container.app-shell {
 .btn-full .mat-mdc-progress-spinner {
   display: inline-flex;
   margin-right: 8px;
-  --mdc-circular-progress-active-indicator-color: #fff;
+  --mat-progress-spinner-active-indicator-color: #fff;
 }
 .material-chip-row {
   display: flex;

@@ -117,7 +117,7 @@ Each bounded context follows `domain`, `application`, `infrastructure`, and `pre
 
 | Layer | Technology |
 | --- | --- |
-| Framework | Angular 18 |
+| Framework | Angular 21 |
 | Language | TypeScript |
 | UI | Angular Material, Material Design, CSS |
 | Routing | Angular Router |

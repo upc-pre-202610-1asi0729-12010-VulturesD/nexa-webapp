@@ -1,14 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CompanyAdministrationStore } from '@app/dashboard/application/company-administration.store';
-import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
 import { NexaIconComponent } from '@app/shared/presentation/icons/nexa-icon.component';
 
 @Component({
-  selector: 'nx-company-administration',
-  standalone: true,
-  imports: [CommonModule, TranslatePipe, NexaIconComponent],
-  template: `
+    selector: 'nx-company-administration',
+    imports: [CommonModule, NexaIconComponent],
+    template: `
     <div class="company-admin-page page">
       <div class="page-header" role="banner">
         <div>

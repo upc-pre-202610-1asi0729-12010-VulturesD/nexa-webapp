@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { Client } from '@app/clients/domain/model';
@@ -8,10 +8,9 @@ import { DispatchStore } from '@app/dispatch/application/dispatch.store';
 import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
 
 @Component({
-  selector: 'nx-proof-of-delivery',
-  standalone: true,
-  imports: [CommonModule, RouterLink, TranslatePipe],
-  template: `
+    selector: 'nx-proof-of-delivery',
+    imports: [RouterLink, TranslatePipe],
+    template: `
     <div class="page">
       <div class="page-header" role="banner">
         <div>
@@ -70,7 +69,7 @@ import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
         </div>
       }
     </div>
-  `,
+  `
 })
 export class ProofOfDeliveryPage {
   private readonly api = inject(DispatchStore);

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IamStore } from '@app/iam/application/iam.store';
@@ -7,10 +7,9 @@ import { I18nService, Lang } from '@app/shared/presentation/services/i18n.servic
 import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
 
 @Component({
-  selector: 'nx-profile',
-  standalone: true,
-  imports: [CommonModule, FormsModule, TranslatePipe],
-  template: `
+    selector: 'nx-profile',
+    imports: [FormsModule, TranslatePipe],
+    template: `
     <div class="page">
       <div class="page-header" role="banner">
         <div>
@@ -115,7 +114,7 @@ import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
         </div>
       </div>
     </div>
-  `,
+  `
 })
 export class ProfilePage {
   private readonly session = inject(IamStore);

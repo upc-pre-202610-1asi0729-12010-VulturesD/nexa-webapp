@@ -12,10 +12,9 @@ import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
 import { NexaIconComponent } from '@app/shared/presentation/icons/nexa-icon.component';
 
 @Component({
-  selector: 'nx-portal',
-  standalone: true,
-  imports: [CommonModule, RouterLink, TranslatePipe, NexaIconComponent],
-  template: `
+    selector: 'nx-portal',
+    imports: [CommonModule, RouterLink, TranslatePipe, NexaIconComponent],
+    template: `
     <div class="buyer-page">
       <section class="buyer-shell-band">
         <div>
@@ -196,7 +195,7 @@ import { NexaIconComponent } from '@app/shared/presentation/icons/nexa-icon.comp
         </div>
       }
     </div>
-  `,
+  `
 })
 export class PortalPage {
   private readonly store = inject(PortalStore);

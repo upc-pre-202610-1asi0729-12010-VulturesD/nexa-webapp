@@ -5,10 +5,9 @@ import { Client } from '@app/clients/domain/model';
 import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
 
 @Component({
-  selector: 'nx-clients',
-  standalone: true,
-  imports: [CommonModule, TranslatePipe],
-  template: `
+    selector: 'nx-clients',
+    imports: [CommonModule, TranslatePipe],
+    template: `
     <div class="page">
       <div class="page-header" role="banner">
         <div>
@@ -80,7 +79,7 @@ import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
         }
       </div>
     </div>
-  `,
+  `
 })
 export class ClientsPage {
   private readonly api = inject(ClientsStore);

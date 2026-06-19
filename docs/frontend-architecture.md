@@ -1,6 +1,6 @@
 # Frontend Architecture
 
-Nexa WebApp is an Angular 18 single-page application organized by bounded contexts.
+Nexa WebApp is an Angular 21 single-page application organized by bounded contexts.
 
 ## Contexts
 

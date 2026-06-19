@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
@@ -16,10 +16,9 @@ type PodForm = {
 };
 
 @Component({
-  selector: 'nx-dispatches',
-  standalone: true,
-  imports: [CommonModule, FormsModule, TranslatePipe],
-  template: `
+    selector: 'nx-dispatches',
+    imports: [FormsModule, TranslatePipe],
+    template: `
     <div class="page">
     <div class="page-header" role="banner">
       <div>
@@ -198,7 +197,7 @@ type PodForm = {
         </div>
       </div>
     }
-  `,
+  `
 })
 export class DispatchesPage {
   private readonly api = inject(DispatchStore);

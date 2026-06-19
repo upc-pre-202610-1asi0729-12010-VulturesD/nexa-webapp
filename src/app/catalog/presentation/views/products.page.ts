@@ -7,14 +7,13 @@ import { Category, Product } from '@app/catalog/domain/model';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({
-  selector: 'nx-products',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatProgressBarModule,
-  ],
-  template: `
+    selector: 'nx-products',
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatProgressBarModule,
+    ],
+    template: `
     <div class="page">
       <div class="page-header" role="banner">
         <div>
@@ -170,7 +169,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
         </div>
       }
     </div>
-  `,
+  `
 })
 export class ProductsPage {
   private readonly store = inject(CatalogStore);

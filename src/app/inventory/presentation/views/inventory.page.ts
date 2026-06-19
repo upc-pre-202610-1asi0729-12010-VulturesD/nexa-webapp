@@ -11,10 +11,9 @@ import { I18nService } from '@app/shared/presentation/services/i18n.service';
 type StockFilter = 'all' | 'ok' | 'low' | 'out';
 
 @Component({
-  selector: 'nx-inventory',
-  standalone: true,
-  imports: [CommonModule, FormsModule, TranslatePipe],
-  template: `
+    selector: 'nx-inventory',
+    imports: [CommonModule, FormsModule, TranslatePipe],
+    template: `
     <div class="page">
       <div class="page-header" role="banner">
         <div>
@@ -157,7 +156,7 @@ type StockFilter = 'all' | 'ok' | 'low' | 'out';
         <div class="card card-pad muted">{{ 'common.comingSoon' | t }}</div>
       }
     </div>
-  `,
+  `
 })
 export class InventoryPage {
   private readonly api = inject(InventoryQueriesStore);

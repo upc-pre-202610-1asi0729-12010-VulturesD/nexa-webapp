@@ -1,14 +1,12 @@
 import { Component, inject, signal, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { PromotionsStore } from '@app/dashboard/application/promotions.store';
-import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
 import { NexaIconComponent } from '@app/shared/presentation/icons/nexa-icon.component';
 
 @Component({
-  selector: 'nx-promotions-manager',
-  standalone: true,
-  imports: [CommonModule, TranslatePipe, NexaIconComponent],
-  template: `
+    selector: 'nx-promotions-manager',
+    imports: [NexaIconComponent],
+    template: `
     <div class="page">
       <div class="page-header" role="banner">
         <div>

@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { forkJoin } from 'rxjs';
 import { PageHeaderComponent } from '@app/shared/presentation/components/page-header.component';
 import { InventoryQueriesStore } from '@app/inventory/application/inventory-queries.store';
@@ -7,10 +7,9 @@ import { StockMovement } from '@app/inventory/domain/model';
 import { Product } from '@app/catalog/domain/model';
 
 @Component({
-  selector: 'nx-stock-movements',
-  standalone: true,
-  imports: [CommonModule, PageHeaderComponent],
-  template: `
+    selector: 'nx-stock-movements',
+    imports: [PageHeaderComponent],
+    template: `
     <div class="page">
       <nx-page-header title="Movimientos de stock" subtitle="Entradas, salidas y ajustes"></nx-page-header>
 
@@ -45,7 +44,7 @@ import { Product } from '@app/catalog/domain/model';
         }
       </div>
     </div>
-  `,
+  `
 })
 export class StockMovementsPage {
   private readonly api = inject(InventoryQueriesStore);

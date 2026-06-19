@@ -1,14 +1,12 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BusinessDocumentsStore } from '@app/dashboard/application/business-documents.store';
-import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
 import { NexaIconComponent } from '@app/shared/presentation/icons/nexa-icon.component';
 
 @Component({
-  selector: 'nx-business-documents-center',
-  standalone: true,
-  imports: [CommonModule, TranslatePipe, NexaIconComponent],
-  template: `
+    selector: 'nx-business-documents-center',
+    imports: [CommonModule, NexaIconComponent],
+    template: `
     <div class="page">
       <div class="page-header" role="banner">
         <div>

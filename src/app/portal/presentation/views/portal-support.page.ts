@@ -1,14 +1,11 @@
 import { Component, inject, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router } from '@angular/router';
 import { I18nService } from '@app/shared/presentation/services/i18n.service';
-import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
 
 @Component({
-  selector: 'nx-portal-support',
-  standalone: true,
-  imports: [CommonModule, TranslatePipe],
-  template: `
+    selector: 'nx-portal-support',
+    template: `
     <div class="legal-page">
       @if (supportCopy(); as support) {
         <section class="legal-hero support-hero">
@@ -57,7 +54,7 @@ import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
         </div>
       }
     </div>
-  `,
+  `
 })
 export class PortalSupportPage {
   private readonly router = inject(Router);

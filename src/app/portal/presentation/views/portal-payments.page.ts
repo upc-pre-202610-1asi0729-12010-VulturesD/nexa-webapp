@@ -1,6 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { BuyerPaymentRecord, PortalSnapshot } from '@app/portal/domain/model';
 import { PortalStore } from '@app/portal/application/portal.store';
 import { IamStore } from '@app/iam/application/iam.store';
@@ -9,10 +8,9 @@ import { TranslatePipe } from '@app/shared/presentation/pipes/t.pipe';
 import { NexaIconComponent } from '@app/shared/presentation/icons/nexa-icon.component';
 
 @Component({
-  selector: 'nx-portal-payments',
-  standalone: true,
-  imports: [CommonModule, RouterLink, TranslatePipe, NexaIconComponent],
-  template: `
+    selector: 'nx-portal-payments',
+    imports: [CommonModule, TranslatePipe, NexaIconComponent],
+    template: `
     <div class="buyer-page">
       <header class="portal-page-header">
         <div>
@@ -123,7 +121,7 @@ import { NexaIconComponent } from '@app/shared/presentation/icons/nexa-icon.comp
         }
       }
     </div>
-  `,
+  `
 })
 export class PortalPaymentsPage {
   private readonly store = inject(PortalStore);

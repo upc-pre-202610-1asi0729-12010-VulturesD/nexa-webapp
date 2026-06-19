@@ -27,7 +27,7 @@ This wiki explains how the WebApp is structured, how it consumes Nexa Platform, 
 
 ## Stack
 
-- Angular 18.
+- Angular 21.
 - TypeScript.
 - Angular Router.
 - Angular Material.
