@@ -1,0 +1,41 @@
+[
+  {
+    "id": "USR-SALES",
+    "name": "Valeria Sanchez",
+    "email": "sales@nexa.com",
+    "password": "NexaAccess2026!",
+    "role": "ops",
+    "scope": "ops",
+    "roleKey": "commercial",
+    "roleName": "Sales",
+    "department": "Sales",
+    "initials": "VS",
+    "clientId": null
+  },
+  {
+    "id": "USR-LOGISTICS",
+    "name": "Roberto Garcia",
+    "email": "logistics@nexa.com",
+    "password": "NexaAccess2026!",
+    "role": "ops",
+    "scope": "ops",
+    "roleKey": "logistics",
+    "roleName": "Logistics",
+    "department": "Logistics",
+    "initials": "RG",
+    "clientId": null
+  },
+  {
+    "id": "USR-BUYER",
+    "name": "Elena Litano",
+    "email": "buyer@nexa.com",
+    "password": "NexaAccess2026!",
+    "role": "portal",
+    "scope": "portal",
+    "roleKey": "buyer",
+    "roleName": "B2B Buyer",
+    "department": "Purchasing",
+    "initials": "EL",
+    "clientId": "CLI-001"
+  }
+]

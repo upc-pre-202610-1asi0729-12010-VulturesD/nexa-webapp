@@ -5,6 +5,7 @@ We follow standard development workflows to keep project branches and commits cl
 ---
 
 ## 1. Branch Strategy (GitFlow)
+
 - **`main`**: The release branch. Represents live code in production.
 - **`develop`**: The integration branch. Features are merged here first.
 - **`feature/*`**: Feature branches. Created off `develop` and merged back via pull request.
@@ -13,6 +14,7 @@ We follow standard development workflows to keep project branches and commits cl
 ---
 
 ## 2. Commit Style Guidelines
+
 Every commit must follow this structured multiline format:
 
 ```txt
@@ -32,14 +34,16 @@ Validation:
 - What was reviewed or checked before committing.
 ```
 
-### Commit Types:
+### Commit Types
+
 - **`feat`**: A new user-facing feature.
 - **`fix`**: A bug fix.
 - **`docs`**: Documentation edits.
 - **`style`**: Formatting, layout padding tweaks, style corrections.
 - **`refactor`**: Code restructuring without user-facing behavior changes.
 
-### Example Commit:
+### Example Commit
+
 ```txt
 feat(sales): add commercial orders list component
 
@@ -60,6 +64,4 @@ Validation:
 
 ---
 
-<p align="center">
-  [Home](Home.md) · [Project Overview](Project-Overview.md) · [Architecture](Frontend-Architecture.md) · [Development Workflow](Branching-and-Commits.md) · [Quality & Security](Quality-and-Security.md)
-</p>
+[Home](Home.md) | [Project Overview](Project-Overview.md) | [Architecture](Frontend-Architecture.md) | [Development Workflow](Branching-and-Commits.md) | [Quality & Security](Quality-and-Security.md)

@@ -2,33 +2,33 @@
 
 <br/>
 
-<img src="./docs/assets/nexa-logo.svg" alt="Nexa" width="200"/>
+<img src="./docs/assets/nexa-logo.svg" alt="Nexa" width="220"/>
 
 <br/><br/>
 
 # nexa-webapp
 
-**Web application and frontend user interface for the Nexa B2B cold-chain distribution platform**
+**Angular Web Application for Nexa B2B cold-chain commercial, logistics, warehouse, and buyer workflows**
 
 <br/>
 
-![Vue.js 3](https://img.shields.io/badge/Vue.js-3.x-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?style=for-the-badge&logo=vite&logoColor=white)
-![PrimeVue](https://img.shields.io/badge/PrimeVue-4.x-10B981?style=for-the-badge&logo=primevue&logoColor=white)
-![Pinia](https://img.shields.io/badge/Pinia-2.x-FFD43B?style=for-the-badge&logo=vue.js&logoColor=black)
-![Axios](https://img.shields.io/badge/Axios-1.x-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
+![Angular](https://img.shields.io/badge/Angular-18-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Angular Material](https://img.shields.io/badge/Angular%20Material-18-0a2540?style=for-the-badge)
+![REST API](https://img.shields.io/badge/API-%2Fapi%2Fv1-0EA5E9?style=for-the-badge)
+![Render](https://img.shields.io/badge/Deploy-Render-22c55e?style=for-the-badge)
 
 <br/>
 
-![Course](https://img.shields.io/badge/Course-1ASI0730%20Aplicaciones%20Web-0a2540?style=flat-square)
+![Course](https://img.shields.io/badge/Course-1ASI0729%20Desarrollo%20de%20Aplicaciones%20Open%20Source-0a2540?style=flat-square)
 ![Cycle](https://img.shields.io/badge/Cycle-2026--10-0a2540?style=flat-square)
 ![University](https://img.shields.io/badge/University-UPC-0a2540?style=flat-square)
-![Team](https://img.shields.io/badge/Team-King-2a67d9?style=flat-square)
-![Status](https://img.shields.io/badge/Status-Release%201.0.0-22c55e?style=flat-square)
+![Team](https://img.shields.io/badge/Team-Nexa-2a67d9?style=flat-square)
+![Status](https://img.shields.io/badge/Status-Release%202.0.0-22c55e?style=flat-square)
 
 <br/>
 
-🌐 **[View Live WebApp →](https://nexa-webapp.onrender.com/)**
+🌐 **[Open Live WebApp Login →](https://nexa-webapp.onrender.com/#/auth/login)**
 
 <br/>
 
@@ -38,7 +38,9 @@
 
 ## Overview
 
-The `nexa-webapp` repository houses the single-page application (SPA) client interface for the Nexa B2B cold-chain operations ecosystem. Built using Vue 3 and Vite, it delivers intuitive, highly responsive dashboards for warehouse operators, logistics dispatchers, and B2B buyers. The application integrates securely with the ASP.NET Core platform backend for real-time operations, and utilizes structured in-memory datasets as safe fallbacks for local-only modules.
+`nexa-webapp` is the Angular SPA for Nexa. It supports commercial coordinators, logistics leads, warehouse operators, and B2B buyers through catalog, orders, inventory, dispatch, analytics, business documents, payments, and buyer portal workflows.
+
+The WebApp consumes `nexa-platform` through RESTful endpoints under `/api/v1`. Local development points to `http://localhost:8080/api/v1`; production builds point to the Render backend URL configured in `src/environments/environment.prod.ts`.
 
 ---
 
@@ -47,9 +49,9 @@ The `nexa-webapp` repository houses the single-page application (SPA) client int
 <table>
   <tr>
     <td width="50%">
-      <p><a href="https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-website">nexa-website</a></p>
+      <p><a href="https://github.com/upc-pre-202610-1asi0729-12010-VulturesD/nexa-website">upc-pre-202610-1asi0729-12010-VulturesD/nexa-website</a></p>
       <p>Public landing website and central product entry point.</p>
-      <p><a href="https://upc-pre-202610-1asi0730-12242-king.github.io/nexa-website/">Open Live Website</a></p>
+      <p><a href="https://upc-pre-202610-1asi0729-12010-vulturesd.github.io/nexa-website/">Open Live Website</a></p>
       <p>
         <img alt="HTML5" src="https://img.shields.io/badge/HTML5-static-E34F26?style=flat-square&logo=html5&logoColor=white" />
         <img alt="CSS3" src="https://img.shields.io/badge/CSS3-responsive-1572B6?style=flat-square&logo=css3&logoColor=white" />
@@ -57,34 +59,34 @@ The `nexa-webapp` repository houses the single-page application (SPA) client int
       </p>
     </td>
     <td width="50%">
-      <p><a href="https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-webapp">nexa-webapp</a> (This Repository)</p>
-      <p>Main web application for B2B buyer portal, operator workflows, and cold-chain logs.</p>
-      <p><a href="https://nexa-webapp.onrender.com/">Open Live WebApp</a></p>
+      <p><a href="https://github.com/upc-pre-202610-1asi0729-12010-VulturesD/nexa-webapp">upc-pre-202610-1asi0729-12010-VulturesD/nexa-webapp</a> (This Repository)</p>
+      <p>Angular Web Application for operational workflows and buyer-facing coordination.</p>
+      <p><a href="https://nexa-webapp.onrender.com/#/auth/login">Open Live WebApp Login</a></p>
       <p>
-        <img alt="Vue 3" src="https://img.shields.io/badge/Vue%203-35495E?style=flat-square&logo=vue.js&logoColor=4FC08D" />
-        <img alt="Vite" src="https://img.shields.io/badge/Vite-0F172A?style=flat-square&logo=vite&logoColor=FFD62E" />
-        <img alt="PrimeVue" src="https://img.shields.io/badge/PrimeVue-0EA5E9?style=flat-square" />
+        <img alt="Angular" src="https://img.shields.io/badge/Angular-18-DD0031?style=flat-square&logo=angular&logoColor=white" />
+        <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.5-3178C6?style=flat-square&logo=typescript&logoColor=white" />
+        <img alt="Angular Material" src="https://img.shields.io/badge/Angular%20Material-18-0a2540?style=flat-square" />
       </p>
     </td>
   </tr>
   <tr>
     <td width="50%">
-      <p><a href="https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-platform">nexa-platform</a></p>
-      <p>Backend platform and API service layer context workspace.</p>
-      <p><a href="https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-platform/wiki">Open Engineering Wiki</a></p>
+      <p><a href="https://github.com/upc-pre-202610-1asi0729-12010-VulturesD/nexa-platform">upc-pre-202610-1asi0729-12010-VulturesD/nexa-platform</a></p>
+      <p>Spring Boot backend platform and REST API service layer.</p>
+      <p><a href="https://github.com/upc-pre-202610-1asi0729-12010-VulturesD/nexa-platform/wiki">Open Engineering Wiki</a></p>
       <p>
-        <img alt="Platform" src="https://img.shields.io/badge/Platform-backend%20workspace-512BD4?style=flat-square" />
-        <img alt="API" src="https://img.shields.io/badge/API-domain%20services-0EA5E9?style=flat-square" />
-        <img alt="EF Core" src="https://img.shields.io/badge/EF%20Core-9.0-512BD4?style=flat-square" />
+        <img alt="Java" src="https://img.shields.io/badge/Java-21-0a2540?style=flat-square" />
+        <img alt="Spring Boot" src="https://img.shields.io/badge/Spring%20Boot-3.3-6DB33F?style=flat-square&logo=springboot&logoColor=white" />
+        <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-Render-4169E1?style=flat-square&logo=postgresql&logoColor=white" />
       </p>
     </td>
     <td width="50%">
-      <p><a href="https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-ecosystem-report">nexa-ecosystem-report</a></p>
-      <p>Academic report, product backlog, architectural research documentation, and evidence logs.</p>
-      <p><a href="https://github.com/upc-pre-202610-1asi0730-12242-king/nexa-ecosystem-report">Open Report Repository</a></p>
+      <p><a href="https://github.com/upc-pre-202610-1asi0729-12010-VulturesD/nexa-report">upc-pre-202610-1asi0729-12010-VulturesD/nexa-report</a></p>
+      <p>Academic report, product research, backlog, architecture documentation, and project evidence.</p>
+      <p><a href="https://github.com/upc-pre-202610-1asi0729-12010-VulturesD/nexa-report">Open Report Repository</a></p>
       <p>
         <img alt="Documentation" src="https://img.shields.io/badge/Documentation-report-0F172A?style=flat-square" />
-        <img alt="UPC" src="https://img.shields.io/badge/UPC-course%20evidence-0EA5E9?style=flat-square" />
+        <img alt="Open Source" src="https://img.shields.io/badge/Open%20Source-course%20evidence-0EA5E9?style=flat-square" />
       </p>
     </td>
   </tr>
@@ -92,122 +94,117 @@ The `nexa-webapp` repository houses the single-page application (SPA) client int
 
 ---
 
-## Application Areas
+## Bounded Contexts
 
-| Area | Frontend Responsibility | Key Managed State & Views |
-|---|---|---|
-| **Sales** | Interactive order placement, catalog browsing, purchase requests creation, and B2B portal context. | Orders, purchase request details, and buyer dashboards. |
-| **Warehouse** | Inventory lots tracking, real-time temperature alerts, and cold-storage zone configurations. | Stock lists, warehouse maps, and sensor readings. |
-| **Logistics** | Dispatch routes tracking, dispatcher planning grids, vehicle assignments, and delivery logs. | Route coordinates, dispatch logs, and tracking metrics. |
-| **Invoicing** | Business documents list, payment method configurations, invoice references log, and subscription status. | PDF invoice references, subscription states, and payment profiles. |
-| **Catalog Management** | Product detail page views, brand lists, category grids, and cold-chain temperature thresholds. | CatalogItems, brands context, and temperature levels. |
-| **IAM** | Security portal login, registration fields, route navigation guards, and JWT session handling. | User tokens, role validation, and login status. |
+| Context | Responsibility |
+| --- | --- |
+| `iam` | Login, profile, session, auth guard, role guard |
+| `dashboard` | Commercial and operations dashboards |
+| `catalog` | Product catalog and cold-chain product data |
+| `clients` | B2B client account data |
+| `ordering` | Orders, order details, purchase requests, order creation |
+| `inventory` | Warehouses, lots, stock movements |
+| `dispatch` | Dispatch board, delivery tracking, proof of delivery |
+| `analytics` | Commercial and operations reports |
+| `portal` | Buyer-facing catalog, requests, orders, documents, payments |
+| `shared` | Layout, common components, i18n, HTTP interceptor |
+
+Each bounded context follows `domain`, `application`, `infrastructure`, and `presentation` layers.
 
 ---
 
 ## Tech Stack
 
 | Layer | Technology |
-|---|---|
-| **Core UI Framework** | Vue 3 (Composition API) |
-| **Build System & Bundler** | Vite 5 |
-| **Component Suite** | PrimeVue 4 & PrimeIcons |
-| **Global State Manager** | Pinia 2 (Local offline data caching & store) |
-| **Routing** | Vue Router 4 (Guards & session checkpoints) |
-| **HTTP client** | Axios 1 (REST APIs connection) |
-| **Styling** | Vanilla CSS layout rules, CSS Flexbox & Grid |
+| --- | --- |
+| Framework | Angular 18 |
+| Language | TypeScript |
+| UI | Angular Material, Material Design, CSS |
+| Routing | Angular Router |
+| Data access | Angular HttpClient |
+| API integration | Nexa Platform REST API under `/api/v1` |
+| Deployment | Render Static Site |
 
 ---
 
-## Getting Started
+## Local Setup
 
-### Local Setup
+```bash
+npm ci
+npm start
+```
 
-1.  **Prerequisites**:
-    - Install [Node.js (v18 or higher recommended)](https://nodejs.org/).
-    - Run the backend service locally or make sure you have access to a deployment.
-
-2.  **Configuration**:
-    - Navigate to the project root directory.
-    - Create a local environment configuration file named `.env.development` (see `.env.example` as reference):
-      ```env
-      VITE_CORE_BACKEND_ENABLED=true
-      VITE_NEXA_API_BASE_URL=http://localhost:5068/api/v1
-      ```
-    - Note that if the backend is offline, modules without live endpoints will fall back automatically to static in-memory data structures managed by `data.store.js`.
-
-3.  **Install Dependencies**:
-    ```bash
-    npm install
-    ```
-
-4.  **Start Dev Server**:
-    Start the Vite development server locally:
-    ```bash
-    npm run dev
-    ```
-    *The WebApp will be running at `http://localhost:5173/`.*
-
-5.  **Compile for Production**:
-    Build the project bundle to verify correct packaging:
-    ```bash
-    npm run build
-    ```
-
----
-
-## Available Commands
-
-| Command | Action |
-|---|---|
-| `npm run dev` | Runs the Vite local dev server with hot reload. |
-| `npm run build` | Compiles and packages source code for production into `dist/`. |
-| `npm run preview` | Previews the built production assets locally. |
-
----
-
-## Project Structure
+Local app:
 
 ```text
-src/
-├── app/                  # Global shell, main routers, layouts, and Pinia cache store bootstrap
-├── assets/               # Shared style sheets (ops.css), images, and fonts
-├── catalog-management/   # Product definitions, brands context, and categories views
-├── iam/                  # Authentication logins, registration, session, and role checking
-├── invoicing/            # Business documentation, PDF invoices log, and payment methods context
-├── logistics/            # Route maps, dispatches control, vehicle details, portals
-├── sales/                # Order sheets, commercial validation, clients context, buyer dashboard
-├── shared/               # Shared infrastructure (http Axios clients, base-endpoint, static data)
-├── warehouse/            # Inventory lots tracking, cold-zone limits, temperature logs
-└── main.js               # WebApp bootstrapping and PrimeVue loading
+http://localhost:4200
 ```
+
+Build:
+
+```bash
+npm run build
+```
+
+---
+
+## Render Deployment
+
+`render.yaml` defines a Render Static Site:
+
+- build command: `npm ci && npm run build`
+- publish path: `dist/nexa-webapp/browser`
+- SPA fallback: `/*` to `/index.html`
+- Node version: `20`
+
+If the backend Render URL changes, update:
+
+```text
+src/environments/environment.prod.ts
+```
+
+and keep the platform `FRONTEND_ORIGIN` aligned.
+
+---
+
+## Demo Users
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Commercial coordinator | `sales@nexa.com` | `NexaAccess2026!` |
+| Logistics lead | `logistics@nexa.com` | `NexaAccess2026!` |
+| Warehouse operator | `warehouse@nexa.com` | `NexaAccess2026!` |
+| Buyer | `buyer@nexa.com` | `NexaAccess2026!` |
 
 ---
 
 ## Team & Domain Ownership
 
-Specific functional contexts are assigned to primary owners:
+To keep development organized, bounded contexts are assigned to primary owners and support contributors:
 
 | Context | Owner | Support |
-|---|---|---|
-| **Sales** | DiegoS284 | Cmarin2802, R0obxdnt-bit |
-| **Logistics** | Cmarin2802 | DiegoS284, GerardRojasMancilla |
-| **Warehouse** | JoaquinVerde115 | R0obxdnt-bit, DiegoS284 |
-| **Invoicing** | GerardRojasMancilla | Cmarin2802, DiegoS284 |
-| **Catalog Management** | R0obxdnt-bit | JoaquinVerde115, DiegoS284 |
+| --- | --- | --- |
+| **Catalog & Buyer Portal** | DiegoS284 | Cmarin2802, R0obxdnt-bit |
+| **Commercial Dashboard & Orders** | Cmarin2802 | DiegoS284, GerardRojasMancilla |
+| **Inventory & Warehouse** | JoaquinVerde115 | R0obxdnt-bit, DiegoS284 |
+| **Dispatch & Logistics** | GerardRojasMancilla | Cmarin2802, DiegoS284 |
+| **UX, Documentation & Release** | R0obxdnt-bit | JoaquinVerde115, DiegoS284 |
 
 ---
 
 ## Documentation
 
-Full frontend specifications, architecture guides, and developer workflows are maintained in:
-- **[Nexa WebApp Wiki Index (wiki/Home.md)](wiki/Home.md)** (Local offline copy) or online GitHub Wiki.
-- [Frontend Architecture Guidelines](docs/frontend-architecture.md)
-- [Validation Evidence Log](docs/validation-evidence.md)
-- [Security Guidelines (SECURITY.md)](.github/SECURITY.md)
+- [Architecture](docs/architecture.md)
+- [Deployment](docs/deployment.md)
+- [Frontend architecture](docs/frontend-architecture.md)
+- [API contract alignment](docs/api-contract-alignment.md)
+- [Release notes](docs/releases/README.md)
+- [Engineering wiki](wiki/Home.md)
+- [Contributing](.github/CONTRIBUTING.md)
+- [Security policy](.github/SECURITY.md)
 
 ---
 
 <p align="center">
-  <strong>Nexa WebApp</strong> · Universidad Peruana de Ciencias Aplicadas · 2026-10
+  <strong>Nexa WebApp</strong> · Team Nexa · Universidad Peruana de Ciencias Aplicadas · 2026-10
 </p>

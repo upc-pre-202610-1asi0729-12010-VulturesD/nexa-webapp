@@ -1,32 +1,46 @@
 # Environment Setup
 
-Getting the Nexa WebApp running locally is straightforward.
+## Prerequisites
 
-## 1. Prerequisites
-- Ensure you have **Node.js v18** or newer installed.
+- Node.js 20 for Render parity.
+- npm.
+- Running `nexa-platform` locally when validating live API integration.
 
-## 2. Dev Environment Setup
-1. Clone the repository and install dependencies:
-   ```bash
-   npm install
-   ```
-2. Create a `.env.development` file in the root folder with:
-   ```env
-   VITE_CORE_BACKEND_ENABLED=true
-   VITE_NEXA_API_BASE_URL=http://localhost:5068/api/v1
-   ```
-3. Run the development server:
-   ```bash
-   npm run dev
-   ```
-   *The WebApp will start on `http://localhost:5173/`.*
+## Local Run
 
-## 3. Production Deployment Notes
-Nexa WebApp is configured for static site deployment and is currently hosted live on **Render** at:
-`https://nexa-webapp.onrender.com/`
+```bash
+npm ci
+npm start
+```
 
----
+Default local WebApp URL:
 
-<p align="center">
-  [Home](Home.md) · [Project Overview](Project-Overview.md) · [Architecture](Frontend-Architecture.md) · [Development Workflow](Branching-and-Commits.md) · [Quality & Security](Quality-and-Security.md)
-</p>
+```text
+http://localhost:4200
+```
+
+Default local API URL:
+
+```text
+http://localhost:8080/api/v1
+```
+
+## Production
+
+Production API base URL is configured in:
+
+```text
+src/environments/environment.prod.ts
+```
+
+Render Static Site uses:
+
+```bash
+npm ci && npm run build
+```
+
+Publish path:
+
+```text
+dist/nexa-webapp/browser
+```

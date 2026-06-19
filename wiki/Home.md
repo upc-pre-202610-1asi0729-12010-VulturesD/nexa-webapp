@@ -1,57 +1,40 @@
 # Nexa WebApp Engineering Wiki
 
-Operational and technical documentation for the Nexa cold-chain operations B2B web application.
-
----
-
-Welcome to the engineering wiki for **Nexa WebApp**, the user interface and single page application layer of Nexa, a B2B SaaS platform designed to support cold-chain operations.
-
-This Wiki centralizes the most important technical, layout, and architectural documentation required to understand, run, and maintain the frontend system.
+Technical documentation for the Angular WebApp of Nexa.
 
 ## Purpose
 
-The purpose of this Wiki is to provide a single documentation space for:
-- Understanding the product scope of Nexa WebApp.
-- Explaining the frontend architecture (Vue 3 composition API, Pinia cache layer, PrimeVue styling, routing).
-- Documenting the main technologies and dependencies used.
-- Explaining how the WebApp consumes the Nexa Platform REST APIs.
-- Standardizing development, branching, commits, and pull request workflows.
-- Supporting academic and engineering traceability.
+This wiki explains how the WebApp is structured, how it consumes Nexa Platform, and how the team validates the Open Source delivery.
 
 ## Quick Navigation
 
 | Area | Page |
-|---|---|
+| --- | --- |
 | Product context | [Project Overview](Project-Overview.md) |
-| Scope definition | [Product Scope](Product-Scope.md) |
+| Product scope | [Product Scope](Product-Scope.md) |
 | Frontend architecture | [Frontend Architecture](Frontend-Architecture.md) |
-| Repository organization | [Repository Structure](Repository-Structure.md) |
-| Technologies | [Main Technologies](Main-Technologies.md) |
-| Local setup | [Environment Setup](Environment-Setup.md) |
+| Repository structure | [Repository Structure](Repository-Structure.md) |
+| Main technologies | [Main Technologies](Main-Technologies.md) |
+| Environment setup | [Environment Setup](Environment-Setup.md) |
 | Git workflow | [Branching and Commits](Branching-and-Commits.md) |
 | Pull requests | [Pull Request Guidelines](Pull-Request-Guidelines.md) |
 | API standards | [API Design Guidelines](API-Design-Guidelines.md) |
 | Quality and security | [Quality and Security](Quality-and-Security.md) |
-| Wiki guidelines | [Wiki Navigation](Wiki-Navigation.md) |
 
 ## Repository Role
 
-`nexa-webapp` contains the Vue 3 single page application frontend. It manages the presentation layer, client-side session states, responsive layout templates, and routes for internal operator portals and B2B buyers.
+`nexa-webapp` contains the Angular single-page application. It owns presentation, routing, client-side session state, HTTP adapters, and user workflows for commercial, logistics, warehouse, and buyer portal users.
 
-## Documentation Status
+## Stack
 
-This Wiki should be updated whenever the team adds components, changes stores/routes structures, updates third-party npm packages, or updates environment settings.
+- Angular 18.
+- TypeScript.
+- Angular Router.
+- Angular Material.
+- Angular HttpClient.
+- REST API integration with `nexa-platform` under `/api/v1`.
+- Render Static Site deployment.
 
 ---
 
-<p align="center">
-  <strong>Nexa WebApp Wiki</strong><br>
-  Engineering documentation for the Nexa B2B SaaS platform frontend.
-</p>
-<p align="center">
-  [Home](Home.md) ·
-  [Project Overview](Project-Overview.md) ·
-  [Architecture](Frontend-Architecture.md) ·
-  [Development Workflow](Branching-and-Commits.md) ·
-  [Quality & Security](Quality-and-Security.md)
-</p>
+Team Nexa · Course 1ASI0729 · 2026-10

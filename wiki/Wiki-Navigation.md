@@ -2,7 +2,8 @@
 
 This local directory contains offline markdown copies of the official Nexa WebApp engineering wiki.
 
-## How to use and maintain the Wiki:
+## How to use and maintain the Wiki
+
 1. **Adding Pages**:
    - Save your markdown file inside the `wiki/` directory.
    - Reference the new document in the navigation table in `wiki/Home.md` and page footers.
@@ -14,6 +15,4 @@ This local directory contains offline markdown copies of the official Nexa WebAp
 
 ---
 
-<p align="center">
-  [Home](Home.md) · [Project Overview](Project-Overview.md) · [Architecture](Frontend-Architecture.md) · [Development Workflow](Branching-and-Commits.md) · [Quality & Security](Quality-and-Security.md)
-</p>
+[Home](Home.md) | [Project Overview](Project-Overview.md) | [Architecture](Frontend-Architecture.md) | [Development Workflow](Branching-and-Commits.md) | [Quality & Security](Quality-and-Security.md)

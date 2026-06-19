@@ -1,0 +1,22 @@
+[
+  {
+    "id": "CAT-001",
+    "name": "Cheese",
+    "cat": "cheese"
+  },
+  {
+    "id": "CAT-002",
+    "name": "Charcuterie",
+    "cat": "charcuterie"
+  },
+  {
+    "id": "CAT-003",
+    "name": "Butter",
+    "cat": "butter"
+  },
+  {
+    "id": "CAT-004",
+    "name": "Dessert",
+    "cat": "dessert"
+  }
+]

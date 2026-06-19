@@ -1,54 +1,35 @@
 # Backend Integration
 
-This webapp consumes the local Nexa Platform backend for supported AV2 flows and uses in-memory datasets for unsupported presentation modules.
+Nexa WebApp consumes Nexa Platform through RESTful endpoints under `/api/v1`.
 
 ## Local Environment
 
-Use these values for local development:
+Local API base URL:
 
-```env
-VITE_NEXA_API_BASE_URL=http://localhost:5068/api/v1
-VITE_CORE_BACKEND_ENABLED=true
+```text
+http://localhost:8080/api/v1
 ```
 
-Swagger is available at `http://localhost:5068/swagger` when the backend is running locally.
+Production API base URL:
+
+```text
+https://nexa-platform.onrender.com/api/v1
+```
 
 ## Core Endpoints
 
-The following resources consume Nexa Platform endpoints:
-
 | Frontend flow | Backend endpoint |
-|---|---|
-| Catalog products | `/catalog-items` |
-| Product categories | `/categories` |
-| Product brands | `/brands` |
-| Inventory lots view | `/inventory-items` |
+| --- | --- |
+| Authentication | `/auth/login` |
+| Workspace users | `/users`, `/users/me` |
+| Catalog products | `/products`, `/catalog-items` |
+| Categories | `/categories` |
+| Customers | `/customers` |
+| Purchase requests | `/purchase-requests` |
+| Orders | `/orders` |
+| Inventory | `/inventory`, `/inventory/movements`, `/inventory/alerts` |
 | Warehouses | `/warehouses` |
-| Purchase orders | `/orders` |
-| Dispatch orders | `/shipments` |
-| Business documents | `/invoices`, `/payments` |
-| Authentication | `/authentication/sign-in` |
+| Dispatch | `/shipments`, `/driver-checklists` |
+| Documents and payments | `/invoices`, `/business-documents`, `/payments` |
 
-The central `data.store` loads supported collections through bounded-context application services and infrastructure adapters.
-
-## Catalog Images
-
-Product assets from the ICISA catalog zip are served from:
-
-```txt
-public/catalog-items/
-```
-
-Backend seed records store image URLs such as:
-
-```txt
-/catalog-items/Cavour_SALAME_MILANO_100G.jpeg
-```
-
-Vite serves those files directly from the public directory during local development and production builds.
-
-## Current Boundary
-
-Local static datasets are used in-memory for clients, promotions, purchase request workflow, customer portals, account administration, editable buyer profile display, payment method management, temperature logs, stock movements, support conversations, and proof-of-delivery upload display.
-
-The integration target is local validation against Nexa Platform with standalone frontend data bootstrapping for unsupported modules. Supported backend modules consume the backend endpoints directly.
+HTTP calls must remain in infrastructure adapters. Presentation views should delegate to stores/facades.

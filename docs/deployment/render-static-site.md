@@ -2,38 +2,41 @@
 
 ## Service
 
-- Recommended Static Site name: `nexa-webapp`
-- Branch: `main`
-- Build Command: `npm install && npm run build`
-- Publish Directory: `dist`
+- Recommended Static Site name: `nexa-webapp`.
+- Branch: `main`.
+- Build command: `npm ci && npm run build`.
+- Publish directory: `dist/nexa-webapp/browser`.
 
-## Environment Variables
+## Runtime Configuration
 
-```env
-VITE_NEXA_API_BASE_URL=https://nexa-platform-api.onrender.com/api/v1
-VITE_NEXA_MOCK_API_BASE_URL=https://nexa-platform-api.onrender.com/api/v1
-VITE_ENABLE_MOCK_API_FALLBACK=false
-VITE_CORE_BACKEND_ENABLED=true
+Angular production configuration is compiled from:
+
+```text
+src/environments/environment.prod.ts
 ```
 
-`VITE_*` values are public client-side configuration. Do not add secrets here.
+The API base URL must point to the deployed Nexa Platform backend:
+
+```text
+https://nexa-platform.onrender.com/api/v1
+```
+
+Do not place secrets in Angular environment files. Browser-side configuration is public.
 
 ## SPA Rewrite
 
-Render Static Site must serve Vue Router routes through `index.html`.
+Render must rewrite all routes to `index.html`:
 
 ```text
 /* /index.html 200
 ```
 
-This rule is versioned in `public/_redirects`.
+The repository `render.yaml` contains the SPA fallback rule.
 
-## Backend CORS Follow-Up
+## Backend CORS
 
-After Render creates the frontend URL, add it to Nexa Platform backend configuration:
+After Render creates the frontend URL, set the same URL in Nexa Platform:
 
 ```text
-AllowedOrigins__1=https://<frontend-url>
+FRONTEND_ORIGIN=https://nexa-webapp.onrender.com
 ```
-
-Use no trailing slash in the CORS origin URL.

@@ -1,29 +1,22 @@
-# Release Notes
+# Nexa WebApp Releases
 
-This folder documents the SemVer tags used by the Nexa WebApp academic repository.
+This folder documents release notes for the Angular WebApp used in the Open Source delivery.
 
 ## Policy
 
-- Tags stay pure SemVer: `vMAJOR.MINOR.PATCH`.
-- Latest current version is `v2.0.0`.
-- No `v3.0.0` release exists yet.
-- Release notes describe frontend and backend-integration scope.
-- Source archives are enough; generated `dist/` bundles are not uploaded.
+- Tags follow SemVer: `vMAJOR.MINOR.PATCH`.
+- Generated `dist/` bundles are not committed.
+- Release notes must describe Angular frontend scope, API integration, and validation evidence.
 
 ## Releases
 
 | Version | Scope |
-|---|---|
-| `v0.1.0` | Initial prototype foundation |
-| `v0.2.0` | Vue/Vite foundation |
-| `v1.0.0` | TB1 delivery |
-| `v1.0.1` | Routing/documentation patch |
-| `v1.1.0` | Post-TB1 bounded-context expansion |
-| `v1.1.1` | API path patch |
-| `v1.2.0` | Pre-readiness WebApp iteration |
-| `v1.3.0` | Frontend product readiness sweep |
-| `v1.4.0` | Bounded-context frontend architecture |
-| `v1.7.0` | Hybrid API integration and responsive polish |
-| `v1.7.1` | AV2 release metadata and environment documentation patch |
-| `v1.8.0` | Mock API cleanup and layout polish |
-| `v2.0.0` | B2B Production Release |
+| --- | --- |
+| `v2.0.0` | Open Source delivery baseline: Angular, Render Static Site, Spring Boot API integration |
+
+Current validation:
+
+```bash
+npm ci
+npm run build
+```

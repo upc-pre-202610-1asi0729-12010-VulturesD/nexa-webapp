@@ -1,9 +1,0 @@
-import { BaseEndpoint } from '@/shared/infrastructure/base-endpoint';
-
-export class ColdChainMonitoringApi {
-  constructor() {
-    this.temperatureLogs = new BaseEndpoint('/api/v1/temperature-logs');
-  }
-
-  getTemperatureLogs() { return this.temperatureLogs.getAll(); }
-}
