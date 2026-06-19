@@ -39,7 +39,7 @@ dist/nexa-webapp/browser
 Production API calls use:
 
 ```text
-https://nexa-open-source-platform.onrender.com/api/v1
+https://nexa-platform.onrender.com/api/v1
 ```
 
 If the backend Render service name changes, update `src/environments/environment.prod.ts` and the platform `FRONTEND_ORIGIN` value together.
