@@ -1,0 +1,22 @@
+<div class="auth-page">
+  <div class="auth-wrap">
+    <aside class="auth-left">
+      <div class="auth-left-content"><div class="auth-logo"><img src="assets/img/nexa.svg" alt="Nexa"></div><div class="auth-tagline">{{ 'auth.tagline' | t }}</div><div class="auth-desc">{{ 'auth.desc' | t }}</div><div class="auth-pills" aria-label="Nexa operations"><span class="auth-pill">{{ 'auth.pillCatalog' | t }}</span><span class="auth-pill">{{ 'auth.pillStock' | t }}</span><span class="auth-pill">{{ 'auth.pillOrder' | t }}</span><span class="auth-pill">{{ 'auth.pillDelivery' | t }}</span></div></div>
+      <div class="auth-footer-left"><span>{{ 'auth.rights' | t }}</span></div>
+    </aside>
+    <main class="auth-right">
+      <div class="lang-selector" role="group" [attr.aria-label]="'common.language' | t"><button type="button" class="lang-opt" [class.active]="lang() === 'es'" [attr.aria-pressed]="lang() === 'es'" (click)="setLang('es')">ES</button><button type="button" class="lang-opt" [class.active]="lang() === 'en'" [attr.aria-pressed]="lang() === 'en'" (click)="setLang('en')">EN</button></div>
+      @if (mode === 'recover') {
+        @if (!sent()) {
+          <form class="auth-state-content" (ngSubmit)="sendRecovery()"><div class="auth-form-title">{{ 'auth.recover' | t }}</div><div class="auth-form-sub">{{ 'auth.recoverDesc' | t }}</div><div class="field"><label class="field-label" for="recovery-email">{{ 'auth.email' | t }}</label><div class="field-input"><nx-icon name="pi-envelope"></nx-icon><input id="recovery-email" type="email" [(ngModel)]="email" name="email" placeholder="tu@empresa.pe" required autocomplete="email"></div></div><button class="btn-full btn-primary-full" type="submit" [disabled]="!email.trim()">{{ 'auth.sendLink' | t }}</button><a routerLink="/auth/login" class="btn-full btn-ghost-full"><nx-icon name="pi-arrow-left"></nx-icon>{{ 'auth.back' | t }}</a></form>
+        } @else {
+          <section class="auth-state-content auth-state-centered" role="status"><div class="state-icon state-icon-success"><nx-icon name="pi-check"></nx-icon></div><div class="auth-form-title">{{ 'auth.recoverySentTitle' | t }}</div><div class="auth-form-sub">{{ 'auth.recoverySentDesc' | t:{ email } }}</div><a routerLink="/auth/login" class="btn-full btn-ghost-full"><nx-icon name="pi-arrow-left"></nx-icon>{{ 'auth.back' | t }}</a></section>
+        }
+      } @else if (mode === 'blocked') {
+        <section class="auth-state-content"><div class="auth-form-title">{{ 'auth.blocked' | t }}</div><div class="auth-form-sub">{{ 'auth.blockedDesc' | t }}</div><div class="state-warn"><nx-icon name="pi-exclamation-triangle"></nx-icon><div><strong>{{ 'auth.blockedState.pendingTitle' | t }}</strong><br>{{ 'auth.blockedState.pendingDesc' | t }}</div></div><div class="state-alert"><nx-icon name="pi-ban"></nx-icon><div><strong>{{ 'auth.blockedState.blockedTitle' | t }}</strong><br>{{ 'auth.blockedState.blockedDesc' | t }}</div></div><a routerLink="/auth/login" class="btn-full btn-ghost-full"><nx-icon name="pi-arrow-left"></nx-icon>{{ 'auth.back' | t }}</a></section>
+      } @else {
+        <section class="auth-state-content"><div class="auth-form-title">{{ 'auth.forbidden.title' | t }}</div><div class="auth-form-sub">{{ 'auth.forbidden.subtitle' | t:{ scope: requestedScope() } }}</div><div class="state-alert"><nx-icon name="pi-ban"></nx-icon><div><strong>{{ 'auth.forbidden.permission' | t }}</strong><br>{{ 'auth.forbidden.permissionDesc' | t }}</div></div><button class="btn-full btn-primary-full" type="button" (click)="goToWorkspace()"><nx-icon name="pi-arrow-right"></nx-icon>{{ 'auth.forbidden.workspace' | t }}</button><a routerLink="/auth/login" class="btn-full btn-ghost-full"><nx-icon name="pi-arrow-left"></nx-icon>{{ 'auth.forbidden.switchAccount' | t }}</a></section>
+      }
+    </main>
+  </div>
+</div>
