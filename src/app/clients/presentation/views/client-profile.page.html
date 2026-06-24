@@ -1,0 +1,64 @@
+@if (loading()) {
+  <section class="flow-panel flow-panel-pad"><div class="skeleton profile-skeleton"></div></section>
+} @else if (loadError() || !client()) {
+  <section class="empty-state client-not-found" role="alert">
+    <div class="empty-state-icon"><nx-icon name="pi-building"></nx-icon></div>
+    <div class="empty-state-title">{{ 'clients.profile.notFound' | t }}</div>
+    <div class="empty-state-desc">{{ 'clients.profile.notFoundDesc' | t }}</div>
+    <button mat-flat-button class="btn-primary" type="button" (click)="back()">{{ 'clients.profile.back' | t }}</button>
+  </section>
+} @else if (client(); as client) {
+  <div class="page-header">
+    <div><div class="page-title">{{ client.commercialName || client.businessName }}</div><div class="page-subtitle">{{ 'clients.profile.subtitle' | t }}</div></div>
+    <button mat-stroked-button type="button" (click)="back()"><nx-icon name="pi-arrow-left"></nx-icon>{{ 'clients.profile.accounts' | t }}</button>
+  </div>
+
+  <div class="client-profile-grid">
+    <section class="flow-panel span-4">
+      <div class="flow-panel-head"><div><div class="flow-title">{{ 'clients.profile.summary' | t }}</div><div class="flow-subtitle">{{ 'clients.profile.summaryDesc' | t }}</div></div><span [class]="'badge ' + creditBadge()">{{ creditStatusKey() | t }}</span></div>
+      <div class="flow-panel-pad flow-stack">
+        <div class="mini-row"><span>RUC</span><strong>{{ client.ruc }}</strong></div>
+        <div class="mini-row"><span>{{ 'clients.view.fields.segment' | t }}</span><strong>{{ client.segment }}</strong></div>
+        <div class="mini-row"><span>{{ 'nav.orders' | t }}</span><strong>{{ snapshot()?.orders?.length || 0 }}</strong></div>
+        <div class="mini-row"><span>{{ 'nav.documents' | t }}</span><strong>{{ snapshot()?.documents?.length || 0 }}</strong></div>
+        <div class="mini-row"><span>{{ 'clients.profile.buyerPortal' | t }}</span><strong>{{ (client.portalAccess !== false ? 'common.enabled' : 'common.disabled') | t }}</strong></div>
+      </div>
+    </section>
+
+    <section class="flow-panel span-8" [class.editing]="editing()">
+      <div class="flow-panel-head"><div><div class="flow-title">{{ 'clients.profile.editable' | t }}</div><div class="flow-subtitle">{{ 'clients.profile.editableDesc' | t }}</div></div>@if (!editing()) { <button mat-stroked-button type="button" (click)="startEdit()">{{ 'clients.profile.edit' | t }}</button> }</div>
+      <form class="flow-panel-pad client-profile-form" (ngSubmit)="save()">
+        <label><span>{{ 'clients.view.fields.legalName' | t }}</span><input matInput [(ngModel)]="form.businessName" name="businessName" required [disabled]="!editing()"></label>
+        <label><span>{{ 'clients.view.fields.tradeName' | t }}</span><input matInput [(ngModel)]="form.commercialName" name="commercialName" [disabled]="!editing()"></label>
+        <label><span>RUC</span><input matInput [(ngModel)]="form.taxId" name="taxId" inputmode="numeric" required [disabled]="!editing()"></label>
+        <label><span>{{ 'clients.view.fields.segment' | t }}</span><input matInput [(ngModel)]="form.segment" name="segment" [disabled]="!editing()"></label>
+        <label><span>{{ 'clients.view.fields.contactName' | t }}</span><input matInput [(ngModel)]="form.contact" name="contact" [disabled]="!editing()"></label>
+        <label><span>{{ 'clients.view.fields.contactEmail' | t }}</span><input matInput [(ngModel)]="form.contactEmail" name="contactEmail" type="email" [disabled]="!editing()"></label>
+        <label><span>{{ 'clients.view.fields.phone' | t }}</span><input matInput [(ngModel)]="form.phone" name="phone" [disabled]="!editing()"></label>
+        <label><span>{{ 'clients.view.fields.creditCondition' | t }}</span><select [(ngModel)]="form.paymentCondition" name="paymentCondition" [disabled]="!editing()"><option value="credit_7">{{ 'clients.profile.credit7' | t }}</option><option value="credit_15">{{ 'clients.view.payment.credit15' | t }}</option><option value="credit_30">{{ 'clients.view.payment.credit30' | t }}</option><option value="cash">{{ 'clients.cash' | t }}</option></select></label>
+        <label><span>{{ 'clients.view.fields.creditLimit' | t }}</span><input matInput [(ngModel)]="form.monthlyCreditLimit" name="monthlyCreditLimit" type="number" min="0" [disabled]="!editing()"></label>
+        <label><span>{{ 'clients.profile.creditUsed' | t }}</span><input matInput [(ngModel)]="form.monthlyCreditUsed" name="monthlyCreditUsed" type="number" min="0" [disabled]="!editing()"></label>
+        <label><span>{{ 'clients.profile.creditStatus' | t }}</span><select [(ngModel)]="form.monthlyCreditStatus" name="monthlyCreditStatus" [disabled]="!editing()"><option value="ok">{{ 'clients.view.readiness.ok' | t }}</option><option value="attention">{{ 'clients.view.readiness.attention' | t }}</option><option value="document_pending">{{ 'clients.view.readiness.documentPending' | t }}</option><option value="blocked">{{ 'clients.view.readiness.blocked' | t }}</option></select></label>
+        <label><span>{{ 'clients.profile.accountStatus' | t }}</span><select [(ngModel)]="form.status" name="status" [disabled]="!editing()"><option value="active">{{ 'clients.active' | t }}</option><option value="paused">{{ 'clients.profile.paused' | t }}</option></select></label>
+        <label class="span-full"><span>{{ 'clients.profile.deliveryPreference' | t }}</span><input matInput [(ngModel)]="form.deliveryPreference" name="deliveryPreference" [disabled]="!editing()"></label>
+        <label><span>{{ 'clients.profile.district' | t }}</span><input matInput [(ngModel)]="form.district" name="district" [disabled]="!editing()"></label>
+        <label><span>{{ 'clients.profile.province' | t }}</span><input matInput [(ngModel)]="form.province" name="province" [disabled]="!editing()"></label>
+        <label class="span-full"><span>{{ 'clients.profile.deliveryAddress' | t }}</span><input matInput [(ngModel)]="form.deliveryAddress" name="deliveryAddress" [disabled]="!editing()"></label>
+        <label class="span-full"><span>{{ 'clients.profile.deliveryReference' | t }}</span><textarea matInput [(ngModel)]="form.deliveryReference" name="deliveryReference" rows="3" [disabled]="!editing()"></textarea></label>
+        <label class="portal-toggle span-full"><input [(ngModel)]="form.portalAccess" name="portalAccess" type="checkbox" [disabled]="!editing()"><span>{{ 'clients.profile.portalEnabled' | t }}</span></label>
+        @if (saveError()) { <p class="banner banner-danger span-full" role="alert">{{ saveError() }}</p> }
+        @if (saved()) { <p class="banner banner-success span-full" role="status">{{ 'clients.profile.saved' | t }}</p> }
+        @if (editing()) { <div class="profile-form-actions span-full"><button mat-stroked-button type="button" (click)="cancelEdit()">{{ 'common.cancel' | t }}</button><button mat-flat-button class="btn-primary" type="submit" [disabled]="saving()"><nx-icon [name]="saving() ? 'pi-spinner' : 'pi-save'"></nx-icon>{{ (saving() ? 'common.saving' : 'clients.profile.save') | t }}</button></div> }
+      </form>
+    </section>
+
+    <section class="flow-panel span-6">
+      <div class="flow-panel-head"><div><div class="flow-title">{{ 'clients.profile.recentOrders' | t }}</div><div class="flow-subtitle">{{ 'clients.profile.recentOrdersDesc' | t }}</div></div></div>
+      <div class="flow-panel-pad flow-stack">@for (order of snapshot()?.orders?.slice(0, 5); track order.backendId) { <div class="mini-row"><span class="text-mono">{{ orderLabel(order) }}</span><strong>{{ orderStatus(order.status) }}</strong></div> } @empty { <div class="empty-state compact">{{ 'clients.profile.noOrders' | t }}</div> }</div>
+    </section>
+    <section class="flow-panel span-6">
+      <div class="flow-panel-head"><div><div class="flow-title">{{ 'nav.documents' | t }}</div><div class="flow-subtitle">{{ 'clients.profile.documentsDesc' | t }}</div></div></div>
+      <div class="flow-panel-pad flow-stack">@for (document of snapshot()?.documents?.slice(0, 5); track document.id) { <div class="mini-row"><span>{{ document.label || document.type }}</span><strong>{{ documentStatus(document.status) }}</strong></div> } @empty { <div class="empty-state compact">{{ 'clients.profile.noDocuments' | t }}</div> }</div>
+    </section>
+  </div>
+}
