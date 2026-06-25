@@ -1,0 +1,164 @@
+@if (store.loading()) {
+  <section class="admin-loading" aria-live="polite">
+    <div class="skeleton hero"></div><div class="skeleton body"></div>
+  </section>
+} @else if (store.error() && !tenant()) {
+  <div class="banner banner-danger" role="alert">
+    <nx-icon name="pi-exclamation-triangle"></nx-icon>
+    <span>{{ store.error()! | t }}</span>
+  </div>
+} @else if (tenant(); as company) {
+  <section class="company-admin-page">
+    <header class="company-admin-header">
+      <div>
+        <span>{{ 'tenant.companyAdmin.eyebrow' | t }}</span>
+        <h1>{{ (activeSection() === 'overview' ? 'tenant.companyAdmin.title' : 'tenant.companyAdmin.sections.' + activeSection()) | t }}</h1>
+        <p>{{ ('tenant.companyAdmin.sectionSubtitles.' + activeSection()) | t }}</p>
+      </div>
+        <div class="workspace-pill">{{ currentWorkspace().url || company.workspaceUrl }}</div>
+    </header>
+
+    @if (store.error()) {
+      <div class="banner banner-danger compact" role="alert"><nx-icon name="pi-exclamation-triangle"></nx-icon><span>{{ store.error()! | t }}</span></div>
+    }
+
+    <div class="admin-shell">
+      <main class="admin-content" style="width: 100%;">
+        @switch (activeSection()) {
+          @case ('overview') {
+            <section class="overview-hero section-card">
+              <div class="overview-brand">
+                <div class="brand-logo">{{ company.name.slice(0, 2).toUpperCase() }}</div>
+                <div>
+                  <span>{{ 'tenant.companyAdmin.overview.tenant' | t }}</span>
+                  <h2>{{ company.name }}</h2>
+                  <p>{{ company.workspaceUrl }} · {{ company.country }}</p>
+                </div>
+              </div>
+              <div class="overview-actions">
+                <button mat-flat-button class="btn-primary" type="button" (click)="beginTenantEdit()">{{ 'tenant.companyAdmin.actions.editProfile' | t }}</button>
+                <button mat-stroked-button type="button">Manage workspace</button>
+                <button mat-stroked-button type="button">Register company member</button>
+                <button mat-stroked-button type="button">Review access</button>
+              </div>
+            </section>
+            @if (editing() === 'tenant') {
+              <form class="editor-grid section-card" (ngSubmit)="saveTenant()">
+                <mat-form-field><mat-label>{{ 'tenant.companyAdmin.form.legalName' | t }}</mat-label><input matInput name="legalName" [(ngModel)]="tenantDraft.legalName" required /></mat-form-field>
+                <mat-form-field><mat-label>{{ 'tenant.companyAdmin.form.displayName' | t }}</mat-label><input matInput name="name" [(ngModel)]="tenantDraft.name" required /></mat-form-field>
+                <mat-form-field><mat-label>{{ 'tenant.companyAdmin.form.country' | t }}</mat-label><input matInput name="country" [(ngModel)]="tenantDraft.country" required /></mat-form-field>
+                <div class="editor-actions"><button mat-button type="button" (click)="cancelEdit()">{{ 'common.cancel' | t }}</button><button mat-flat-button type="submit" [disabled]="store.saving()">{{ 'common.save' | t }}</button></div>
+              </form>
+            }
+            <div class="metric-grid">
+              <article>
+                <span style="color: #64748b; font-size: 11px;">Status / plan</span>
+                <strong style="font-size: 20px; font-weight: 800; color: #0f172a; margin-top: 4px;">Active</strong>
+                <span style="color: #94a3b8; font-size: 11px; margin-top: 4px;">Standard</span>
+              </article>
+              <article>
+                <span style="color: #64748b; font-size: 11px;">Setup progress</span>
+                <strong style="font-size: 20px; font-weight: 800; color: #0f172a; margin-top: 4px;">{{ setupProgress() }}%</strong>
+                <div class="bar-wrapper" style="height: 6px; background: #e2e8f0; border-radius: 4px; margin-top: 8px; overflow: hidden; width: 100%;">
+                  <div class="bar" [style.width.%]="setupProgress()" style="height: 100%; background: #3b82f6; border-radius: 4px;"></div>
+                </div>
+              </article>
+              <article>
+                <span style="color: #64748b; font-size: 11px;">Cold-chain policy</span>
+                <strong style="font-size: 20px; font-weight: 800; color: #0f172a; margin-top: 4px;">-18°C to 4°C</strong>
+                <span style="color: #94a3b8; font-size: 11px; margin-top: 4px;">— · Disabled</span>
+              </article>
+              <article>
+                <span style="color: #64748b; font-size: 11px;">Main warehouse</span>
+                <strong style="font-size: 20px; font-weight: 800; color: #0f172a; margin-top: 4px;">ICISA Lima Cold Hub</strong>
+                <span style="color: #94a3b8; font-size: 11px; margin-top: 4px;">0 Cold rooms</span>
+              </article>
+            </div>
+            <section class="section-card connections" style="margin-top: 18px; padding: 18px;">
+              <div class="section-heading" style="margin-bottom: 12px;">
+                <div>
+                  <h3 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0 0 4px;">Segment connection cards</h3>
+                  <p style="font-size: 12px; color: #64748b; margin: 0;">Configure tenant data, cold-chain operation rules, warehouses, FEFO and segment connections.</p>
+                </div>
+              </div>
+              <div class="connection-pills">
+                <div class="conn-pill"><span class="bullet">●</span><nx-icon name="pi-box"></nx-icon> Catalog Management</div>
+                <div class="conn-pill"><span class="bullet">●</span><nx-icon name="pi-envelope"></nx-icon> Sales</div>
+                <div class="conn-pill"><span class="bullet">●</span><nx-icon name="pi-database"></nx-icon> Warehouse</div>
+                <div class="conn-pill"><span class="bullet">●</span><nx-icon name="pi-send"></nx-icon> Logistics</div>
+                <div class="conn-pill"><span class="bullet">●</span><nx-icon name="pi-file"></nx-icon> Invoicing</div>
+              </div>
+            </section>
+          }
+
+          @case ('workspaces') {
+            <div class="section-heading"><div><h2>{{ 'tenant.companyAdmin.sections.workspaces' | t }}</h2><p>{{ 'tenant.companyAdmin.sectionSubtitles.workspaces' | t }}</p></div><button mat-flat-button type="button" (click)="beginWorkspace()">{{ 'tenant.companyAdmin.workspace.create' | t }}</button></div>
+            <div class="record-grid">@for (workspace of workspaces(); track workspace.id) { <article class="record-card"><div class="record-icon"><nx-icon name="pi-building"></nx-icon></div><div class="record-main"><div><strong>{{ workspace.name }}</strong>@if (workspace.primaryWorkspace) { <span class="badge primary">{{ 'tenant.companyAdmin.workspace.primary' | t }}</span> }</div><p>{{ workspace.url }}</p><small>{{ workspace.emailDomain }} · {{ workspace.status }}</small></div><button mat-stroked-button type="button" (click)="beginWorkspace(workspace)">{{ 'common.edit' | t }}</button></article> } @empty { <div class="empty-state">{{ 'tenant.companyAdmin.empty.workspaces' | t }}</div> }</div>
+            @if (editing() === 'workspace') {
+              <form class="editor-grid section-card" (ngSubmit)="saveWorkspace()">
+                <mat-form-field><mat-label>{{ 'tenant.companyAdmin.workspace.name' | t }}</mat-label><input matInput name="workspaceName" [(ngModel)]="workspaceDraft.name" required /></mat-form-field>
+                <mat-form-field><mat-label>{{ 'tenant.companyAdmin.workspace.slug' | t }}</mat-label><input matInput name="workspaceSlug" [(ngModel)]="workspaceDraft.slug" required /></mat-form-field>
+                <mat-form-field><mat-label>{{ 'tenant.companyAdmin.workspace.accessUrl' | t }}</mat-label><input matInput name="workspaceUrl" [(ngModel)]="workspaceDraft.url" /></mat-form-field>
+                <mat-form-field><mat-label>{{ 'tenant.companyAdmin.workspace.emailDomain' | t }}</mat-label><input matInput name="emailDomain" [(ngModel)]="workspaceDraft.emailDomain" /></mat-form-field>
+                <mat-form-field><mat-label>{{ 'tenant.companyAdmin.form.status' | t }}</mat-label><mat-select name="workspaceStatus" [(ngModel)]="workspaceDraft.status"><mat-option value="active">{{ 'tenant.companyAdmin.status.active' | t }}</mat-option><mat-option value="disabled">{{ 'tenant.companyAdmin.status.disabled' | t }}</mat-option></mat-select></mat-form-field>
+                <mat-slide-toggle name="primaryWorkspace" [(ngModel)]="workspaceDraft.primaryWorkspace">{{ 'tenant.companyAdmin.workspace.primary' | t }}</mat-slide-toggle>
+                <div class="editor-actions"><button mat-button type="button" (click)="cancelEdit()">{{ 'common.cancel' | t }}</button><button mat-flat-button type="submit" [disabled]="store.saving()">{{ 'common.save' | t }}</button></div>
+              </form>
+            }
+          }
+
+          @case ('teammates') {
+            <section class="teammate-hero section-card"><div><span>{{ 'tenant.companyAdmin.teammatesHero.eyebrow' | t }}</span><h2>{{ 'tenant.companyAdmin.sections.teammates' | t }}</h2><p>{{ 'tenant.companyAdmin.teammatesHero.desc' | t }}</p></div><div><strong>{{ members().length }}<small>{{ 'tenant.companyAdmin.teammatesHero.members' | t }}</small></strong><strong>{{ activeMembers() }}<small>{{ 'tenant.companyAdmin.status.active' | t }}</small></strong></div></section>
+            <div class="section-heading"><div></div><button mat-flat-button type="button" (click)="beginMember()">{{ 'tenant.companyAdmin.actions.registerTeammate' | t }}</button></div>
+            <div class="member-grid">@for (member of members(); track member.id) { <article class="member-card"><div class="avatar">{{ memberInitials(member.fullName) }}</div><div class="member-info"><strong>{{ member.fullName }}</strong><span>{{ ('tenant.companyAdmin.roles.' + roleKey(member.role)) | t }}</span><small>{{ member.email }} · {{ member.department }}</small></div><span class="badge" [class.disabled]="member.status === 'disabled'">{{ ('tenant.companyAdmin.status.' + member.status) | t }}</span><div class="card-actions"><button mat-stroked-button type="button" (click)="beginMember(member)">{{ 'common.edit' | t }}</button><button mat-button type="button" [disabled]="member.status === 'disabled'" (click)="store.deactivateMember(member)">{{ 'tenant.companyAdmin.actions.deactivate' | t }}</button></div></article> } @empty { <div class="empty-state">{{ 'tenant.companyAdmin.empty.teammates' | t }}</div> }</div>
+            @if (editing() === 'member') {
+              <form class="editor-grid section-card" (ngSubmit)="saveMember()">
+                <mat-form-field><mat-label>{{ 'tenant.companyAdmin.table.name' | t }}</mat-label><input matInput name="memberName" [(ngModel)]="memberDraft.fullName" required /></mat-form-field>
+                <mat-form-field><mat-label>{{ 'tenant.companyAdmin.form.corporateEmail' | t }}</mat-label><input matInput type="email" name="memberEmail" [(ngModel)]="memberDraft.email" required /></mat-form-field>
+                @if (!editingId) { <mat-form-field><mat-label>{{ 'tenant.companyAdmin.form.password' | t }}</mat-label><input matInput type="password" name="memberPassword" [(ngModel)]="memberPassword" minlength="8" autocomplete="new-password" required /></mat-form-field> }
+                <mat-form-field><mat-label>{{ 'tenant.companyAdmin.form.role' | t }}</mat-label><mat-select name="memberRole" [(ngModel)]="memberDraft.role">@for (role of roleOptions; track role.value) { <mat-option [value]="role.value">{{ ('tenant.companyAdmin.roles.' + role.key) | t }}</mat-option> }</mat-select></mat-form-field>
+                <mat-form-field><mat-label>{{ 'tenant.companyAdmin.form.department' | t }}</mat-label><input matInput name="department" [(ngModel)]="memberDraft.department" /></mat-form-field>
+                <mat-form-field><mat-label>{{ 'tenant.companyAdmin.form.status' | t }}</mat-label><mat-select name="memberStatus" [(ngModel)]="memberDraft.status"><mat-option value="active">{{ 'tenant.companyAdmin.status.active' | t }}</mat-option><mat-option value="invited">{{ 'tenant.companyAdmin.status.invited' | t }}</mat-option><mat-option value="disabled">{{ 'tenant.companyAdmin.status.disabled' | t }}</mat-option></mat-select></mat-form-field>
+                <div class="editor-actions"><button mat-button type="button" (click)="cancelEdit()">{{ 'common.cancel' | t }}</button><button mat-flat-button type="submit" [disabled]="store.saving()">{{ 'common.save' | t }}</button></div>
+              </form>
+            }
+          }
+
+          @case ('rules') {
+            <div class="section-heading"><div><h2>{{ 'tenant.companyAdmin.rulesBrief.title' | t }}</h2><p>{{ 'tenant.companyAdmin.rulesBrief.desc' | t }}</p></div><button mat-flat-button type="button" (click)="beginRule()">{{ 'tenant.companyAdmin.actions.addRule' | t }}</button></div>
+            <div class="rule-grid">@for (rule of rules(); track rule.id) { <article class="rule-card" [class.disabled]="!rule.enabled"><div><span class="badge">{{ ('tenant.companyAdmin.ruleCategories.' + categoryKey(rule.category)) | t }}</span><span class="badge" [class.disabled]="!rule.enabled">{{ (rule.enabled ? 'tenant.companyAdmin.status.enabled' : 'tenant.companyAdmin.status.disabled') | t }}</span></div><h3>{{ rule.name }}</h3><p>{{ rule.description || ('tenant.companyAdmin.rules.noDescription' | t) }}</p><div class="card-actions"><button mat-stroked-button type="button" (click)="beginRule(rule)">{{ 'common.edit' | t }}</button><button mat-button type="button" (click)="toggleRule(rule)">{{ (rule.enabled ? 'tenant.companyAdmin.actions.deactivate' : 'tenant.companyAdmin.actions.activate') | t }}</button><button mat-button type="button" (click)="store.deleteRule(rule.id)">{{ 'common.delete' | t }}</button></div></article> } @empty { <div class="empty-state">{{ 'tenant.companyAdmin.empty.rules' | t }}</div> }</div>
+            @if (editing() === 'rule') {
+              <form class="editor-grid section-card" (ngSubmit)="saveRule()"><mat-form-field><mat-label>{{ 'tenant.companyAdmin.form.ruleTitle' | t }}</mat-label><input matInput name="ruleName" [(ngModel)]="ruleDraft.name" required /></mat-form-field><mat-form-field><mat-label>{{ 'tenant.companyAdmin.form.category' | t }}</mat-label><mat-select name="ruleCategory" [(ngModel)]="ruleDraft.category">@for (category of ruleCategories; track category.value) { <mat-option [value]="category.value">{{ ('tenant.companyAdmin.ruleCategories.' + category.key) | t }}</mat-option> }</mat-select></mat-form-field><mat-form-field class="wide"><mat-label>{{ 'tenant.companyAdmin.form.description' | t }}</mat-label><textarea matInput name="ruleDescription" [(ngModel)]="ruleDraft.description"></textarea></mat-form-field><mat-slide-toggle name="ruleEnabled" [(ngModel)]="ruleDraft.enabled">{{ 'tenant.companyAdmin.status.enabled' | t }}</mat-slide-toggle><div class="editor-actions"><button mat-button type="button" (click)="cancelEdit()">{{ 'common.cancel' | t }}</button><button mat-flat-button type="submit" [disabled]="store.saving()">{{ 'common.save' | t }}</button></div></form>
+            }
+          }
+
+          @case ('customFields') {
+            <div class="section-heading"><div><h2>{{ 'tenant.companyAdmin.customFieldsBrief.title' | t }}</h2><p>{{ 'tenant.companyAdmin.customFieldsBrief.desc' | t }}</p></div><button mat-flat-button type="button" (click)="beginCustomField()">{{ 'tenant.companyAdmin.actions.addCustomField' | t }}</button></div>
+            <div class="data-table"><div class="table-head"><span>{{ 'tenant.companyAdmin.table.label' | t }}</span><span>{{ 'tenant.companyAdmin.table.target' | t }}</span><span>{{ 'tenant.companyAdmin.table.type' | t }}</span><span>{{ 'tenant.companyAdmin.table.required' | t }}</span><span>{{ 'tenant.companyAdmin.table.actions' | t }}</span></div>@for (field of customFields(); track field.id) { <div class="table-row"><strong>{{ field.label }}</strong><span>{{ ('tenant.companyAdmin.fieldTargets.' + optionKey(field.targetResource)) | t }}</span><span>{{ ('tenant.companyAdmin.fieldTypes.' + optionKey(field.fieldType)) | t }}</span><span>{{ (field.required ? 'common.yes' : 'common.no') | t }}</span><div class="card-actions"><button mat-stroked-button type="button" (click)="beginCustomField(field)">{{ 'common.edit' | t }}</button><button mat-button type="button" (click)="store.deleteCustomField(field.id)">{{ 'common.delete' | t }}</button></div></div> } @empty { <div class="empty-state">{{ 'tenant.companyAdmin.empty.customFields' | t }}</div> }</div>
+            @if (editing() === 'customField') {
+              <form class="editor-grid section-card" (ngSubmit)="saveCustomField()"><mat-form-field><mat-label>{{ 'tenant.companyAdmin.form.label' | t }}</mat-label><input matInput name="fieldLabel" [(ngModel)]="fieldDraft.label" required /></mat-form-field><mat-form-field><mat-label>{{ 'tenant.companyAdmin.form.target' | t }}</mat-label><mat-select name="fieldTarget" [(ngModel)]="fieldDraft.targetResource">@for (target of fieldTargets; track target) { <mat-option [value]="target">{{ ('tenant.companyAdmin.fieldTargets.' + optionKey(target)) | t }}</mat-option> }</mat-select></mat-form-field><mat-form-field><mat-label>{{ 'tenant.companyAdmin.form.type' | t }}</mat-label><mat-select name="fieldType" [(ngModel)]="fieldDraft.fieldType">@for (type of fieldTypes; track type) { <mat-option [value]="type">{{ ('tenant.companyAdmin.fieldTypes.' + optionKey(type)) | t }}</mat-option> }</mat-select></mat-form-field><mat-slide-toggle name="fieldRequired" [(ngModel)]="fieldDraft.required">{{ 'tenant.companyAdmin.form.required' | t }}</mat-slide-toggle><mat-slide-toggle name="fieldEnabled" [(ngModel)]="fieldDraft.enabled">{{ 'tenant.companyAdmin.status.enabled' | t }}</mat-slide-toggle><div class="editor-actions"><button mat-button type="button" (click)="cancelEdit()">{{ 'common.cancel' | t }}</button><button mat-flat-button type="submit" [disabled]="store.saving()">{{ 'common.save' | t }}</button></div></form>
+            }
+          }
+
+          @case ('billing') {
+            <section class="billing-hero"><div><span>{{ 'tenant.companyAdmin.billing.heroEyebrow' | t }}</span><h2>{{ 'tenant.companyAdmin.billing.heroTitle' | t }}</h2><p>{{ 'tenant.companyAdmin.billing.heroDesc' | t }}</p></div><button mat-flat-button type="button" (click)="beginBilling()">{{ 'tenant.companyAdmin.billing.comparePlans' | t }}</button></section>
+            @if (subscription(); as billing) { <section class="billing-summary section-card"><div><span>{{ 'tenant.companyAdmin.billing.plan' | t }}</span><strong>{{ billing.plan }}</strong></div><div><span>{{ 'tenant.companyAdmin.billing.seats' | t }}</span><strong>{{ billing.seats }}</strong></div><div><span>{{ 'tenant.companyAdmin.billing.usage.warehouses' | t }}</span><strong>{{ billing.warehouses }}</strong></div><div><span>{{ 'tenant.companyAdmin.billing.paymentStatus' | t }}</span><strong>{{ ('tenant.companyAdmin.billing.status.' + billing.paymentStatus) | t }}</strong></div><div><span>{{ 'tenant.companyAdmin.billing.nextBillingDate' | t }}</span><strong>{{ billing.nextBillingDate || '—' }}</strong></div><div><span>{{ 'tenant.companyAdmin.billing.billingContact' | t }}</span><strong>{{ billing.billingContact || '—' }}</strong></div></section> } @else { <div class="empty-state">{{ 'tenant.companyAdmin.empty.billing' | t }}</div> }
+            <div class="plan-grid">@for (plan of plans; track plan) { <article [class.current]="subscription()?.plan === plan"><span>{{ ('tenant.registration.planLabels.' + plan) | t }}</span><h3>{{ plan }}</h3><p>{{ ('tenant.registration.planDescriptions.' + plan) | t }}</p><button mat-stroked-button type="button" (click)="beginBilling(); billingDraft.plan = plan">{{ (subscription()?.plan === plan ? 'tenant.companyAdmin.billing.currentPlan' : 'tenant.companyAdmin.billing.requestPlan') | t }}</button></article> }</div>
+            @if (editing() === 'billing') {
+              <form class="editor-grid section-card" (ngSubmit)="saveBilling()"><mat-form-field><mat-label>{{ 'tenant.companyAdmin.billing.plan' | t }}</mat-label><mat-select name="billingPlan" [(ngModel)]="billingDraft.plan">@for (plan of plans; track plan) { <mat-option [value]="plan">{{ plan }}</mat-option> }</mat-select></mat-form-field><mat-form-field><mat-label>{{ 'tenant.companyAdmin.billing.seats' | t }}</mat-label><input matInput type="number" min="0" name="billingSeats" [(ngModel)]="billingDraft.seats" /></mat-form-field><mat-form-field><mat-label>{{ 'tenant.companyAdmin.billing.usage.warehouses' | t }}</mat-label><input matInput type="number" min="0" name="billingWarehouses" [(ngModel)]="billingDraft.warehouses" /></mat-form-field><mat-form-field><mat-label>{{ 'tenant.companyAdmin.billing.paymentStatus' | t }}</mat-label><mat-select name="paymentStatus" [(ngModel)]="billingDraft.paymentStatus"><mat-option value="review_active">{{ 'tenant.companyAdmin.billing.status.review_active' | t }}</mat-option><mat-option value="review_required">{{ 'tenant.companyAdmin.billing.status.review_required' | t }}</mat-option></mat-select></mat-form-field><mat-form-field><mat-label>{{ 'tenant.companyAdmin.billing.nextBillingDate' | t }}</mat-label><input matInput type="date" name="nextBillingDate" [(ngModel)]="billingDraft.nextBillingDate" /></mat-form-field><mat-form-field><mat-label>{{ 'tenant.companyAdmin.billing.billingContact' | t }}</mat-label><input matInput type="email" name="billingContact" [(ngModel)]="billingDraft.billingContact" /></mat-form-field><div class="editor-actions"><button mat-button type="button" (click)="cancelEdit()">{{ 'common.cancel' | t }}</button><button mat-flat-button type="submit" [disabled]="store.saving()">{{ 'common.save' | t }}</button></div></form>
+            }
+            <p class="billing-note">{{ 'tenant.companyAdmin.billing.note' | t }}</p>
+          }
+
+          @case ('preferences') {
+            <div class="section-heading"><div><h2>{{ 'tenant.companyAdmin.preferencesBrief.title' | t }}</h2><p>{{ 'tenant.companyAdmin.preferencesBrief.desc' | t }}</p></div><button mat-flat-button type="button" (click)="beginPreferences()">{{ 'common.edit' | t }}</button></div>
+            <div class="preferences-grid">@for (group of preferenceGroups; track group.key) { <section class="section-card"><h3>{{ ('tenant.companyAdmin.preferenceGroups.' + group.key) | t }}</h3>@for (field of group.fields; track field) { <div class="preference-row"><div><strong>{{ ('tenant.companyAdmin.preferences.' + field) | t }}</strong><p>{{ ('tenant.companyAdmin.preferencesDesc.' + field) | t }}</p></div><span>{{ preferenceValue(field) | t }}</span></div> }</section> }</div>
+            @if (editing() === 'preferences') {
+              <form class="preferences-editor section-card" (ngSubmit)="savePreferences()">@for (group of preferenceGroups; track group.key) { <fieldset><legend>{{ ('tenant.companyAdmin.preferenceGroups.' + group.key) | t }}</legend>@for (field of group.fields; track field) { @if (booleanPreferences.has(field)) { <mat-slide-toggle [name]="field" [(ngModel)]="preferenceDraft[field]">{{ ('tenant.companyAdmin.preferences.' + field) | t }}</mat-slide-toggle> } @else { <mat-form-field><mat-label>{{ ('tenant.companyAdmin.preferences.' + field) | t }}</mat-label><input matInput [name]="field" [(ngModel)]="preferenceDraft[field]" /></mat-form-field> } }</fieldset> }<div class="editor-actions"><button mat-button type="button" (click)="cancelEdit()">{{ 'common.cancel' | t }}</button><button mat-flat-button type="submit" [disabled]="store.saving()">{{ 'common.save' | t }}</button></div></form>
+            }
+          }
+        }
+      </main>
+    </div>
+  </section>
+}
