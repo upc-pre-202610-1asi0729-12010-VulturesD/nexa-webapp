@@ -1,0 +1,62 @@
+<section class="dispatch-detail-page">
+  @if (loading()) {
+    <div class="detail-loading" aria-live="polite"><div class="skeleton"></div><div class="skeleton"></div></div>
+  } @else if (!dispatch()) {
+    <div class="empty-state"><nx-icon name="pi-search"></nx-icon><h1>{{ 'dispatch.detailView.notFound' | t }}</h1><a routerLink="/dispatches" class="btn btn-primary">{{ 'dispatch.detailView.backToBoard' | t }}</a></div>
+  } @else {
+    <header class="page-header">
+      <div>
+        <div class="title-row"><a routerLink="/dispatches" class="icon-link" [attr.aria-label]="'dispatch.detailView.backToBoard' | t"><nx-icon name="pi-arrow-left"></nx-icon></a><h1>{{ dispatch()!.code }}</h1><span class="status">{{ ('dispatch.status.' + dispatch()!.status) | t }}</span></div>
+        <p>{{ clientName() }} · {{ dispatch()!.routeName || ('dispatch.detailView.routePending' | t) }} · ETA {{ dispatch()!.eta ? (dispatch()!.eta | date:'short') : ('dispatch.board.unscheduled' | t) }}</p>
+      </div>
+      <div class="action-row" [attr.aria-label]="'dispatch.a11y.lifecycleActions' | t">
+        <button mat-stroked-button [disabled]="store.saving() || ['delivered','incident'].includes(dispatch()!.status)" (click)="changeStatus('preparing', false)">{{ 'dispatch.detailView.process' | t }}</button>
+        <button mat-stroked-button [disabled]="store.saving() || !['preparing','scheduled','assigned'].includes(dispatch()!.status)" (click)="changeStatus('ready_for_route', true)">{{ 'dispatch.detailView.readyRoute' | t }}</button>
+        <button mat-flat-button color="primary" [disabled]="store.saving() || dispatch()!.status !== 'ready_for_route'" (click)="changeStatus('in_route', true)">{{ 'dispatch.detailView.startRoute' | t }}</button>
+        <button mat-stroked-button [disabled]="store.saving() || dispatch()!.status !== 'in_route'" (click)="changeStatus('delivered', true)">{{ 'dispatch.deliveredBtn' | t }}</button>
+        <button mat-stroked-button class="danger" [disabled]="store.saving() || ['delivered','incident'].includes(dispatch()!.status)" (click)="changeStatus('incident', true)">{{ 'dispatch.detailView.returnToSales' | t }}</button>
+      </div>
+    </header>
+
+    @if (store.error()) { <div class="banner banner-danger" role="alert"><nx-icon name="pi-exclamation-triangle"></nx-icon><span>{{ store.error()! | t }}</span></div> }
+    @if (dispatch()!.status === 'incident') { <div class="banner banner-danger"><nx-icon name="pi-exclamation-triangle"></nx-icon><div><strong>{{ 'dispatch.detailView.incidentLockedTitle' | t }}</strong><p>{{ 'dispatch.detailView.incidentLockedDesc' | t }}</p></div></div> }
+
+    <nav class="detail-tabs" [attr.aria-label]="'dispatch.a11y.detailSections' | t">
+      <button type="button" [class.active]="activeSection() === 'operations'" (click)="setSection('operations')">{{ 'dispatch.detailView.operationalSummary' | t }}</button>
+      <button type="button" [class.active]="activeSection() === 'coldChain'" (click)="setSection('coldChain')">{{ 'dispatch.detailView.podTemperature' | t }}</button>
+      <button type="button" [class.active]="activeSection() === 'timeline'" (click)="setSection('timeline')">{{ 'dispatch.detailView.timelineVisible' | t }}</button>
+    </nav>
+
+    @if (activeSection() === 'operations') {
+      <div class="operations-grid">
+        <article class="panel summary-panel"><header><h2>{{ 'dispatch.detailView.operationalSummary' | t }}</h2></header><div class="panel-body summary-list">
+          <div><span>{{ 'dispatch.detailView.client' | t }}</span><strong>{{ clientName() }}</strong></div><div><span>{{ 'dispatch.board.purchaseOrder' | t }}</span><strong>#{{ dispatch()!.orderId }}</strong></div><div><span>{{ 'dispatch.board.route' | t }}</span><strong>{{ dispatch()!.routeName }}</strong></div><div><span>{{ 'dispatch.detailView.owner' | t }}</span><strong>{{ dispatch()!.responsible || ('dispatch.board.unassigned' | t) }}</strong></div><div><span>{{ 'dispatch.board.eta' | t }}</span><strong>{{ dispatch()!.eta ? (dispatch()!.eta | date:'medium') : ('dispatch.board.unscheduled' | t) }}</strong></div><div><span>{{ 'dispatch.detail.deliveryWindow' | t }}</span><strong>{{ dispatch()!.deliveryWindow || '-' }}</strong></div>
+        </div></article>
+        <article class="panel"><header><h2>{{ 'dispatch.detail.assignment' | t }}</h2></header><div class="panel-body form-grid">
+          <mat-form-field appearance="outline"><mat-label>{{ 'dispatch.detailView.owner' | t }}</mat-label><input matInput [(ngModel)]="responsible"></mat-form-field><button mat-stroked-button [disabled]="store.saving() || !responsible.trim()" (click)="assign()">{{ 'common.save' | t }}</button>
+          <mat-form-field appearance="outline"><mat-label>{{ 'dispatch.board.eta' | t }}</mat-label><input matInput type="datetime-local" [(ngModel)]="eta"></mat-form-field><mat-form-field appearance="outline"><mat-label>{{ 'dispatch.detail.deliveryWindow' | t }}</mat-label><input matInput [(ngModel)]="deliveryWindow"></mat-form-field><mat-form-field appearance="outline" class="wide"><mat-label>{{ 'common.notes' | t }}</mat-label><textarea matInput rows="2" [(ngModel)]="actionNote"></textarea></mat-form-field><button mat-flat-button color="primary" [disabled]="store.saving() || !eta || !deliveryWindow.trim()" (click)="schedule()">{{ 'dispatch.schedule' | t }}</button>
+        </div></article>
+      </div>
+    }
+
+    @if (activeSection() === 'coldChain') {
+      <div class="cold-grid">
+        <article class="panel"><header><h2>{{ 'dispatch.detail.temperature' | t }}</h2><span class="counter">{{ detail()!.temperatures.length }}</span></header><div class="panel-body">
+          <div class="temperature-summary" [class.warning]="temperatureAlerts() > 0"><nx-icon name="pi-thermometer"></nx-icon><span>{{ temperatureAlerts() ? ('dispatch.detailView.temperatureReview' | t) : ('dispatch.detailView.temperatureOk' | t) }}</span></div>
+          <div class="record-list">@for (record of detail()!.temperatures; track record.id) { <div><span>{{ record.recordedAt | date:'short' }} · {{ record.zone }}</span><strong [class.warning-text]="record.status !== 'ok'">{{ record.celsius }} °C · {{ record.status }}</strong></div> } @empty { <p class="muted">{{ 'dispatch.detail.noTemperature' | t }}</p> }</div>
+          <div class="form-grid compact"><mat-form-field appearance="outline"><mat-label>°C</mat-label><input matInput type="number" [(ngModel)]="temperature"></mat-form-field><mat-form-field appearance="outline"><mat-label>{{ 'dispatch.detail.zone' | t }}</mat-label><input matInput [(ngModel)]="temperatureZone"></mat-form-field><mat-form-field appearance="outline"><mat-label>{{ 'common.status' | t }}</mat-label><mat-select [(ngModel)]="temperatureStatus"><mat-option value="ok">OK</mat-option><mat-option value="alert">Alert</mat-option></mat-select></mat-form-field><button mat-flat-button color="primary" [disabled]="store.saving() || temperature === null" (click)="addTemperature()">{{ 'dispatch.detail.addTemperature' | t }}</button></div>
+        </div></article>
+        <article class="panel"><header><h2>{{ 'dispatch.detailView.completePod' | t }}</h2></header><div class="panel-body">
+          @if (completedPod()) { <div class="banner banner-success"><nx-icon name="pi-check-circle"></nx-icon><span>{{ 'dispatch.detailView.podCompleteMessage' | t }}</span></div><div class="pod-result"><strong>{{ completedPod()!.receivedBy }}</strong><span>{{ completedPod()!.completedAt | date:'medium' }}</span><p>{{ completedPod()!.notes }}</p></div> }
+          @else { <div class="banner banner-warning"><nx-icon name="pi-camera"></nx-icon><span>{{ 'dispatch.detailView.podPendingMessage' | t }}</span></div><div class="form-grid"><mat-form-field appearance="outline" class="wide"><mat-label>{{ 'dispatch.detail.receiver' | t }}</mat-label><input matInput [(ngModel)]="receiver"></mat-form-field><mat-checkbox [(ngModel)]="podPhoto">{{ 'dispatch.detailView.deliveryPhoto' | t }}</mat-checkbox><mat-checkbox [(ngModel)]="podSignature">{{ 'dispatch.detailView.receiverSignature' | t }}</mat-checkbox><mat-form-field appearance="outline" class="wide"><mat-label>{{ 'common.notes' | t }}</mat-label><textarea matInput rows="2" [(ngModel)]="podNotes"></textarea></mat-form-field><button mat-flat-button color="primary" [disabled]="store.saving() || !receiver.trim()" (click)="completePod()">{{ 'dispatch.detailView.completePod' | t }}</button></div> }
+        </div></article>
+      </div>
+    }
+
+    @if (activeSection() === 'timeline') {
+      <article class="panel"><header><h2>{{ 'dispatch.detailView.timelineVisible' | t }}</h2><span class="counter">{{ detail()!.events.length }}</span></header><div class="panel-body timeline">
+        @for (event of detail()!.events; track event.id) { <div class="timeline-item"><span class="timeline-dot"><nx-icon name="pi-check"></nx-icon></span><div><strong>{{ event.description }}</strong><p>{{ ('dispatch.status.' + event.status) | t }} · {{ event.createdAt | date:'medium' }} · {{ (event.visibleToBuyer ? 'dispatch.detailView.buyerVisible' : 'dispatch.detailView.internal') | t }}</p></div></div> } @empty { <p class="muted">{{ 'dispatch.detail.noEvents' | t }}</p> }
+      </div></article>
+    }
+  }
+</section>
