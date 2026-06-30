@@ -1,0 +1,38 @@
+import { Routes } from '@angular/router';
+
+export const PORTAL_ROUTES: Routes = [
+  {
+    path: '',
+    loadComponent: () => import('./layout/portal-shell.component').then((m) => m.PortalShellComponent),
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'home' },
+      { path: 'home', loadComponent: () => import('./views/portal.page').then((m) => m.PortalPage) },
+      { path: 'product-catalog', loadComponent: () => import('./views/portal-catalog.page').then((m) => m.PortalCatalogPage) },
+      { path: 'catalog', pathMatch: 'full', redirectTo: 'product-catalog' },
+      { path: 'product-catalog/:id', loadComponent: () => import('./views/portal-product-detail.page').then((m) => m.PortalProductDetailPage) },
+      { path: 'catalog/:id', redirectTo: 'product-catalog/:id' },
+      { path: 'request-builder', loadComponent: () => import('./views/portal-request-builder.page').then((m) => m.PortalRequestBuilderPage) },
+      { path: 'purchase-requests', loadComponent: () => import('./views/portal-requests.page').then((m) => m.PortalRequestsPage) },
+      { path: 'requests', pathMatch: 'full', redirectTo: 'purchase-requests' },
+      { path: 'purchase-requests/:id', loadComponent: () => import('./views/portal-request-detail.page').then((m) => m.PortalRequestDetailPage) },
+      { path: 'requests/:id', redirectTo: 'purchase-requests/:id' },
+      { path: 'purchase-orders', loadComponent: () => import('./views/portal-orders.page').then((m) => m.PortalOrdersPage) },
+      { path: 'orders', pathMatch: 'full', redirectTo: 'purchase-orders' },
+      { path: 'purchase-orders/success', loadComponent: () => import('./views/portal-order-success.page').then((m) => m.PortalOrderSuccessPage) },
+      { path: 'orders/success', redirectTo: 'purchase-orders/success' },
+      { path: 'purchase-orders/:id/tracking', loadComponent: () => import('./views/portal-order-tracking.page').then((m) => m.PortalOrderTrackingPage) },
+      { path: 'orders/:id/tracking', redirectTo: 'purchase-orders/:id/tracking' },
+      { path: 'purchase-orders/:id', loadComponent: () => import('./views/portal-order-detail.page').then((m) => m.PortalOrderDetailPage) },
+      { path: 'orders/:id', redirectTo: 'purchase-orders/:id' },
+      { path: 'business-documents', pathMatch: 'full', redirectTo: 'purchase-orders' },
+      { path: 'documents', pathMatch: 'full', redirectTo: 'purchase-orders' },
+      { path: 'payment-methods', loadComponent: () => import('./views/portal-payments.page').then((m) => m.PortalPaymentsPage) },
+      { path: 'payments', pathMatch: 'full', redirectTo: 'payment-methods' },
+      { path: 'premium', loadComponent: () => import('./views/portal-premium.page').then((m) => m.PortalPremiumPage) },
+      { path: 'profile', loadComponent: () => import('./views/portal-profile.page').then((m) => m.PortalProfilePage) },
+      { path: 'legal/terms', loadComponent: () => import('./views/portal-legal.page').then((m) => m.PortalLegalPage), data: { page: 'terms' } },
+      { path: 'legal/privacy', loadComponent: () => import('./views/portal-legal.page').then((m) => m.PortalLegalPage), data: { page: 'privacy' } },
+      { path: 'support', loadComponent: () => import('./views/portal-support.page').then((m) => m.PortalSupportPage) },
+    ],
+  },
+];
